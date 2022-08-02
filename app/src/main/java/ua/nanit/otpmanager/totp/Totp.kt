@@ -1,22 +1,28 @@
 package ua.nanit.otpmanager.totp
 
 import org.apache.commons.codec.binary.Base32
-import java.io.ByteArrayInputStream
-import java.io.DataInput
-import java.io.DataInputStream
-import java.io.IOException
+import java.nio.ByteBuffer
+import java.time.Instant
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
+import kotlin.experimental.and
+import kotlin.math.floor
+import kotlin.math.pow
 
 object Totp {
 
+    private val base32 = Base32()
+    private var digits = 6
+
     fun genPassword(key: String, interval: Int): String {
-        val counter = counter(interval).toByteArray()
-        val hash = hmacSha1(Base32().decode(key), counter)
-        val offset = hash[hash.size - 1].toInt() and 0xf
+        val counter = ByteBuffer.allocate(8)
+            .putLong(counter(interval))
+            .array()
+        val hash = hmacSha1(base32.decode(key), counter)
+        val offset = hash.last().and(0x0f).toInt()
         val truncated = truncateHash(hash, offset)
-        val code = truncated % 1000000
-        return padOutput(code)
+        val code = truncated % 10.0.pow(digits).toInt()
+        return code.toString().padStart(digits, '0')
     }
 
     private fun truncateHash(hash: ByteArray, offset: Int): Int {
@@ -26,30 +32,13 @@ object Totp {
                 (hash[offset+3].toInt() and 0xff)
     }
 
-    private fun padOutput(value: Int): String {
-        var result = value.toString()
-        for (i in result.length until 6) {
-            result = "0$result"
-        }
-        return result
-    }
-
-    private fun counter(interval: Int) = unixTime() / interval
+    private fun counter(interval: Int) = floor(unixTime().toDouble() / interval).toLong()
 
     private fun unixTime() = System.currentTimeMillis() / 1000
 
     private fun hmacSha1(key: ByteArray, value: ByteArray): ByteArray {
-        val mac: Mac = Mac.getInstance("HMACSHA1")
-        mac.init(SecretKeySpec(key, "HMACSHA1"))
+        val mac: Mac = Mac.getInstance("HmacSHA1")
+        mac.init(SecretKeySpec(key, "RAW"))
         return mac.doFinal(value)
     }
-}
-
-fun Long.toByteArray(): ByteArray {
-    val buf = ByteArray(4)
-    buf[0] = (this shr 0).toByte()
-    buf[1] = (this shr 8).toByte()
-    buf[2] = (this shr 16).toByte()
-    buf[3] = (this shr 24).toByte()
-    return buf
 }
