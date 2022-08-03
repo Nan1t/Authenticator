@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ua.nanit.otpmanager.databinding.ItemAccountBinding
 import ua.nanit.otpmanager.domain.Account
-import ua.nanit.otpmanager.domain.code
 
 class AccountsAdapter(
     private val data: List<Account>

@@ -1,11 +1,32 @@
 package ua.nanit.otpmanager.domain
 
-data class Account(
-    val name: String,
-    val token: String,
-    val interval: Int
-)
+import ua.nanit.otpmanager.otp.Otp
 
-fun Account.code(): String {
-    return "000 000"
+interface Account {
+    val name: String
+    val secret: String
+
+    fun code(): String
+}
+
+class TotpAccount(
+    override val name: String,
+    override val secret: String,
+    val interval: Long = 30
+) : Account {
+
+    override fun code(): String {
+        return Otp.totp(secret, interval)
+    }
+}
+
+class HotpAccount(
+    override val name: String,
+    override val secret: String,
+    val counter: Long
+) : Account {
+
+    override fun code(): String {
+        return Otp.hotp(secret, counter)
+    }
 }

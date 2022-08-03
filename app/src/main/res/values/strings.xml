@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">OtpManager</string>
+    <string name="appName">OtpManager</string>
+    <string name="manual.submit">Create account</string>
+    <string name="manual.tab.totp">By time (TOTP)</string>
+    <string name="manual.tab.hotp">By counter (HOTP)</string>
+    <string name="manual.name">Account name</string>
+    <string name="manual.secret">Secret code</string>
+    <string name="manual.additional">Show additional options</string>
+    <string name="manual.interval">Refresh interval</string>
+    <string name="manual.counter">Initial counter</string>
+    <string name="manual.digits">Digits count</string>
 </resources>

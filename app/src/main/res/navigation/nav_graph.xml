@@ -11,4 +11,9 @@
         android:name="ua.nanit.otpmanager.ui.accounts.AccountsFragment"
         tools:layout="@layout/frag_accounts"/>
 
+    <fragment
+        android:id="@+id/navAddManual"
+        android:name="ua.nanit.otpmanager.ui.create.AddAccountFragment"
+        tools:layout="@layout/frag_add"/>
+
 </navigation>
