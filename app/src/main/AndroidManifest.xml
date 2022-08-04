@@ -3,6 +3,7 @@
     package="ua.nanit.otpmanager">
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:label="@string/appName"
         android:supportsRtl="true"

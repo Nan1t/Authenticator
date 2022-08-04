@@ -9,8 +9,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.FragAccountsBinding
-import ua.nanit.otpmanager.domain.Account
-import ua.nanit.otpmanager.domain.TotpAccount
 
 class AccountsFragment : Fragment() {
 

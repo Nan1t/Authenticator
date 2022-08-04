@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ua.nanit.otpmanager.databinding.ItemAccountBinding
-import ua.nanit.otpmanager.domain.Account
+import ua.nanit.otpmanager.account.Account
 
 class AccountsAdapter(
     private val data: List<Account>
@@ -29,7 +29,7 @@ class AccountHolder(
 
     fun bind(acc: Account) {
         binding.accountName.text = acc.name
-        binding.accountCode.text = acc.code()
+        binding.accountCode.text = acc.password()
     }
 
 }
