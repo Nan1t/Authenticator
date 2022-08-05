@@ -1,4 +1,4 @@
-package ua.nanit.otpmanager.ui
+package ua.nanit.otpmanager.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

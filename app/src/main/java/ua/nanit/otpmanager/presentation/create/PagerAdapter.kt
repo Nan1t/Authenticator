@@ -1,4 +1,4 @@
-package ua.nanit.otpmanager.ui.create
+package ua.nanit.otpmanager.presentation.create
 
 import android.content.Context
 import androidx.fragment.app.Fragment
@@ -7,7 +7,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import ua.nanit.otpmanager.R
 
-class PagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class PagerAdapter(fragment: Fragment, ) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = 2
 

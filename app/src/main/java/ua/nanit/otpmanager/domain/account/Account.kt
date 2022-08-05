@@ -1,25 +1,25 @@
-package ua.nanit.otpmanager.account
+package ua.nanit.otpmanager.domain.account
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ua.nanit.otpmanager.otp.Otp
+import ua.nanit.otpmanager.domain.Otp
 
 @Serializable
 sealed class Account {
     abstract val id: Int
     abstract val name: String
-    abstract val secret: String
+    abstract val secret: ByteArray
 
     abstract fun password(): String
 }
 
 @Serializable
 @SerialName("totp")
-data class TotpAccount(
+class TotpAccount(
     override val id: Int,
     override val name: String,
-    override val secret: String,
-    private val interval: Long = 30
+    override val secret: ByteArray,
+    val interval: Long
 ) : Account() {
 
     override fun password(): String {
@@ -29,11 +29,11 @@ data class TotpAccount(
 
 @Serializable
 @SerialName("hotp")
-data class HotpAccount(
+class HotpAccount(
     override val id: Int,
     override val name: String,
-    override val secret: String,
-    private val counter: Long = 0
+    override val secret: ByteArray,
+    val counter: Long
 ) : Account() {
 
     override fun password(): String {

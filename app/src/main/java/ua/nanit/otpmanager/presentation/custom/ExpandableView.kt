@@ -1,4 +1,4 @@
-package ua.nanit.otpmanager.ui.custom
+package ua.nanit.otpmanager.presentation.custom
 
 import android.content.Context
 import android.util.AttributeSet
@@ -22,10 +22,6 @@ class ExpandableView @JvmOverloads constructor(
     }
 
     private fun setVisible(visible: Boolean) {
-        if (visible) {
-            this.visibility = VISIBLE
-        } else {
-            this.visibility = GONE
-        }
+        this.visibility = if (visible) VISIBLE else GONE
     }
 }

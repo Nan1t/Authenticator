@@ -8,12 +8,19 @@
 
     <fragment
         android:id="@+id/navAccounts"
-        android:name="ua.nanit.otpmanager.ui.accounts.AccountsFragment"
-        tools:layout="@layout/frag_accounts"/>
+        android:name="ua.nanit.otpmanager.presentation.accounts.AccountsFragment"
+        tools:layout="@layout/frag_accounts">
+        <action android:id="@+id/actionNavAddManual"
+            app:destination="@id/navAddManual"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
 
     <fragment
         android:id="@+id/navAddManual"
-        android:name="ua.nanit.otpmanager.ui.create.AddAccountFragment"
+        android:name="ua.nanit.otpmanager.presentation.create.AddAccountFragment"
         tools:layout="@layout/frag_add"/>
 
 </navigation>

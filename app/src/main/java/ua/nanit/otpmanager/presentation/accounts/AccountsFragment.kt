@@ -1,4 +1,4 @@
-package ua.nanit.otpmanager.ui.accounts
+package ua.nanit.otpmanager.presentation.accounts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,7 +29,7 @@ class AccountsFragment : Fragment() {
     }
 
     private fun onAddBtnClick(view: View) {
-        findNavController().navigate(R.id.navAddManual)
+        findNavController().navigate(R.id.actionNavAddManual)
     }
 
 }

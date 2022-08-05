@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:text="@string/manual.additional" />
 
-        <ua.nanit.otpmanager.ui.custom.ExpandableView
+        <ua.nanit.otpmanager.presentation.custom.ExpandableView
             android:id="@+id/extrasLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,9 +60,10 @@
                     android:id="@+id/hotpCounter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"/>
+                    android:inputType="number"
+                    android:text="0"/>
             </com.google.android.material.textfield.TextInputLayout>
-        </ua.nanit.otpmanager.ui.custom.ExpandableView>
+        </ua.nanit.otpmanager.presentation.custom.ExpandableView>
 
         <Button
             android:id="@+id/submitBtn"

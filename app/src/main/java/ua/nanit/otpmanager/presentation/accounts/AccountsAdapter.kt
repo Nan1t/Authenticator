@@ -1,10 +1,10 @@
-package ua.nanit.otpmanager.ui.accounts
+package ua.nanit.otpmanager.presentation.accounts
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ua.nanit.otpmanager.databinding.ItemAccountBinding
-import ua.nanit.otpmanager.account.Account
+import ua.nanit.otpmanager.domain.account.Account
 
 class AccountsAdapter(
     private val data: List<Account>
