@@ -1,14 +1,10 @@
 package ua.nanit.otpmanager
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
-import dagger.hilt.android.HiltAndroidApp
+import ua.nanit.otpmanager.inject.DaggerAppComponent
 
-@HiltAndroidApp
 class App : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
-    }
+   val component = DaggerAppComponent.create()
 
 }

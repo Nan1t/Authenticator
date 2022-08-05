@@ -8,10 +8,10 @@ class AccountMapper {
     fun fromEntity(entity: AccountEntity): Account {
         return when (entity.type) {
             AccountType.TOTP -> TotpAccount(
-                entity.id, entity.name, entity.secret, entity.counter
+                entity.id.toInt(), entity.name, entity.secret, entity.counter
             )
             AccountType.HOTP -> HotpAccount(
-                entity.id, entity.name, entity.secret, entity.counter
+                entity.id.toInt(), entity.name, entity.secret, entity.counter
             )
         }
     }
@@ -19,14 +19,14 @@ class AccountMapper {
     fun toEntity(account: Account): AccountEntity {
         return when(account) {
             is TotpAccount -> AccountEntity(
-                account.id,
+                account.id.toLong(),
                 AccountType.TOTP,
                 account.name,
                 account.secret,
                 account.interval
             )
             is HotpAccount -> AccountEntity(
-                account.id,
+                account.id.toLong(),
                 AccountType.HOTP,
                 account.name,
                 account.secret,

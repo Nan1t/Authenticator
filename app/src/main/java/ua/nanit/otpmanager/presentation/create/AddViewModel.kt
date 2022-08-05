@@ -3,12 +3,12 @@ package ua.nanit.otpmanager.presentation.create
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.domain.account.*
+import javax.inject.Inject
 
-class AddViewModel(
+class AddViewModel @Inject constructor(
     private val dispatcher: CoroutineContext,
     private val interactor: AccountInteractor
 ) : ViewModel() {

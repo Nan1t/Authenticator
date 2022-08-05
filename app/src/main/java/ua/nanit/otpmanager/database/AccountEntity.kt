@@ -11,7 +11,7 @@ enum class AccountType {
 @Entity
 class AccountEntity(
     @PrimaryKey(autoGenerate = true)
-    var id: Int,
+    var id: Long,
     @TypeConverters(TypeConverter::class)
     val type: AccountType,
     val name: String,

@@ -12,7 +12,7 @@ interface AccountDao {
     suspend fun findById(id: Int): AccountEntity?
 
     @Insert
-    suspend fun create(account: AccountEntity): Int
+    suspend fun create(account: AccountEntity): Long
 
     @Update
     suspend fun update(account: AccountEntity)
