@@ -2,8 +2,11 @@ package ua.nanit.otpmanager.domain.account
 
 import ua.nanit.otpmanager.database.AccountEntity
 import ua.nanit.otpmanager.database.AccountType
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AccountMapper {
+@Singleton
+class AccountMapper @Inject constructor() {
 
     fun fromEntity(entity: AccountEntity): Account {
         return when (entity.type) {

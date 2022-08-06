@@ -3,8 +3,9 @@ package ua.nanit.otpmanager.domain.account
 import ua.nanit.otpmanager.database.AccountDao
 import ua.nanit.otpmanager.database.AccountEntity
 import ua.nanit.otpmanager.database.AccountType
+import javax.inject.Inject
 
-class AccountFactory(
+class AccountFactory @Inject constructor(
     private val dao: AccountDao,
     private val mapper: AccountMapper
 ) {

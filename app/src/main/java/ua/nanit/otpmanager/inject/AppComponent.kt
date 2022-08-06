@@ -1,17 +1,20 @@
 package ua.nanit.otpmanager.inject
 
-import androidx.room.Room
 import dagger.Component
-import dagger.Module
+import ua.nanit.otpmanager.presentation.accounts.AccountsFragment
+import ua.nanit.otpmanager.presentation.create.AddAccountFragment
+import ua.nanit.otpmanager.presentation.create.AddHotpFragment
+import ua.nanit.otpmanager.presentation.create.AddTotpFragment
+import javax.inject.Singleton
 
-@Component(modules = [AppModule::class])
+@Singleton
+@Component(modules = [DataModule::class])
 interface AppComponent {
 
-}
+    fun inject(fragment: AddAccountFragment)
 
-@Module
-object AppModule {
+    fun inject(fragment: AddTotpFragment)
 
-
+    fun inject(fragment: AddHotpFragment)
 
 }
