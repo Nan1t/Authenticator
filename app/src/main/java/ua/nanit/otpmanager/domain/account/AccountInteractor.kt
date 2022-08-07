@@ -1,7 +1,6 @@
 package ua.nanit.otpmanager.domain.account
 
-import kotlinx.coroutines.flow.MutableSharedFlow
-import org.apache.commons.codec.binary.Base32
+import ua.nanit.otpmanager.util.Base32
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,33 +11,30 @@ class AccountInteractor @Inject constructor(
     private val editor: AccountEditor
 ) {
 
-    private val base32 = Base32()
-    private var accountsFlow: MutableSharedFlow<Account>? = null
+    private var accounts: MutableList<Account>? = null
 
-//    suspend fun getAllAccounts(): SharedFlow<Account> {
-//        var flow = accountsFlow
-//
-//        if (flow == null)
-//            flow = repository.getAll().asFlow()
-//
-//        return flow
-//    }
+    suspend fun getAll(): List<Account> {
+        if (accounts == null)
+            accounts = repository.getAll().toMutableList()
+
+        return accounts!!
+    }
 
     suspend fun createTotpAccount(name: String, secret: String, interval: Long) {
         if (interval < 1) throw InvalidIntervalException()
-        val key = base32.decode(secret)
+        val key = Base32.decode(secret)
         validateAccount(name, key)
         val account = factory.createTotp(name, key, interval)
-        accountsFlow?.emit(account)
+        accounts?.add(account)
     }
 
     suspend fun createHotpAccount(name: String, secret: String, counter: Long) {
         if (counter < 0) throw InvalidCounterException()
 
-        val key = base32.decode(secret)
+        val key = Base32.decode(secret)
         validateAccount(name, key)
         val account = factory.createHotp(name, key, counter)
-        accountsFlow?.emit(account)
+        accounts?.add(account)
     }
 
     suspend fun editAccount(account: Account) {
@@ -47,6 +43,7 @@ class AccountInteractor @Inject constructor(
 
     suspend fun removeAccount(account: Account) {
         editor.removeAccount(account)
+        accounts?.remove(account)
     }
 
     private fun validateAccount(name: String, secret: ByteArray) {

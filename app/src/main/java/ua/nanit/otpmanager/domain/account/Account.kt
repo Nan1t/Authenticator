@@ -25,6 +25,27 @@ class TotpAccount(
     override fun password(): String {
         return Otp.totp(secret, interval)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (javaClass != other?.javaClass) return false
+
+        other as TotpAccount
+
+        return id == other.id
+                && name == other.name
+                && secret.contentEquals(other.secret)
+                && interval == other.interval
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + name.hashCode()
+        result = 31 * result + secret.contentHashCode()
+        result = 31 * result + interval.hashCode()
+        return result
+    }
+
+
 }
 
 @Serializable
@@ -38,5 +59,24 @@ class HotpAccount(
 
     override fun password(): String {
         return Otp.hotp(secret, counter)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (javaClass != other?.javaClass) return false
+
+        other as HotpAccount
+
+        return id == other.id
+                && name == other.name
+                && secret.contentEquals(other.secret)
+                && counter == other.counter
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + name.hashCode()
+        result = 31 * result + secret.contentHashCode()
+        result = 31 * result + counter.hashCode()
+        return result
     }
 }

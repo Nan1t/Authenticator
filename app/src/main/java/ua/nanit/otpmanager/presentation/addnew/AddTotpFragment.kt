@@ -1,19 +1,20 @@
-package ua.nanit.otpmanager.presentation.create
+package ua.nanit.otpmanager.presentation.addnew
 
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import ua.nanit.otpmanager.appComponent
-import ua.nanit.otpmanager.databinding.FragAddHotpBinding
+import ua.nanit.otpmanager.databinding.FragAddTotpBinding
 import javax.inject.Inject
 
-class AddHotpFragment : Fragment() {
+class AddTotpFragment : Fragment() {
 
-    private lateinit var binding: FragAddHotpBinding
+    private lateinit var binding: FragAddTotpBinding
     private val viewModel: AddViewModel by viewModels(
         factoryProducer = { viewModelFactory },
         ownerProducer = { requireParentFragment() }
@@ -32,19 +33,19 @@ class AddHotpFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragAddHotpBinding.inflate(inflater, container, false)
+        binding = FragAddTotpBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.extrasLayout.bindToSwitch(binding.showExtras)
-
         binding.submitBtn.setOnClickListener {
             val name = binding.accountName.text?.toString() ?: ""
             val secret = binding.accountSecret.text?.toString() ?: ""
-            val counter = (binding.hotpCounter.text?.toString() ?: "").toLong()
+            val interval = (binding.totpInterval.text?.toString() ?: "").toLong()
 
-            viewModel.createHotp(name, secret, counter)
+            viewModel.createTotp(name, secret, interval)
         }
     }
+
 }

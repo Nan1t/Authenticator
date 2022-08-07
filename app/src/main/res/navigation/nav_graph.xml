@@ -13,14 +13,14 @@
         <action android:id="@+id/actionNavAddManual"
             app:destination="@id/navAddManual"
             app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/idle"
+            app:popEnterAnim="@anim/idle"
             app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
         android:id="@+id/navAddManual"
-        android:name="ua.nanit.otpmanager.presentation.create.AddAccountFragment"
+        android:name="ua.nanit.otpmanager.presentation.addnew.AddAccountFragment"
         tools:layout="@layout/frag_add"/>
 
 </navigation>

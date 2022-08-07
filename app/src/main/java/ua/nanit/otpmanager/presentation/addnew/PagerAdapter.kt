@@ -1,4 +1,4 @@
-package ua.nanit.otpmanager.presentation.create
+package ua.nanit.otpmanager.presentation.addnew
 
 import android.content.Context
 import androidx.fragment.app.Fragment

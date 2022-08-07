@@ -1,11 +1,14 @@
-package ua.nanit.otpmanager.presentation.create
+package ua.nanit.otpmanager.presentation.addnew
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.domain.account.*
+import javax.inject.Inject
 
 class AddViewModel (
     private val dispatcher: CoroutineContext,
@@ -16,8 +19,6 @@ class AddViewModel (
     val error = MutableLiveData<String>()
 
     fun createTotp(name: String, secret: String, interval: Long) {
-        println("Create TOTP $name, $secret, $interval")
-
         viewModelScope.launch(dispatcher) {
             try {
                 interactor.createTotpAccount(name, secret, interval)
@@ -33,8 +34,6 @@ class AddViewModel (
     }
 
     fun createHotp(name: String, secret: String, counter: Long) {
-        println("Create HOTP $name, $secret, $counter")
-
         viewModelScope.launch(dispatcher) {
             try {
                 interactor.createHotpAccount(name, secret, counter)
@@ -47,5 +46,15 @@ class AddViewModel (
                 error.postValue("Invalid counter")
             }
         }
+    }
+}
+
+class AddViewModelFactory @Inject constructor(
+    private val interactor: AccountInteractor
+) : ViewModelProvider.Factory {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return AddViewModel(Dispatchers.Default, interactor) as T
     }
 }
