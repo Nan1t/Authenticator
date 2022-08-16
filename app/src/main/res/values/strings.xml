@@ -10,6 +10,7 @@
     <string name="menu.edit.delete">Delete</string>
 
     <string name="accounts.copied">Copied!</string>
+    <string name="accounts.increment">Increment counter</string>
     <string name="accounts.options">Account options</string>
 
     <string name="manual.title">New account</string>

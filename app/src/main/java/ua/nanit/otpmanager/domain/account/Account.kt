@@ -72,12 +72,16 @@ class HotpAccount(
 ) : Account() {
 
     override val generator: OtpGenerator = hotp
-    override var currentPassword: String =
-        generator.generate(secret, counter)
+    override var currentPassword: String = generate()
 
     override fun update() {
         counter += 1
-        currentPassword = generator.generate(secret, counter)
+        currentPassword = generate()
+    }
+
+    private fun generate(): String {
+        if (counter <= 0L) return "------"
+        return generator.generate(secret, counter)
     }
 
     override fun equals(other: Any?): Boolean {

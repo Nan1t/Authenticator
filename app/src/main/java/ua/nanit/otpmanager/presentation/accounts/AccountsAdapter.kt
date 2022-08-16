@@ -12,7 +12,7 @@ import ua.nanit.otpmanager.databinding.ItemAccountBinding
 import ua.nanit.otpmanager.domain.account.Account
 import ua.nanit.otpmanager.domain.account.HotpAccount
 import ua.nanit.otpmanager.domain.account.TotpAccount
-import java.lang.StringBuilder
+import ua.nanit.otpmanager.domain.otp.formatAsOtp
 
 class AccountsAdapter(
     private val listener: AccountListener,
@@ -49,7 +49,7 @@ class AccountHolder(
 
     fun bind(acc: Account) {
         binding.accountName.text = acc.name
-        binding.accountCode.text = formatPassword(acc.currentPassword)
+        binding.accountCode.text = acc.currentPassword.formatAsOtp()
 
         itemView.setOnClickListener {
             listener.onCopy(acc.currentPassword)
@@ -60,22 +60,15 @@ class AccountHolder(
             true
         }
 
-        if (acc is TotpAccount) {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.refreshBtn.visibility = View.GONE
-            startCounting(acc)
-        }
-
-        if (acc is HotpAccount) {
-            binding.progressBar.visibility = View.GONE
-            binding.refreshBtn.visibility = View.VISIBLE
-            binding.refreshBtn.setOnClickListener{
-                listener.onUpdate(AccountWrapper(acc, adapterPosition))
-            }
+        when (acc) {
+            is TotpAccount -> bindTotp(acc)
+            is HotpAccount -> bindHotp(acc)
         }
     }
 
-    private fun startCounting(acc: TotpAccount) {
+    private fun bindTotp(acc: TotpAccount) {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.refreshBtn.visibility = View.GONE
         val currentProgress = (acc.secondsToUpdate() * 1000 / acc.interval).toInt()
 
         ValueAnimator.ofInt(currentProgress, 0).apply {
@@ -90,12 +83,12 @@ class AccountHolder(
         }.start()
     }
 
-    private fun formatPassword(pass: String): String {
-        val result = StringBuilder()
-        result.append(pass.substring(0, 3))
-        result.append(" ")
-        result.append(pass.substring(3, 6))
-        return result.toString()
+    private fun bindHotp(acc: HotpAccount) {
+        binding.progressBar.visibility = View.GONE
+        binding.refreshBtn.visibility = View.VISIBLE
+        binding.refreshBtn.setOnClickListener {
+            listener.onUpdate(AccountWrapper(acc, adapterPosition))
+        }
     }
 
 }
