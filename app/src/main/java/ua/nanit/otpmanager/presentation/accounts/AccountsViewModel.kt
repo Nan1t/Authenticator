@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.domain.account.Account
 import ua.nanit.otpmanager.domain.account.AccountInteractor
@@ -17,6 +18,7 @@ class AccountsViewModel(
 ) : ViewModel() {
 
     val accounts = MutableLiveData<List<Account>>()
+    val updates = MutableSharedFlow<AccountWrapper>()
 
     init {
         viewModelScope.launch(dispatcher) {
@@ -24,12 +26,11 @@ class AccountsViewModel(
         }
     }
 
-    fun editAccount() {
-
-    }
-
-    fun removeAccount() {
-
+    fun updateAccount(wrapper: AccountWrapper) {
+        viewModelScope.launch(dispatcher) {
+            wrapper.account.update()
+            updates.emit(wrapper)
+        }
     }
 }
 

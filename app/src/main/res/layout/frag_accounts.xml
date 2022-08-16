@@ -18,6 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_gravity="end|bottom"
-        android:src="@drawable/ic_baseline_add"/>
+        android:src="@drawable/ic_round_add"/>
 
 </FrameLayout>

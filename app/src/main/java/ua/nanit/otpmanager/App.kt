@@ -18,7 +18,6 @@ class App : Application() {
          .dataModule(DataModule(this))
          .build()
    }
-
 }
 
 fun Context.appComponent(): AppComponent {

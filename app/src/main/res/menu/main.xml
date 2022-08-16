@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menuImport"
+        android:title="@string/menu.main.import"/>
+
+    <item android:id="@+id/menuExport"
+        android:title="@string/menu.main.export"/>
+
+    <item android:id="@+id/menuSettings"
+        android:title="@string/menu.main.settings"/>
+
+    <item android:id="@+id/menuAbout"
+        android:title="@string/menu.main.about"/>
+
+</menu>

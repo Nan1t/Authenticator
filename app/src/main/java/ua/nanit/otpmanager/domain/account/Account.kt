@@ -2,15 +2,23 @@ package ua.nanit.otpmanager.domain.account
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ua.nanit.otpmanager.domain.Otp
+import ua.nanit.otpmanager.domain.Clock
+import ua.nanit.otpmanager.domain.otp.HotpGenerator
+import ua.nanit.otpmanager.domain.otp.OtpGenerator
+import ua.nanit.otpmanager.domain.otp.TotpGenerator
+
+private val totp = TotpGenerator()
+private val hotp = HotpGenerator()
 
 @Serializable
 sealed class Account {
     abstract val id: Int
     abstract val name: String
     abstract val secret: ByteArray
+    abstract val generator: OtpGenerator
+    abstract var currentPassword: String
 
-    abstract fun password(): String
+    abstract fun update()
 }
 
 @Serializable
@@ -22,8 +30,16 @@ class TotpAccount(
     val interval: Long
 ) : Account() {
 
-    override fun password(): String {
-        return Otp.totp(secret, interval)
+    override val generator: OtpGenerator = totp
+    override var currentPassword: String =
+        generator.generate(secret, interval)
+
+    fun secondsToUpdate(): Long {
+        return interval - Clock.epochSeconds() % interval
+    }
+
+    override fun update() {
+        currentPassword = generator.generate(secret, interval)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -44,8 +60,6 @@ class TotpAccount(
         result = 31 * result + interval.hashCode()
         return result
     }
-
-
 }
 
 @Serializable
@@ -54,11 +68,16 @@ class HotpAccount(
     override val id: Int,
     override val name: String,
     override val secret: ByteArray,
-    val counter: Long
+    var counter: Long
 ) : Account() {
 
-    override fun password(): String {
-        return Otp.hotp(secret, counter)
+    override val generator: OtpGenerator = hotp
+    override var currentPassword: String =
+        generator.generate(secret, counter)
+
+    override fun update() {
+        counter += 1
+        currentPassword = generator.generate(secret, counter)
     }
 
     override fun equals(other: Any?): Boolean {

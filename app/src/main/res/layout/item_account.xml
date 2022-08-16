@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp"
+    android:paddingVertical="8dp"
+    android:paddingHorizontal="16dp"
     android:layout_marginBottom="8dp"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
@@ -14,12 +15,25 @@
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressBar"
+        android:layout_weight="15"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="10"
-        android:progress="75"
-        app:trackThickness="20dp" />
+        android:max="1000"
+        android:progress="750" />
+
+    <ImageButton
+        android:visibility="gone"
+        android:id="@+id/refreshBtn"
+        android:layout_weight="15"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_round_refresh" />
 
     <LinearLayout
         android:layout_weight="70"
@@ -45,9 +59,10 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_weight="20"
+        android:visibility="invisible"
+        android:layout_weight="15"
         android:layout_width="0dp"
         android:layout_height="32dp"
         android:layout_gravity="center"
-        android:src="@drawable/ic_baseline_drag_handle" />
+        android:src="@drawable/ic_round_drag_handle" />
 </LinearLayout>

@@ -5,11 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import ua.nanit.otpmanager.appComponent
 import ua.nanit.otpmanager.databinding.FragAddTotpBinding
+import ua.nanit.otpmanager.domain.Constants
 import javax.inject.Inject
 
 class AddTotpFragment : Fragment() {
@@ -38,6 +39,7 @@ class AddTotpFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.totpInterval.setText(Constants.DEFAULT_TOTP_INTERVAL.toString(), TextView.BufferType.NORMAL)
         binding.extrasLayout.bindToSwitch(binding.showExtras)
         binding.submitBtn.setOnClickListener {
             val name = binding.accountName.text?.toString() ?: ""

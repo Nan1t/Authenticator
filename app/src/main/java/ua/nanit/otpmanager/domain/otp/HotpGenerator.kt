@@ -1,26 +1,22 @@
-package ua.nanit.otpmanager.domain
+package ua.nanit.otpmanager.domain.otp
 
 import java.nio.ByteBuffer
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
-import kotlin.math.floor
+import kotlin.math.pow
 
-object Otp {
+open class HotpGenerator : OtpGenerator {
 
-    private const val algorithm = "HmacSHA1"
-    private val divider = arrayOf(0, 10, 100, 1000, 10000, 100000,
-        1000000, 10000000, 100000000, 1000000000)
-
-    fun totp(secret: ByteArray, interval: Long, digits: Int = 6): String {
-        return hotp(secret, counter(interval), digits)
+    companion object {
+        private const val algorithm = "HmacSHA1"
     }
 
-    fun hotp(secret: ByteArray, counter: Long, digits: Int = 6): String {
-        val hash = hmacSha1(secret, counter.toBytes())
+    override fun generate(secret: ByteArray, value: Long, digits: Int): String {
+        val hash = hmacSha1(secret, value.toBytes())
         val offset = hash.last().and(0x0f).toInt()
         val truncated = truncate(hash, offset)
-        val code = truncated % divider[digits]
+        val code = truncated % 10.0.pow(digits).toInt()
         return code.toString().padStart(digits, '0')
     }
 
@@ -38,11 +34,7 @@ object Otp {
         }
     }
 
-    private fun counter(interval: Long) = floor(unixTime().toDouble() / interval).toLong()
-
-    private fun unixTime() = System.currentTimeMillis() / 1000
+    private fun Long.toBytes(): ByteArray = ByteBuffer.allocate(8)
+        .putLong(this)
+        .array()
 }
-
-fun Long.toBytes(): ByteArray = ByteBuffer.allocate(8)
-    .putLong(this)
-    .array()
