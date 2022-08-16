@@ -29,6 +29,7 @@ class AccountsViewModel(
     fun updateAccount(wrapper: AccountWrapper) {
         viewModelScope.launch(dispatcher) {
             wrapper.account.update()
+            interactor.updateAccount(wrapper.account)
             updates.emit(wrapper)
         }
     }

@@ -62,7 +62,6 @@ class AccountsFragment : AccountListener, Fragment() {
         lifecycleScope.launchWhenStarted {
             viewModel.updates.collect {
                 adapter.update(it)
-                println("Update ${it.account.name}")
             }
         }
     }

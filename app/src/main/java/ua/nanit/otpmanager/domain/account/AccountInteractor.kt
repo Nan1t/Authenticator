@@ -37,6 +37,12 @@ class AccountInteractor @Inject constructor(
         accounts?.add(account)
     }
 
+    suspend fun updateAccount(account: Account) {
+        if (account is HotpAccount) {
+            editAccount(account)
+        }
+    }
+
     suspend fun editAccount(account: Account) {
         editor.editAccount(account)
     }

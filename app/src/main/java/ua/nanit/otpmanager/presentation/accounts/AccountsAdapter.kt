@@ -36,8 +36,7 @@ class AccountsAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountHolder, position: Int) {
-        val account = data[position]
-        holder.bind(account)
+        holder.bind(data[position])
     }
 
     override fun getItemCount(): Int = data.size
@@ -62,6 +61,8 @@ class AccountHolder(
         }
 
         if (acc is TotpAccount) {
+            binding.progressBar.visibility = View.VISIBLE
+            binding.refreshBtn.visibility = View.GONE
             startCounting(acc)
         }
 
