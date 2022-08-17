@@ -15,6 +15,8 @@ sealed class Account {
     abstract val id: Int
     abstract val name: String
     abstract val secret: ByteArray
+    abstract val algorithm: String
+    abstract val digits: Int
     abstract val generator: OtpGenerator
     abstract var currentPassword: String
 
@@ -27,20 +29,23 @@ class TotpAccount(
     override val id: Int,
     override val name: String,
     override val secret: ByteArray,
+    override val algorithm: String,
+    override val digits: Int,
     val interval: Long
 ) : Account() {
 
     override val generator: OtpGenerator = totp
-    override var currentPassword: String =
-        generator.generate(secret, interval)
+    override var currentPassword: String = generate()
 
     fun secondsToUpdate(): Long {
         return interval - Clock.epochSeconds() % interval
     }
 
     override fun update() {
-        currentPassword = generator.generate(secret, interval)
+        currentPassword = generate()
     }
+
+    private fun generate(): String = generator.generate(secret, interval, algorithm, digits)
 
     override fun equals(other: Any?): Boolean {
         if (javaClass != other?.javaClass) return false
@@ -68,6 +73,8 @@ class HotpAccount(
     override val id: Int,
     override val name: String,
     override val secret: ByteArray,
+    override val algorithm: String,
+    override val digits: Int,
     var counter: Long
 ) : Account() {
 
@@ -79,10 +86,7 @@ class HotpAccount(
         currentPassword = generate()
     }
 
-    private fun generate(): String {
-        if (counter <= 0L) return "------"
-        return generator.generate(secret, counter)
-    }
+    private fun generate(): String = generator.generate(secret, counter, algorithm, digits)
 
     override fun equals(other: Any?): Boolean {
         if (javaClass != other?.javaClass) return false

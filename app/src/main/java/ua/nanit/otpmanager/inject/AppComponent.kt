@@ -5,6 +5,7 @@ import ua.nanit.otpmanager.presentation.accounts.AccountsFragment
 import ua.nanit.otpmanager.presentation.addnew.AddAccountFragment
 import ua.nanit.otpmanager.presentation.addnew.AddHotpFragment
 import ua.nanit.otpmanager.presentation.addnew.AddTotpFragment
+import ua.nanit.otpmanager.presentation.addnew.ScanCodeActivity
 import javax.inject.Singleton
 
 @Singleton
@@ -18,5 +19,7 @@ interface AppComponent {
     fun inject(fragment: AddTotpFragment)
 
     fun inject(fragment: AddHotpFragment)
+
+    fun inject(activity: ScanCodeActivity)
 
 }

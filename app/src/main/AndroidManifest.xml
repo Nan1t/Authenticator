@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ua.nanit.otpmanager">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -17,6 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".presentation.addnew.ScanCodeActivity" android:exported="false"/>
     </application>
 
 </manifest>

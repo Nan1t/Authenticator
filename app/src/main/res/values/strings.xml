@@ -13,6 +13,9 @@
     <string name="accounts.increment">Increment counter</string>
     <string name="accounts.options">Account options</string>
 
+    <string name="accounts.add.scan">Scan code</string>
+    <string name="accounts.add.manual">Enter manually</string>
+
     <string name="manual.title">New account</string>
     <string name="manual.submit">Create account</string>
     <string name="manual.tab.totp">By time (TOTP)</string>
@@ -23,4 +26,6 @@
     <string name="manual.interval">Refresh interval</string>
     <string name="manual.counter">Initial counter</string>
     <string name="manual.digits">Digits count</string>
+
+    <string name="scan.title">Scan code</string>
 </resources>

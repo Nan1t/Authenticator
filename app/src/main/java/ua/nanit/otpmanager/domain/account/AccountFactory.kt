@@ -10,14 +10,35 @@ class AccountFactory @Inject constructor(
     private val mapper: AccountMapper
 ) {
 
-    suspend fun createTotp(name: String, secret: ByteArray, interval: Long): Account {
-        val entity = AccountEntity(0, AccountType.TOTP, name, secret, interval)
-        entity.id = dao.create(entity)
-        return mapper.fromEntity(entity)
+    suspend fun createTotp(
+        name: String,
+        secret: ByteArray,
+        algorithm: String,
+        digits: Int,
+        interval: Long
+    ): Account {
+        return create(AccountType.TOTP, name, secret, algorithm, digits, interval)
     }
 
-    suspend fun createHotp(name: String, secret: ByteArray, counter: Long): Account {
-        val entity = AccountEntity(0, AccountType.HOTP, name, secret, counter)
+    suspend fun createHotp(
+        name: String,
+        secret: ByteArray,
+        algorithm: String,
+        digits: Int,
+        counter: Long
+    ): Account {
+        return create(AccountType.HOTP, name, secret, algorithm, digits, counter)
+    }
+
+    private suspend fun create(
+        type: AccountType,
+        name: String,
+        secret: ByteArray,
+        algorithm: String,
+        digits: Int,
+        interval: Long
+    ): Account {
+        val entity = AccountEntity(0, type, name, secret, algorithm, digits, interval)
         entity.id = dao.create(entity)
         return mapper.fromEntity(entity)
     }

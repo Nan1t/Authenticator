@@ -3,6 +3,7 @@ package ua.nanit.otpmanager.presentation.accounts
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.core.view.MenuProvider
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -17,6 +19,7 @@ import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.appComponent
 import ua.nanit.otpmanager.databinding.FragAccountsBinding
 import ua.nanit.otpmanager.domain.account.Account
+import ua.nanit.otpmanager.presentation.addnew.ScanCodeActivity
 import javax.inject.Inject
 
 class AccountsFragment : AccountListener, Fragment() {
@@ -24,7 +27,10 @@ class AccountsFragment : AccountListener, Fragment() {
     private val viewModel: AccountsViewModel by viewModels { viewModelFactory }
 
     private lateinit var binding: FragAccountsBinding
+    private lateinit var navController: NavController
     private lateinit var clipboardManager: ClipboardManager
+
+    private var fabEnabled = false
 
     @Inject
     lateinit var viewModelFactory: AccountsViewModelFactory
@@ -44,16 +50,30 @@ class AccountsFragment : AccountListener, Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        activateMainMenu()
-
+        navController = findNavController()
         clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE)
                 as ClipboardManager
+
+        activateMainMenu()
+        enableFab(false)
 
         val adapter = AccountsAdapter(this, emptyList())
 
         binding.accountsList.layoutManager = LinearLayoutManager(requireContext())
-        binding.addAccountBtn.setOnClickListener { onAddBtnClick() }
         binding.accountsList.adapter = adapter
+        binding.addAccountBtn.setOnClickListener {
+            enableFab(!fabEnabled)
+        }
+
+        binding.addManualBtn.setOnClickListener {
+            enableFab(false)
+            navController.navigate(R.id.actionNavAddManual)
+        }
+
+        binding.addScanBtn.setOnClickListener {
+            enableFab(false)
+            startActivity(Intent(requireContext(), ScanCodeActivity::class.java))
+        }
 
         viewModel.accounts.observe(viewLifecycleOwner) {
             adapter.updateAll(it)
@@ -79,8 +99,20 @@ class AccountsFragment : AccountListener, Fragment() {
         //activateEditorMenu()
     }
 
-    private fun onAddBtnClick() {
-        findNavController().navigate(R.id.actionNavAddManual)
+    private fun enableFab(enabled: Boolean) {
+        fabEnabled = enabled
+
+        if (enabled) {
+            binding.addManualBtn.show()
+            binding.addManualText.visibility = View.VISIBLE
+            binding.addScanBtn.show()
+            binding.addScanText.visibility = View.VISIBLE
+        } else {
+            binding.addManualBtn.hide()
+            binding.addManualText.visibility = View.GONE
+            binding.addScanBtn.hide()
+            binding.addScanText.visibility = View.GONE
+        }
     }
 
     private fun activateMainMenu() {

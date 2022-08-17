@@ -17,6 +17,8 @@ class AccountEntity(
     val name: String,
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     val secret: ByteArray,
+    val algorithm: String,
+    val digits: Int,
     val counter: Long
 )
 

@@ -11,10 +11,20 @@ class AccountMapper @Inject constructor() {
     fun fromEntity(entity: AccountEntity): Account {
         return when (entity.type) {
             AccountType.TOTP -> TotpAccount(
-                entity.id.toInt(), entity.name, entity.secret, entity.counter
+                entity.id.toInt(),
+                entity.name,
+                entity.secret,
+                entity.algorithm,
+                entity.digits,
+                entity.counter
             )
             AccountType.HOTP -> HotpAccount(
-                entity.id.toInt(), entity.name, entity.secret, entity.counter
+                entity.id.toInt(),
+                entity.name,
+                entity.secret,
+                entity.algorithm,
+                entity.digits,
+                entity.counter
             )
         }
     }
@@ -26,6 +36,8 @@ class AccountMapper @Inject constructor() {
                 AccountType.TOTP,
                 account.name,
                 account.secret,
+                account.algorithm,
+                account.digits,
                 account.interval
             )
             is HotpAccount -> AccountEntity(
@@ -33,6 +45,8 @@ class AccountMapper @Inject constructor() {
                 AccountType.HOTP,
                 account.name,
                 account.secret,
+                account.algorithm,
+                account.digits,
                 account.counter
             )
         }
