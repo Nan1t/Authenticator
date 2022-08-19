@@ -16,6 +16,8 @@ import ua.nanit.otpmanager.databinding.ActivityScanBinding
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import javax.inject.Inject
+import kotlin.math.max
+import kotlin.math.min
 
 class ScanCodeActivity : AppCompatActivity() {
 
@@ -93,8 +95,13 @@ class ScanCodeActivity : AppCompatActivity() {
             val preview = Preview.Builder().build()
             val analyzer = ImageAnalysis.Builder().build()
 
+            val viewSize = max(binding.cameraPreview.width, binding.cameraPreview.height)
+            val frameSize = binding.frame.width // Assume it's a square (it must)
+
             preview.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
-            analyzer.setAnalyzer(executor, ::analyzeFrame)
+            analyzer.setAnalyzer(executor) {
+                analyzeFrame(viewSize, frameSize, it)
+            }
 
             try {
                 provider.unbindAll()
@@ -105,7 +112,13 @@ class ScanCodeActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-    private fun analyzeFrame(img: ImageProxy) {
+    /**
+     * Preview: 1230x720
+     * Img: 640x480
+     * Preview frame: 400x400; x: 160, y: 415
+     * Frame: 208; x: 136, y: 216
+     */
+    private fun analyzeFrame(viewSize: Int, frameSize: Int, img: ImageProxy) {
         val yBuffer = img.planes[0].buffer
         val vuBuffer = img.planes[2].buffer
 
@@ -117,7 +130,12 @@ class ScanCodeActivity : AppCompatActivity() {
         yBuffer.get(yuvBytes, 0, ySize)
         vuBuffer.get(yuvBytes, ySize, vuSize)
 
-        viewModel.decodeQrCode(yuvBytes, img.width, img.height)
+        val multiplier = max(img.width, img.height).toFloat() / viewSize
+        val resizedFrame = (frameSize * multiplier).toInt()
+        val frameX = img.width / 2 - resizedFrame / 2
+        val frameY = img.height / 2 - resizedFrame / 2
+
+        viewModel.decodeQrCode(yuvBytes, img.width, img.height, frameX, frameY, resizedFrame)
         img.close()
     }
 

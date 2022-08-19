@@ -5,17 +5,24 @@ import com.google.zxing.PlanarYUVLuminanceSource
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 
-object ImageReader {
+object QrImageReader {
 
     private val reader = QRCodeReader()
 
-    fun read(yuvData: ByteArray, width: Int, height: Int): String? {
+    fun read(
+        yuvData: ByteArray,
+        width: Int,
+        height: Int,
+        frameX: Int,
+        frameY: Int,
+        frameSize: Int,
+    ): String? {
         return try {
             val source = PlanarYUVLuminanceSource(
                 yuvData,
                 width, height,
-                0, 0,
-                width, height,
+                frameX, frameY,
+                frameSize, frameSize,
                 false
             )
             val bitmap = BinaryBitmap(HybridBinarizer(source))

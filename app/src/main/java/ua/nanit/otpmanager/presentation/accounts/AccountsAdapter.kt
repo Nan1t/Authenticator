@@ -20,7 +20,8 @@ class AccountsAdapter(
 ) : RecyclerView.Adapter<AccountHolder>() {
 
     fun updateAll(newData: List<Account>) {
-        val result = DiffUtil.calculateDiff(AccountsDiffCallback(data, newData), false)
+        val callback = AccountsDiffCallback(data, newData)
+        val result = DiffUtil.calculateDiff(callback, false)
         data = newData
         result.dispatchUpdatesTo(this)
     }

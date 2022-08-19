@@ -11,10 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.appComponent
 import ua.nanit.otpmanager.databinding.FragAccountsBinding
@@ -75,14 +77,17 @@ class AccountsFragment : AccountListener, Fragment() {
             startActivity(Intent(requireContext(), ScanCodeActivity::class.java))
         }
 
-        viewModel.accounts.observe(viewLifecycleOwner) {
-            adapter.updateAll(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.accounts.collect {
+                    println("Update accounts list")
+                    adapter.updateAll(it)
+                }
+            }
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.updates.collect {
-                adapter.update(it)
-            }
+            viewModel.updates.collect { adapter.update(it) }
         }
     }
 

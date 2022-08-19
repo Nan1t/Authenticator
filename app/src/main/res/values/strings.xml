@@ -28,4 +28,5 @@
     <string name="manual.digits">Digits count</string>
 
     <string name="scan.title">Scan code</string>
+    <string name="scan.hint">QR code must be inside red frame to scan</string>
 </resources>

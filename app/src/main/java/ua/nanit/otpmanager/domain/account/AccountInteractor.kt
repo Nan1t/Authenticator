@@ -1,5 +1,8 @@
 package ua.nanit.otpmanager.domain.account
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.toList
 import ua.nanit.otpmanager.domain.Constants
 import ua.nanit.otpmanager.util.Base32
 import ua.nanit.otpmanager.util.UriParser
@@ -13,13 +16,8 @@ class AccountInteractor @Inject constructor(
     private val editor: AccountEditor
 ) {
 
-    private var accounts: MutableList<Account>? = null
-
-    suspend fun getAll(): List<Account> {
-        if (accounts == null)
-            accounts = repository.getAll().toMutableList()
-
-        return accounts!!
+    val accounts: Flow<List<Account>> = flow {
+        emit(repository.getAll())
     }
 
     suspend fun createByUri(rawUri: String) {
@@ -58,7 +56,8 @@ class AccountInteractor @Inject constructor(
         val key = Base32.decode(secret)
         validateAccount(name, key)
         val account = factory.createTotp(name, key, algorithm, digits, interval)
-        accounts?.add(account)
+//        accounts?.add(account)
+//        accountsFlow.emit(account)
     }
 
     suspend fun createHotpAccount(
@@ -72,7 +71,8 @@ class AccountInteractor @Inject constructor(
         val key = Base32.decode(secret)
         validateAccount(name, key)
         val account = factory.createHotp(name, key, algorithm, digits, counter)
-        accounts?.add(account)
+//        accounts?.add(account)
+//        accountsFlow.emit(account)
     }
 
     suspend fun updateAccount(account: Account) {
@@ -87,7 +87,7 @@ class AccountInteractor @Inject constructor(
 
     suspend fun removeAccount(account: Account) {
         editor.removeAccount(account)
-        accounts?.remove(account)
+        //accounts?.remove(account)
     }
 
     private fun validateAccount(name: String, secret: ByteArray) {

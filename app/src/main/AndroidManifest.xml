@@ -22,7 +22,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.addnew.ScanCodeActivity" android:exported="false"/>
+        <activity
+            android:name=".presentation.addnew.ScanCodeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
