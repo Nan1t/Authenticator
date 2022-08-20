@@ -17,7 +17,6 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import javax.inject.Inject
 import kotlin.math.max
-import kotlin.math.min
 
 class ScanCodeActivity : AppCompatActivity() {
 
@@ -61,6 +60,7 @@ class ScanCodeActivity : AppCompatActivity() {
 
         viewModel.error.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
@@ -112,12 +112,6 @@ class ScanCodeActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-    /**
-     * Preview: 1230x720
-     * Img: 640x480
-     * Preview frame: 400x400; x: 160, y: 415
-     * Frame: 208; x: 136, y: 216
-     */
     private fun analyzeFrame(viewSize: Int, frameSize: Int, img: ImageProxy) {
         val yBuffer = img.planes[0].buffer
         val vuBuffer = img.planes[2].buffer

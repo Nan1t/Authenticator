@@ -3,6 +3,7 @@ package ua.nanit.otpmanager
 import android.app.Application
 import android.content.Context
 import androidx.fragment.app.Fragment
+import ua.nanit.otpmanager.domain.otp.TotpTimer
 import ua.nanit.otpmanager.inject.AppComponent
 import ua.nanit.otpmanager.inject.DaggerAppComponent
 import ua.nanit.otpmanager.inject.DataModule
@@ -17,6 +18,8 @@ class App : Application() {
       component = DaggerAppComponent.builder()
          .dataModule(DataModule(this))
          .build()
+
+      TotpTimer.start()
    }
 }
 

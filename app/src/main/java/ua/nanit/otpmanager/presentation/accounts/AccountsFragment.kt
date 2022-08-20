@@ -37,6 +37,35 @@ class AccountsFragment : AccountListener, Fragment() {
     @Inject
     lateinit var viewModelFactory: AccountsViewModelFactory
 
+    private val mainMenuProvider = object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.main, menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return true
+        }
+    }
+
+    private val editorMenuProvider = object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.editor, menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return when (menuItem.itemId) {
+                R.id.menuEditAccount -> {
+                    true
+                }
+                R.id.menuDeleteAccount -> {
+                    viewModel.removeAccount()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         appComponent().inject(this)
@@ -79,19 +108,24 @@ class AccountsFragment : AccountListener, Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.accounts.collect {
-                    println("Update accounts list")
-                    adapter.updateAll(it)
-                }
+                viewModel.accounts.collect { adapter.updateAll(it) }
             }
         }
 
         lifecycleScope.launchWhenStarted {
             viewModel.updates.collect { adapter.update(it) }
         }
+
+        viewModel.selected.observe(viewLifecycleOwner) {
+            if (it != null) {
+                activateEditorMenu()
+            } else {
+                deactivateEditorMenu()
+            }
+        }
     }
 
-    override fun onUpdate(account: AccountWrapper) {
+    override fun onUpdate(account: AccountItem) {
         viewModel.updateAccount(account)
     }
 
@@ -101,7 +135,7 @@ class AccountsFragment : AccountListener, Fragment() {
     }
 
     override fun onSelect(account: Account) {
-        //activateEditorMenu()
+        viewModel.selectAccount(account)
     }
 
     private fun enableFab(enabled: Boolean) {
@@ -121,27 +155,17 @@ class AccountsFragment : AccountListener, Fragment() {
     }
 
     private fun activateMainMenu() {
-        requireActivity().addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.main, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return true
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        requireActivity().addMenuProvider(mainMenuProvider,
+            viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun activateEditorMenu() {
-        requireActivity().addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.editor, menu)
-            }
+        requireActivity().addMenuProvider(editorMenuProvider,
+            viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
 
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return true
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    private fun deactivateEditorMenu() {
+        requireActivity().removeMenuProvider(editorMenuProvider)
     }
 
 }
