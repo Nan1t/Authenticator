@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/menuEditAccount"
-        android:icon="@drawable/ic_round_edit"
-        android:title="@string/menu.edit.change"
-        app:showAsAction="ifRoom"/>
+    <item android:id="@+id/menuEdit"
+        android:title="@string/menu.edit.change" />
 
-    <item android:id="@+id/menuDeleteAccount"
-        android:icon="@drawable/ic_round_delete_forever"
-        android:title="@string/menu.edit.delete"
-        app:showAsAction="ifRoom"/>
+    <item android:id="@+id/menuDelete"
+        android:title="@string/menu.edit.delete" />
 
 </menu>

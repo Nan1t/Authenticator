@@ -5,7 +5,7 @@ import com.google.zxing.PlanarYUVLuminanceSource
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 
-object QrImageReader {
+class QrImageReader {
 
     private val reader = QRCodeReader()
 

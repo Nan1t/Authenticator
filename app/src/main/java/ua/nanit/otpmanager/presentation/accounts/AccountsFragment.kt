@@ -9,67 +9,26 @@ import android.view.*
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 import ua.nanit.otpmanager.R
-import ua.nanit.otpmanager.appComponent
 import ua.nanit.otpmanager.databinding.FragAccountsBinding
 import ua.nanit.otpmanager.domain.account.Account
 import ua.nanit.otpmanager.presentation.addnew.ScanCodeActivity
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class AccountsFragment : AccountListener, Fragment() {
 
-    private val viewModel: AccountsViewModel by viewModels { viewModelFactory }
+    private val viewModel: AccountsViewModel by viewModels()
 
     private lateinit var binding: FragAccountsBinding
     private lateinit var navController: NavController
     private lateinit var clipboardManager: ClipboardManager
 
     private var fabEnabled = false
-
-    @Inject
-    lateinit var viewModelFactory: AccountsViewModelFactory
-
-    private val mainMenuProvider = object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-            menuInflater.inflate(R.menu.main, menu)
-        }
-
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-            return true
-        }
-    }
-
-    private val editorMenuProvider = object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-            menuInflater.inflate(R.menu.editor, menu)
-        }
-
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-            return when (menuItem.itemId) {
-                R.id.menuEditAccount -> {
-                    true
-                }
-                R.id.menuDeleteAccount -> {
-                    viewModel.removeAccount()
-                    true
-                }
-                else -> false
-            }
-        }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        appComponent().inject(this)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -105,24 +64,6 @@ class AccountsFragment : AccountListener, Fragment() {
             enableFab(false)
             startActivity(Intent(requireContext(), ScanCodeActivity::class.java))
         }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.accounts.collect { adapter.updateAll(it) }
-            }
-        }
-
-        lifecycleScope.launchWhenStarted {
-            viewModel.updates.collect { adapter.update(it) }
-        }
-
-        viewModel.selected.observe(viewLifecycleOwner) {
-            if (it != null) {
-                activateEditorMenu()
-            } else {
-                deactivateEditorMenu()
-            }
-        }
     }
 
     override fun onUpdate(account: AccountItem) {
@@ -135,7 +76,7 @@ class AccountsFragment : AccountListener, Fragment() {
     }
 
     override fun onSelect(account: Account) {
-        viewModel.selectAccount(account)
+
     }
 
     private fun enableFab(enabled: Boolean) {
@@ -155,17 +96,15 @@ class AccountsFragment : AccountListener, Fragment() {
     }
 
     private fun activateMainMenu() {
-        requireActivity().addMenuProvider(mainMenuProvider,
-            viewLifecycleOwner, Lifecycle.State.RESUMED)
-    }
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.main, menu)
+            }
 
-    private fun activateEditorMenu() {
-        requireActivity().addMenuProvider(editorMenuProvider,
-            viewLifecycleOwner, Lifecycle.State.RESUMED)
-    }
-
-    private fun deactivateEditorMenu() {
-        requireActivity().removeMenuProvider(editorMenuProvider)
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return true
+            }
+        }, viewLifecycleOwner)
     }
 
 }

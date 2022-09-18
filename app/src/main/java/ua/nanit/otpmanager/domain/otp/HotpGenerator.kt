@@ -18,7 +18,7 @@ open class HotpGenerator : OtpGenerator {
 
     private fun hash(algorithm: String, key: ByteArray, value: ByteArray): ByteArray {
         return Mac.getInstance("Hmac$algorithm").run {
-            init(SecretKeySpec(key, algorithm))
+            init(SecretKeySpec(key, "RAW"))
             doFinal(value)
         }
     }
@@ -33,4 +33,8 @@ open class HotpGenerator : OtpGenerator {
     private fun Long.toBytes(): ByteArray = ByteBuffer.allocate(8)
         .putLong(this)
         .array()
+
+    companion object {
+        val INSTANCE = HotpGenerator()
+    }
 }

@@ -1,31 +1,22 @@
 package ua.nanit.otpmanager.presentation.addnew
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
-import ua.nanit.otpmanager.appComponent
+import dagger.hilt.android.AndroidEntryPoint
 import ua.nanit.otpmanager.databinding.FragAddBinding
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class AddAccountFragment : Fragment() {
 
     private lateinit var binding: FragAddBinding
-    private val viewModel: AddViewModel by viewModels { viewModelFactory }
-
-    @Inject
-    lateinit var viewModelFactory: AddViewModelFactory
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        appComponent().inject(this)
-    }
+    private val viewModel: AddViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

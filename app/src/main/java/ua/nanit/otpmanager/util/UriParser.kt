@@ -21,7 +21,7 @@ object UriParser {
 
 }
 
-class UriStruct(
+data class UriStruct(
     val uri: URI,
     val args: Map<String, String>
 )

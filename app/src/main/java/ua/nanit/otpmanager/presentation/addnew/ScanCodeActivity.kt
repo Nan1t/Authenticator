@@ -11,13 +11,13 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import ua.nanit.otpmanager.appComponent
+import dagger.hilt.android.AndroidEntryPoint
 import ua.nanit.otpmanager.databinding.ActivityScanBinding
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import javax.inject.Inject
 import kotlin.math.max
 
+@AndroidEntryPoint
 class ScanCodeActivity : AppCompatActivity() {
 
     companion object {
@@ -25,18 +25,15 @@ class ScanCodeActivity : AppCompatActivity() {
         private const val PERMISSION = Manifest.permission.CAMERA
     }
 
-    private lateinit var binding: ActivityScanBinding
-    private val viewModel: AddViewModel by viewModels { viewModelFactory }
+    private val viewModel: AddViewModel by viewModels()
     private var executor: ExecutorService? = null
 
-    @Inject
-    lateinit var viewModelFactory: AddViewModelFactory
+    private lateinit var binding: ActivityScanBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScanBinding.inflate(layoutInflater, null, false)
         setContentView(binding.root)
-        appComponent().inject(this)
 
         if (!hasCamera()) {
             Toast.makeText(this, "No camera!", Toast.LENGTH_SHORT).show()
