@@ -2,7 +2,10 @@ package ua.nanit.otpmanager
 
 import org.junit.Assert.*
 import org.junit.Test
+import ua.nanit.otpmanager.domain.Base32
+import ua.nanit.otpmanager.domain.account.TotpAccount
 import ua.nanit.otpmanager.domain.otp.TotpGenerator
+import ua.nanit.otpmanager.domain.time.TotpTimer
 
 class GeneratorTest {
 
@@ -43,6 +46,30 @@ class GeneratorTest {
     }
 
     // If TOTP generator works, assume HOTP does too
+
+    @Test
+    fun accountTest() {
+        TotpTimer.start()
+
+        val account = TotpAccount(
+            "Test:test@account.com",
+            "test@account.com",
+            "Test",
+            Base32.decode("I65VU7K5ZQL7WB4E"),
+            "SHA1",
+            6,
+            30
+        )
+
+        TotpTimer.subscribe(0) {
+            println("Progress ${account.progress(100)}")
+            if (account.update()) {
+                println("Updated ${account.password}")
+            }
+        }
+
+        Thread.sleep(Long.MAX_VALUE)
+    }
 
     private fun totp(time: Long) = TotpGenerator(ConstClock(time))
 }

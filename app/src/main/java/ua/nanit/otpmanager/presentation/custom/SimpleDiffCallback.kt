@@ -1,11 +1,11 @@
-package ua.nanit.otpmanager.presentation.accounts
+package ua.nanit.otpmanager.presentation.custom
 
 import androidx.recyclerview.widget.DiffUtil
-import ua.nanit.otpmanager.domain.account.Account
 
-class AccountsDiffCallback(
-    private val oldList: List<Account>,
-    private val newList: List<Account>
+open class SimpleDiffCallback<T>(
+    private val oldList: List<T>,
+    private val newList: List<T>,
+    private val comparator: (T, T) -> Boolean
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int = oldList.size
@@ -13,10 +13,11 @@ class AccountsDiffCallback(
     override fun getNewListSize(): Int = newList.size
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].label == newList[newItemPosition].label
+        return comparator(oldList[oldItemPosition], newList[newItemPosition])
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldList[oldItemPosition] == newList[newItemPosition]
     }
+
 }

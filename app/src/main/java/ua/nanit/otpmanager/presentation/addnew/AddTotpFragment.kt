@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import dagger.hilt.android.AndroidEntryPoint
 import ua.nanit.otpmanager.databinding.FragAddTotpBinding
 import ua.nanit.otpmanager.domain.Constants
 
+@AndroidEntryPoint
 class AddTotpFragment : Fragment() {
 
     private lateinit var binding: FragAddTotpBinding

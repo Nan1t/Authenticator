@@ -3,17 +3,18 @@ package ua.nanit.otpmanager.presentation.addnew
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlin.coroutines.CoroutineContext
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.domain.Constants
 import ua.nanit.otpmanager.domain.QrImageReader
 import ua.nanit.otpmanager.domain.account.*
 import javax.inject.Inject
 
+@HiltViewModel
 class AddViewModel @Inject constructor(
-    private val dispatcher: CoroutineContext,
-    private val interactor: AccountManager,
-    private val imgReader: QrImageReader
+    private val dispatcher: CoroutineDispatcher,
+    private val manager: AccountManager
 ) : ViewModel() {
 
     val success = MutableLiveData<Unit>()
@@ -31,13 +32,13 @@ class AddViewModel @Inject constructor(
     ) {
         if (blockedForDecoding) return
 
-        val uri = imgReader.read(yuvData, width, height, frameX, frameY, frameSize) ?: return
+        val uri = QrImageReader.read(yuvData, width, height, frameX, frameY, frameSize) ?: return
 
         blockedForDecoding = true
 
         viewModelScope.launch(dispatcher) {
             try {
-                interactor.createByUri(uri)
+                manager.createByUri(uri)
                 success.postValue(Unit)
             } catch (e: InvalidUriSchemeException) {
                 blockedForDecoding = false
@@ -61,7 +62,7 @@ class AddViewModel @Inject constructor(
     fun createTotp(name: String, secret: String, interval: Long) {
         viewModelScope.launch(dispatcher) {
             try {
-                interactor.createTotpAccount(name, null, secret, Constants.DEFAULT_ALGORITHM, Constants.DEFAULT_DIGITS, interval)
+                manager.createTotpAccount(name, null, secret, Constants.DEFAULT_ALGORITHM, Constants.DEFAULT_DIGITS, interval)
                 success.postValue(Unit)
             } catch (e: ShortLabelException) {
                 error.postValue("Short name")
@@ -76,7 +77,7 @@ class AddViewModel @Inject constructor(
     fun createHotp(name: String, secret: String, counter: Long) {
         viewModelScope.launch(dispatcher) {
             try {
-                interactor.createHotpAccount(name, null, secret, Constants.DEFAULT_ALGORITHM, Constants.DEFAULT_DIGITS, counter)
+                manager.createHotpAccount(name, null, secret, Constants.DEFAULT_ALGORITHM, Constants.DEFAULT_DIGITS, counter)
                 success.postValue(Unit)
             } catch (e: ShortLabelException) {
                 error.postValue("Short name")

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:baselineAligned="false"
     android:paddingVertical="8dp"
     android:paddingHorizontal="16dp"
     android:layout_marginBottom="8dp"
@@ -37,7 +38,7 @@
     </FrameLayout>
 
     <LinearLayout
-        android:layout_weight="70"
+        android:layout_weight="85"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -51,21 +52,11 @@
             tools:text="My Account Name" />
 
         <TextView
-            android:id="@+id/accountCode"
+            android:id="@+id/password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="32sp"
             android:textStyle="bold"
             tools:text="000 000" />
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/menuBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:layout_gravity="center"
-        android:background="?attr/selectableItemBackground"
-        android:src="@drawable/ic_round_more_vert"
-        android:contentDescription="@string/accounts.options"/>
 </LinearLayout>

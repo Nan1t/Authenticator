@@ -1,13 +1,12 @@
 package ua.nanit.otpmanager.presentation.accounts
 
+import android.view.View
 import ua.nanit.otpmanager.domain.account.Account
 
 interface AccountListener {
 
-    fun onUpdate(account: AccountItem)
-
     fun onCopy(password: String)
 
-    fun onSelect(account: Account)
+    fun onMenuClick(account: Account, anchor: View)
 
 }

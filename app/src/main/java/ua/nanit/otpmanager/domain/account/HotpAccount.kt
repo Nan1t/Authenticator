@@ -16,32 +16,14 @@ class HotpAccount(
     var counter: Long
 ) : Account() {
 
-    override var currentPassword: String = generate()
+    override var password: String = generate()
 
-    override fun update() {
+    fun increment() {
         counter += 1
-        currentPassword = generate()
+        password = generate()
     }
 
     private fun generate(): String =
         HotpGenerator.INSTANCE.generate(secret, counter, algorithm, digits)
-
-    override fun equals(other: Any?): Boolean {
-        if (javaClass != other?.javaClass) return false
-
-        other as HotpAccount
-
-        return label == other.label
-                && secret.contentEquals(other.secret)
-                && counter == other.counter
-    }
-
-    override fun hashCode(): Int {
-        var result = label.hashCode()
-        result = 31 * result + secret.contentHashCode()
-        result = 31 * result + counter.hashCode()
-        return result
-    }
-
 
 }

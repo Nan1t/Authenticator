@@ -1,11 +1,8 @@
 package ua.nanit.otpmanager.presentation.accounts
 
-import android.animation.ValueAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.LinearInterpolator
-import androidx.core.animation.doOnEnd
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ua.nanit.otpmanager.databinding.ItemAccountBinding
@@ -13,6 +10,8 @@ import ua.nanit.otpmanager.domain.account.Account
 import ua.nanit.otpmanager.domain.account.HotpAccount
 import ua.nanit.otpmanager.domain.account.TotpAccount
 import ua.nanit.otpmanager.domain.otp.formatAsOtp
+import ua.nanit.otpmanager.domain.time.TotpTimer
+import ua.nanit.otpmanager.presentation.custom.SimpleDiffCallback
 
 class AccountsAdapter(
     private val listener: AccountListener,
@@ -20,14 +19,12 @@ class AccountsAdapter(
 ) : RecyclerView.Adapter<AccountsAdapter.AccountHolder>() {
 
     fun updateAll(newData: List<Account>) {
-        val callback = AccountsDiffCallback(data, newData)
+        val callback = SimpleDiffCallback(data, newData) { old, new ->
+            old.label == new.label
+        }
         val result = DiffUtil.calculateDiff(callback, false)
         data = newData
         result.dispatchUpdatesTo(this)
-    }
-
-    fun update(wrapper: AccountItem) {
-        notifyItemChanged(wrapper.position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountHolder {
@@ -40,6 +37,10 @@ class AccountsAdapter(
         holder.bind(data[position])
     }
 
+    override fun onViewDetachedFromWindow(holder: AccountHolder) {
+        TotpTimer.unsubscribe(holder.adapterPosition)
+    }
+
     override fun getItemCount(): Int = data.size
 
     inner class AccountHolder(
@@ -48,47 +49,35 @@ class AccountsAdapter(
 
         fun bind(acc: Account) {
             binding.accountName.text = acc.name
-            binding.accountCode.text = acc.currentPassword.formatAsOtp()
-
-            itemView.setOnClickListener {
-                listener.onCopy(acc.currentPassword)
-            }
-
-            itemView.setOnLongClickListener {
-                listener.onSelect(acc)
-                true
-            }
+            binding.password.text = acc.password.formatAsOtp()
+            binding.root.setOnClickListener { listener.onCopy(acc.password) }
+            binding.root.setOnLongClickListener { listener.onMenuClick(acc, it); true }
 
             when (acc) {
-                is TotpAccount -> bindTotp(acc)
-                is HotpAccount -> bindHotp(acc)
+                is TotpAccount -> bind(acc)
+                is HotpAccount -> bind(acc)
             }
         }
 
-        private fun bindTotp(acc: TotpAccount) {
+        private fun bind(acc: TotpAccount) {
             binding.progressBar.visibility = View.VISIBLE
             binding.refreshBtn.visibility = View.GONE
-            val currentProgress = (acc.secondsToUpdate() * 1000 / acc.interval).toInt()
+            binding.progressBar.progress = acc.progress(1000)
 
-            ValueAnimator.ofInt(currentProgress, 0).apply {
-                duration = acc.secondsToUpdate() * 1000
-                interpolator = LinearInterpolator()
-
-                doOnEnd {
-                    listener.onUpdate(AccountItem(acc, adapterPosition))
+            TotpTimer.subscribe(adapterPosition) {
+                binding.root.post {
+                    binding.progressBar.progress = acc.progress(1000)
                 }
-                addUpdateListener {
-                    binding.progressBar.progress = it.animatedValue as Int
+                if (acc.update()) {
+                    binding.root.post { binding.password.text = acc.password.formatAsOtp() }
                 }
-            }.start()
+            }
         }
 
-        private fun bindHotp(acc: HotpAccount) {
+        private fun bind(acc: HotpAccount) {
             binding.progressBar.visibility = View.GONE
             binding.refreshBtn.visibility = View.VISIBLE
-            binding.refreshBtn.setOnClickListener {
-                listener.onUpdate(AccountItem(acc, adapterPosition))
-            }
+            binding.refreshBtn.setOnClickListener { println("Update HOTP") }
         }
     }
 }

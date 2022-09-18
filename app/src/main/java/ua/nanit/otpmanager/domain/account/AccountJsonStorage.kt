@@ -4,11 +4,16 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
+import javax.inject.Inject
 import javax.inject.Named
 
 private typealias AccountCache = MutableMap<String, Account>
 
-class AccountJsonStorage(
+//data class AccountCache(
+//    val accounts: MutableMap<String, Account>
+//)
+
+class AccountJsonStorage @Inject constructor(
     @Named("appDir") private val dir: File
 ) : AccountStorage {
 
@@ -47,8 +52,10 @@ class AccountJsonStorage(
 
     private fun getOrCreateFile(): File {
         val file = resolveFile()
-        if (!file.exists())
+        if (!file.exists()) {
             file.createNewFile()
+            file.writeText("{}")
+        }
         return file
     }
 

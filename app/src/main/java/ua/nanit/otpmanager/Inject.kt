@@ -13,19 +13,21 @@ import ua.nanit.otpmanager.domain.account.AccountJsonStorage
 import ua.nanit.otpmanager.domain.account.AccountStorage
 import java.io.File
 import javax.inject.Named
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class BaseModule {
+object BaseModule {
 
     @Provides
     @Named("appDir")
-    fun provideAppDir(@ApplicationContext ctx: Context): File = ctx.filesDir
+    fun provideAppDir(@ApplicationContext ctx: Context): File {
+        return ctx.filesDir
+    }
 
-    @Singleton
     @Provides
-    fun provideDispatcher(): CoroutineDispatcher = Dispatchers.IO
+    fun provideDispatcher(): CoroutineDispatcher {
+        return Dispatchers.IO
+    }
 
 }
 

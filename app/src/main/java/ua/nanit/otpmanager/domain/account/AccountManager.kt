@@ -1,8 +1,8 @@
 package ua.nanit.otpmanager.domain.account
 
 import ua.nanit.otpmanager.domain.Constants
-import ua.nanit.otpmanager.util.Base32
-import ua.nanit.otpmanager.util.UriParser
+import ua.nanit.otpmanager.domain.Base32
+import ua.nanit.otpmanager.domain.UriParser
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -11,6 +11,10 @@ class AccountManager @Inject constructor(
 ) {
 
     private val labelPattern = Pattern.compile(":")
+
+    fun getAll(): List<Account> {
+        return ArrayList(storage.getAll())
+    }
 
     fun createByUri(rawUri: String) {
         val uri = UriParser.parse(rawUri)

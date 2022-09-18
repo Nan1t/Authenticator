@@ -1,4 +1,4 @@
-package ua.nanit.otpmanager.util
+package ua.nanit.otpmanager.domain
 
 import java.net.URI
 

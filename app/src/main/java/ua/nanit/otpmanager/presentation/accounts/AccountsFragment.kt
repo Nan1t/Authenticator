@@ -6,10 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -25,7 +25,6 @@ class AccountsFragment : AccountListener, Fragment() {
     private val viewModel: AccountsViewModel by viewModels()
 
     private lateinit var binding: FragAccountsBinding
-    private lateinit var navController: NavController
     private lateinit var clipboardManager: ClipboardManager
 
     private var fabEnabled = false
@@ -40,7 +39,7 @@ class AccountsFragment : AccountListener, Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        navController = findNavController()
+        val navController = findNavController()
         clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE)
                 as ClipboardManager
 
@@ -64,10 +63,10 @@ class AccountsFragment : AccountListener, Fragment() {
             enableFab(false)
             startActivity(Intent(requireContext(), ScanCodeActivity::class.java))
         }
-    }
 
-    override fun onUpdate(account: AccountItem) {
-        viewModel.updateAccount(account)
+        viewModel.accounts.observe(viewLifecycleOwner) {
+            adapter.updateAll(it)
+        }
     }
 
     override fun onCopy(password: String) {
@@ -75,8 +74,10 @@ class AccountsFragment : AccountListener, Fragment() {
         Snackbar.make(requireView(), R.string.accounts_copied, Snackbar.LENGTH_SHORT).show()
     }
 
-    override fun onSelect(account: Account) {
-
+    override fun onMenuClick(account: Account, anchor: View) {
+        val menu = PopupMenu(requireContext(), anchor)
+        menu.inflate(R.menu.editor)
+        menu.show()
     }
 
     private fun enableFab(enabled: Boolean) {
