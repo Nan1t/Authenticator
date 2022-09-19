@@ -46,7 +46,7 @@ class AccountsFragment : AccountListener, Fragment() {
         activateMainMenu()
         enableFab(false)
 
-        val adapter = AccountsAdapter(this, emptyList())
+        val adapter = AccountsAdapter(this)
 
         binding.accountsList.layoutManager = LinearLayoutManager(requireContext())
         binding.accountsList.adapter = adapter
@@ -78,6 +78,10 @@ class AccountsFragment : AccountListener, Fragment() {
         val menu = PopupMenu(requireContext(), anchor)
         menu.inflate(R.menu.editor)
         menu.show()
+    }
+
+    override fun onUpdate(acc: Account) {
+        viewModel.update(acc)
     }
 
     private fun enableFab(enabled: Boolean) {

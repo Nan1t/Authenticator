@@ -2,6 +2,7 @@ package ua.nanit.otpmanager.domain.account
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import ua.nanit.otpmanager.domain.otp.HotpGenerator
 
 @Serializable
@@ -16,11 +17,28 @@ class HotpAccount(
     var counter: Long
 ) : Account() {
 
+    companion object {
+        private const val UPDATE_COOLDOWN = 3000
+    }
+
+    @Transient
     override var password: String = generate()
 
-    fun increment() {
-        counter += 1
-        password = generate()
+    @Transient
+    private var lastUpdate: Long = 0
+
+    fun increment(): Boolean {
+        if (isReadyForUpdate()) {
+            counter += 1
+            password = generate()
+            lastUpdate = System.currentTimeMillis()
+            return true
+        }
+        return false
+    }
+
+    private fun isReadyForUpdate(): Boolean {
+        return System.currentTimeMillis() > lastUpdate + UPDATE_COOLDOWN
     }
 
     private fun generate(): String =

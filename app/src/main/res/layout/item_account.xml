@@ -23,8 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:max="1000"
-            android:progress="750" />
+            android:progress="75" />
 
         <ImageButton
             android:id="@+id/refreshBtn"

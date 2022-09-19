@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.domain.account.Account
 import ua.nanit.otpmanager.domain.account.AccountManager
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class AccountsViewModel @Inject constructor(
@@ -22,6 +21,12 @@ class AccountsViewModel @Inject constructor(
     init {
         viewModelScope.launch(dispatcher) {
             accounts.postValue(manager.getAll())
+        }
+    }
+
+    fun update(acc: Account) {
+        viewModelScope.launch(dispatcher) {
+            manager.save(acc)
         }
     }
 

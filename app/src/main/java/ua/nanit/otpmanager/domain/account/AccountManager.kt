@@ -3,6 +3,7 @@ package ua.nanit.otpmanager.domain.account
 import ua.nanit.otpmanager.domain.Constants
 import ua.nanit.otpmanager.domain.Base32
 import ua.nanit.otpmanager.domain.UriParser
+import ua.nanit.otpmanager.domain.time.TotpTimer
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -74,6 +75,10 @@ class AccountManager @Inject constructor(
         val account = HotpAccount(label, parsed.name, issuer ?: parsed.issuer,
             key, algorithm, digits, counter)
         storage.add(account)
+    }
+
+    fun save(account: Account) {
+        storage.edit(account)
     }
 
     private fun parseLabel(label: String): ParsedLabel {

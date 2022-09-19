@@ -2,8 +2,11 @@ package ua.nanit.otpmanager.domain.account
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import ua.nanit.otpmanager.domain.time.SystemClock
 import ua.nanit.otpmanager.domain.otp.TotpGenerator
+import ua.nanit.otpmanager.domain.time.TotpListener
+import ua.nanit.otpmanager.domain.time.TotpTimer
 
 @Serializable
 @SerialName("totp")
@@ -14,27 +17,34 @@ class TotpAccount(
     override val secret: ByteArray,
     override val algorithm: String,
     override val digits: Int,
-    private val interval: Long
+    val interval: Long
 ) : Account() {
 
+    @Transient
     override var password: String = generate()
-    private var lastUpdate: Long = 0
 
-    fun progress(multiplier: Int): Int = (secondsRemain() * multiplier / interval).toInt()
+    @Transient
+    var listener: TotpListener? = null
+        private set
 
-    // Problem here
-    fun update(): Boolean {
-        val seconds = SystemClock.epochSeconds()
-        if (seconds > lastUpdate + interval) {
-            password = generate()
-            lastUpdate = seconds
-            return true
-        }
-        return false
+    init {
+        TotpTimer.subscribe(this)
     }
 
-    private fun secondsRemain(): Long {
-        return interval - SystemClock.epochSeconds() % interval
+    fun listen(listener: TotpListener) {
+        this.listener = listener
+    }
+
+    fun removeListener() {
+        this.listener = null
+    }
+
+    fun update() {
+        password = generate()
+    }
+
+    fun secondsRemain(): Int {
+        return (interval - SystemClock.epochSeconds() % interval).toInt()
     }
 
     private fun generate(): String =
