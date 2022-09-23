@@ -26,8 +26,8 @@ class AccountRepository @Inject constructor(
         emitUpdate()
     }
 
-    suspend fun remove(account: Account) {
-        storage.remove(account)
+    suspend fun delete(account: Account) {
+        storage.delete(account)
         emitUpdate()
     }
 

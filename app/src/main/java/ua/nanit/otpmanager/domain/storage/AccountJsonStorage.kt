@@ -34,7 +34,7 @@ class AccountJsonStorage @Inject constructor(
         add(account) // For json map these operations are same
     }
 
-    override fun remove(account: Account) {
+    override fun delete(account: Account) {
         editFile { it.remove(account.label.lowercase()) }
     }
 

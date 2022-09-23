@@ -1,4 +1,4 @@
-package ua.nanit.otpmanager.ext
+package ua.nanit.otpmanager.presentation.ext
 
 import android.content.Context
 import ua.nanit.otpmanager.R

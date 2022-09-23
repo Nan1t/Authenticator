@@ -27,6 +27,12 @@ import ua.nanit.otpmanager.presentation.addnew.ScanCodeActivity
 class AccountsFragment : AccountListener, Fragment() {
 
     private val viewModel: AccountsViewModel by viewModels()
+    private val renameDialog = lazy { AccountRenameDialog(requireContext()) {
+        viewModel.edit(it)
+    }}
+    private val deleteDialog = lazy { AccountDeleteDialog(requireContext()) {
+        viewModel.delete(it)
+    }}
 
     private lateinit var binding: FragAccountsBinding
     private lateinit var clipboardManager: ClipboardManager
@@ -47,7 +53,7 @@ class AccountsFragment : AccountListener, Fragment() {
         clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE)
                 as ClipboardManager
 
-        activateMainMenu()
+        setupMainMenu()
         enableFab(false)
 
         val adapter = AccountsAdapter(this)
@@ -88,11 +94,11 @@ class AccountsFragment : AccountListener, Fragment() {
         menu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menuEdit -> {
-
+                    renameDialog.value.show(account)
                     true
                 }
                 R.id.menuDelete -> {
-
+                    deleteDialog.value.show(account)
                     true
                 }
                 else -> false
@@ -121,7 +127,7 @@ class AccountsFragment : AccountListener, Fragment() {
         }
     }
 
-    private fun activateMainMenu() {
+    private fun setupMainMenu() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.main, menu)
@@ -132,5 +138,4 @@ class AccountsFragment : AccountListener, Fragment() {
             }
         }, viewLifecycleOwner)
     }
-
 }

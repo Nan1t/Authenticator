@@ -12,7 +12,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.FragAddBinding
-import ua.nanit.otpmanager.ext.display
+import ua.nanit.otpmanager.presentation.ext.display
 
 @AndroidEntryPoint
 class AddAccountFragment : Fragment() {

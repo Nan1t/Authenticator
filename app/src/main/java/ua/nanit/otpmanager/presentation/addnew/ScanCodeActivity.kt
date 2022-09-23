@@ -15,9 +15,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.ActivityScanBinding
 import ua.nanit.otpmanager.domain.QrImageReader
-import ua.nanit.otpmanager.ext.display
+import ua.nanit.otpmanager.presentation.ext.display
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.max
 
 @AndroidEntryPoint
@@ -32,7 +33,7 @@ class ScanCodeActivity : AppCompatActivity() {
 
     private val viewModel: AddViewModel by viewModels()
     private var executor: ExecutorService? = null
-    private var analyzerBlocked = false
+    private var analyzerBlocked = AtomicBoolean(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,16 +55,13 @@ class ScanCodeActivity : AppCompatActivity() {
         }
 
         viewModel.success.observe(this) {
-            viewModel.success.removeObservers(this)
             val msg = getString(R.string.accounts_add_success, it.name)
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-            analyzerBlocked = false
             finish()
         }
 
         viewModel.error.observe(this) {
             Toast.makeText(this, it.display(this), Toast.LENGTH_SHORT).show()
-            analyzerBlocked = false
             finish()
         }
     }
@@ -97,8 +95,10 @@ class ScanCodeActivity : AppCompatActivity() {
         cameraProviderFuture.addListener({
             val provider = cameraProviderFuture.get()
             val preview = Preview.Builder().build()
-            val analyzer = ImageAnalysis.Builder().build()
-
+            val analyzer = ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_BLOCK_PRODUCER)
+                .setImageQueueDepth(1)
+                .build()
             val viewSize = max(binding.cameraPreview.width, binding.cameraPreview.height)
             val frameSize = binding.frame.width // Assume it's a square (it must)
 
@@ -118,36 +118,31 @@ class ScanCodeActivity : AppCompatActivity() {
     }
 
     private fun analyzeFrame(viewSize: Int, frameSize: Int, img: ImageProxy) {
-        if (analyzerBlocked) return
+        if (!analyzerBlocked.get()) {
+            val yBuffer = img.planes[0].buffer
+            val vuBuffer = img.planes[2].buffer
 
-        analyzerBlocked = true
+            val ySize = yBuffer.remaining()
+            val vuSize = vuBuffer.remaining()
 
-        val yBuffer = img.planes[0].buffer
-        val vuBuffer = img.planes[2].buffer
+            val yuvBytes = ByteArray(ySize + vuSize)
 
-        val ySize = yBuffer.remaining()
-        val vuSize = vuBuffer.remaining()
+            yBuffer.get(yuvBytes, 0, ySize)
+            vuBuffer.get(yuvBytes, ySize, vuSize)
 
-        val yuvBytes = ByteArray(ySize + vuSize)
+            val multiplier = max(img.width, img.height).toFloat() / viewSize
+            val resizedFrame = (frameSize * multiplier).toInt()
+            val frameX = img.width / 2 - resizedFrame / 2
+            val frameY = img.height / 2 - resizedFrame / 2
+            val uri = QrImageReader.read(yuvBytes, img.width, img.height, frameX, frameY, resizedFrame)
 
-        yBuffer.get(yuvBytes, 0, ySize)
-        vuBuffer.get(yuvBytes, ySize, vuSize)
-
-        val multiplier = max(img.width, img.height).toFloat() / viewSize
-        val resizedFrame = (frameSize * multiplier).toInt()
-        val frameX = img.width / 2 - resizedFrame / 2
-        val frameY = img.height / 2 - resizedFrame / 2
-
-        val uri = QrImageReader.read(yuvBytes, img.width, img.height, frameX, frameY, resizedFrame)
-
-        img.close()
-
-        if (uri == null) {
-            analyzerBlocked = false
-            return
+            if (uri != null) {
+                analyzerBlocked.set(true)
+                viewModel.createByUri(uri)
+            }
         }
 
-        viewModel.createByUri(uri)
+        img.close()
     }
 
     private fun isGrantedPermissions(): Boolean =

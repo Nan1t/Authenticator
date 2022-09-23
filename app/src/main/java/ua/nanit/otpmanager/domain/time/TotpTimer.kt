@@ -13,8 +13,12 @@ object TotpTimer {
         scheduler.scheduleAtFixedRate(::tick, 0, 1, TimeUnit.SECONDS)
     }
 
-    fun subscribe(acc: TotpAccount) {
-        listeners[acc.label] = TotpTask(acc)
+    fun subscribe(acc: TotpAccount, listener: TotpListener) {
+        listeners[acc.label] = TotpTask(acc, listener)
+    }
+
+    fun unsubscribe(acc: TotpAccount) {
+        listeners.remove(acc.label)
     }
 
     private fun tick() {
@@ -31,7 +35,10 @@ interface TotpListener {
     fun onUpdate()
 }
 
-class TotpTask(private val account: TotpAccount) {
+class TotpTask(
+    private val account: TotpAccount,
+    private val listener: TotpListener
+) {
 
     private var last = account.secondsRemain()
 
@@ -42,11 +49,11 @@ class TotpTask(private val account: TotpAccount) {
 
         if (remain > last) {
             account.update()
-            account.listener?.onUpdate()
+            listener.onUpdate()
         }
 
         last = remain
-        account.listener?.onTick(remain - 1)
+        listener.onTick(remain - 1)
     }
 
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.domain.account.Account
 import ua.nanit.otpmanager.domain.account.AccountManager
@@ -24,6 +23,12 @@ class AccountsViewModel @Inject constructor(
     fun edit(acc: Account) {
         viewModelScope.launch(dispatcher) {
             repository.edit(acc)
+        }
+    }
+
+    fun delete(acc: Account) {
+        viewModelScope.launch(dispatcher) {
+            repository.delete(acc)
         }
     }
 

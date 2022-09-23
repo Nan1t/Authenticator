@@ -9,7 +9,7 @@ import ua.nanit.otpmanager.domain.otp.HotpGenerator
 @SerialName("hotp")
 class HotpAccount(
     override val label: String,
-    override val name: String,
+    override var name: String,
     override val issuer: String?,
     override val secret: ByteArray,
     override val algorithm: String,

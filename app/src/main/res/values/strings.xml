@@ -1,6 +1,8 @@
 <resources>
     <string name="appName">OTP Manager</string>
 
+    <string name="cancel">Cancel</string>
+
     <string name="menu.main.import">Import</string>
     <string name="menu.main.export">Export</string>
     <string name="menu.main.settings">Settings</string>
@@ -16,6 +18,12 @@
     <string name="accounts.add.scan">Scan code</string>
     <string name="accounts.add.manual">Enter manually</string>
     <string name="accounts.add.success">Successfully added account %1$s</string>
+
+    <string name="account.rename">Rename</string>
+    <string name="account.rename.title">Rename account</string>
+    <string name="account.delete">Delete account</string>
+    <string name="account.delete.title">Delete this account?</string>
+    <string name="account.delete.warning">Before deleting %1$s, ensure you disabled 2FA for this account!</string>
 
     <string name="manual.title">New account</string>
     <string name="manual.submit">Create account</string>

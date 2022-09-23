@@ -12,6 +12,6 @@ interface AccountStorage {
 
     fun edit(account: Account)
 
-    fun remove(account: Account)
+    fun delete(account: Account)
 
 }

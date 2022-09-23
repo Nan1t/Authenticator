@@ -11,6 +11,7 @@ import ua.nanit.otpmanager.domain.account.HotpAccount
 import ua.nanit.otpmanager.domain.account.TotpAccount
 import ua.nanit.otpmanager.domain.otp.formatAsOtp
 import ua.nanit.otpmanager.domain.time.TotpListener
+import ua.nanit.otpmanager.domain.time.TotpTimer
 import ua.nanit.otpmanager.presentation.custom.SimpleDiffCallback
 
 class AccountsAdapter(
@@ -36,14 +37,6 @@ class AccountsAdapter(
         holder.bind(data[position])
     }
 
-    override fun onViewDetachedFromWindow(holder: AccountHolder) {
-        holder.unbind(data[holder.adapterPosition])
-    }
-
-    override fun onViewAttachedToWindow(holder: AccountHolder) {
-        holder.bind(data[holder.adapterPosition])
-    }
-
     override fun getItemCount(): Int = data.size
 
     inner class AccountHolder(
@@ -62,11 +55,6 @@ class AccountsAdapter(
             }
         }
 
-        fun unbind(acc: Account) {
-            if (acc is TotpAccount)
-                acc.removeListener()
-        }
-
         private fun bindTotp(acc: TotpAccount) {
             binding.progressBar.visibility = View.VISIBLE
             binding.refreshBtn.visibility = View.GONE
@@ -74,7 +62,7 @@ class AccountsAdapter(
             binding.progressBar.max = acc.interval.toInt() - 1
             binding.progressBar.setProgressCompat(acc.secondsRemain(), false)
 
-            acc.listen(object : TotpListener {
+            TotpTimer.subscribe(acc, object : TotpListener {
                 override fun onTick(progress: Int) {
                     itemView.post {
                         binding.progressBar.setProgressCompat(progress, true)
