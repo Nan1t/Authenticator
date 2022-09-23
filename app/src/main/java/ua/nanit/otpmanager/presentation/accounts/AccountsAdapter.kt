@@ -95,7 +95,7 @@ class AccountsAdapter(
             binding.refreshBtn.setOnClickListener {
                 if (acc.increment()) {
                     binding.password.text = acc.password.formatAsOtp()
-                    listener.onUpdate(acc)
+                    listener.onHotpIncrement(acc)
                 }
             }
         }

@@ -17,7 +17,7 @@ sealed class Account {
     override fun equals(other: Any?): Boolean {
         if (javaClass != other?.javaClass) return false
 
-        other as TotpAccount
+        other as Account
 
         return label == other.label
                 && secret.contentEquals(other.secret)

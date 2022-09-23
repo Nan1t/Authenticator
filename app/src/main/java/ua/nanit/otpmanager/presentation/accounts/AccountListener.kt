@@ -9,6 +9,6 @@ interface AccountListener {
 
     fun onMenuClick(account: Account, anchor: View)
 
-    fun onUpdate(acc: Account)
+    fun onHotpIncrement(acc: Account)
 
 }

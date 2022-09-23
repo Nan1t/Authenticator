@@ -15,6 +15,7 @@
 
     <string name="accounts.add.scan">Scan code</string>
     <string name="accounts.add.manual">Enter manually</string>
+    <string name="accounts.add.success">Successfully added account %1$s</string>
 
     <string name="manual.title">New account</string>
     <string name="manual.submit">Create account</string>
@@ -29,4 +30,14 @@
 
     <string name="scan.title">Scan code</string>
     <string name="scan.hint">QR code must be inside red frame to scan</string>
+    <string name="scan.permission.required">Camera permission is required for scanning!</string>
+
+    <string name="error.undefined">Undefined error</string>
+    <string name="error.exists">Account with such name already exists</string>
+    <string name="error.invalidUri">Invalid creation URI</string>
+    <string name="error.undefinedType">Undefined account type</string>
+    <string name="error.shortLabel">Too short account name</string>
+    <string name="error.shortSecret">Too short secret code</string>
+    <string name="error.invalidInterval">Invalid interval value</string>
+    <string name="error.invalidCounter">Invalid counter value</string>
 </resources>

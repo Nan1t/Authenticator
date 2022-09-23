@@ -12,7 +12,10 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
+import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.ActivityScanBinding
+import ua.nanit.otpmanager.domain.QrImageReader
+import ua.nanit.otpmanager.ext.display
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.math.max
@@ -25,10 +28,11 @@ class ScanCodeActivity : AppCompatActivity() {
         private const val PERMISSION = Manifest.permission.CAMERA
     }
 
+    private lateinit var binding: ActivityScanBinding
+
     private val viewModel: AddViewModel by viewModels()
     private var executor: ExecutorService? = null
-
-    private lateinit var binding: ActivityScanBinding
+    private var analyzerBlocked = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,12 +55,15 @@ class ScanCodeActivity : AppCompatActivity() {
 
         viewModel.success.observe(this) {
             viewModel.success.removeObservers(this)
-            Toast.makeText(this, "Added new account", Toast.LENGTH_SHORT).show()
+            val msg = getString(R.string.accounts_add_success, it.name)
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+            analyzerBlocked = false
             finish()
         }
 
         viewModel.error.observe(this) {
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, it.display(this), Toast.LENGTH_SHORT).show()
+            analyzerBlocked = false
             finish()
         }
     }
@@ -72,7 +79,7 @@ class ScanCodeActivity : AppCompatActivity() {
             if (isGrantedPermissions()) {
                 openCamera()
             } else {
-                Toast.makeText(this, "Camera permission required for scanning!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.scan_permission_required, Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
@@ -102,7 +109,8 @@ class ScanCodeActivity : AppCompatActivity() {
 
             try {
                 provider.unbindAll()
-                provider.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, preview, analyzer)
+                provider.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA,
+                    preview, analyzer)
             } catch(ex: Exception) {
                 Log.e(null, "Camera use cases binding failed", ex)
             }
@@ -110,6 +118,10 @@ class ScanCodeActivity : AppCompatActivity() {
     }
 
     private fun analyzeFrame(viewSize: Int, frameSize: Int, img: ImageProxy) {
+        if (analyzerBlocked) return
+
+        analyzerBlocked = true
+
         val yBuffer = img.planes[0].buffer
         val vuBuffer = img.planes[2].buffer
 
@@ -126,8 +138,16 @@ class ScanCodeActivity : AppCompatActivity() {
         val frameX = img.width / 2 - resizedFrame / 2
         val frameY = img.height / 2 - resizedFrame / 2
 
-        viewModel.decodeQrCode(yuvBytes, img.width, img.height, frameX, frameY, resizedFrame)
+        val uri = QrImageReader.read(yuvBytes, img.width, img.height, frameX, frameY, resizedFrame)
+
         img.close()
+
+        if (uri == null) {
+            analyzerBlocked = false
+            return
+        }
+
+        viewModel.createByUri(uri)
     }
 
     private fun isGrantedPermissions(): Boolean =

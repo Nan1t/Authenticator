@@ -10,10 +10,14 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.FragAccountsBinding
 import ua.nanit.otpmanager.domain.account.Account
@@ -64,8 +68,12 @@ class AccountsFragment : AccountListener, Fragment() {
             startActivity(Intent(requireContext(), ScanCodeActivity::class.java))
         }
 
-        viewModel.accounts.observe(viewLifecycleOwner) {
-            adapter.updateAll(it)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.accounts.collect {
+                    adapter.updateAll(it)
+                }
+            }
         }
     }
 
@@ -77,11 +85,24 @@ class AccountsFragment : AccountListener, Fragment() {
     override fun onMenuClick(account: Account, anchor: View) {
         val menu = PopupMenu(requireContext(), anchor)
         menu.inflate(R.menu.editor)
+        menu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menuEdit -> {
+
+                    true
+                }
+                R.id.menuDelete -> {
+
+                    true
+                }
+                else -> false
+            }
+        }
         menu.show()
     }
 
-    override fun onUpdate(acc: Account) {
-        viewModel.update(acc)
+    override fun onHotpIncrement(acc: Account) {
+        viewModel.edit(acc)
     }
 
     private fun enableFab(enabled: Boolean) {

@@ -9,8 +9,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import ua.nanit.otpmanager.domain.account.AccountJsonStorage
-import ua.nanit.otpmanager.domain.account.AccountStorage
+import ua.nanit.otpmanager.domain.storage.AccountJsonStorage
+import ua.nanit.otpmanager.domain.storage.AccountStorage
 import java.io.File
 import javax.inject.Named
 

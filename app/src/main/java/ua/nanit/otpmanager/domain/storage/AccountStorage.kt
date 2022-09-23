@@ -1,4 +1,6 @@
-package ua.nanit.otpmanager.domain.account
+package ua.nanit.otpmanager.domain.storage
+
+import ua.nanit.otpmanager.domain.account.Account
 
 interface AccountStorage {
 

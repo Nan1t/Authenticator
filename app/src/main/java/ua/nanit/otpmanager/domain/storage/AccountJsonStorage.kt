@@ -1,18 +1,17 @@
-package ua.nanit.otpmanager.domain.account
+package ua.nanit.otpmanager.domain.storage
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import ua.nanit.otpmanager.domain.account.Account
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Named
+import javax.inject.Singleton
 
-private typealias AccountCache = MutableMap<String, Account>
+private typealias AccountCache = LinkedHashMap<String, Account>
 
-//data class AccountCache(
-//    val accounts: MutableMap<String, Account>
-//)
-
+@Singleton
 class AccountJsonStorage @Inject constructor(
     @Named("appDir") private val dir: File
 ) : AccountStorage {
@@ -45,11 +44,6 @@ class AccountJsonStorage @Inject constructor(
         getOrCreateFile().writeText(Json.encodeToString(parsed))
     }
 
-    private fun getFile(): File? {
-        val file = resolveFile()
-        return if (file.exists()) file else null
-    }
-
     private fun getOrCreateFile(): File {
         val file = resolveFile()
         if (!file.exists()) {
@@ -62,7 +56,7 @@ class AccountJsonStorage @Inject constructor(
     private fun getOrParseData(): AccountCache {
         val cache = this.cache
         return if (cache == null) {
-            val file = getFile() ?: return mutableMapOf()
+            val file = getOrCreateFile()
             val parsed: AccountCache = Json.decodeFromString(file.readText())
             this.cache = parsed
             parsed

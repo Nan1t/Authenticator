@@ -3,25 +3,21 @@ package ua.nanit.otpmanager.domain.account
 import ua.nanit.otpmanager.domain.Constants
 import ua.nanit.otpmanager.domain.Base32
 import ua.nanit.otpmanager.domain.UriParser
-import ua.nanit.otpmanager.domain.time.TotpTimer
 import java.util.regex.Pattern
 import javax.inject.Inject
 
 class AccountManager @Inject constructor(
-    private val storage: AccountStorage
+    private val repository: AccountRepository
 ) {
 
     private val labelPattern = Pattern.compile(":")
 
-    fun getAll(): List<Account> {
-        return ArrayList(storage.getAll())
-    }
-
-    fun createByUri(rawUri: String) {
+    suspend fun createByUri(rawUri: String): Account {
         val uri = UriParser.parse(rawUri)
         val scheme = uri.uri.scheme.lowercase()
 
-        if (scheme != "otpauth") throw InvalidUriSchemeException()
+        if (scheme != "otpauth")
+            throw throw CreationError.INVALID_URI.asException()
 
         val type = uri.uri.host.lowercase()
         val label = uri.uri.path.substring(1)
@@ -39,46 +35,44 @@ class AccountManager @Inject constructor(
                 val counter = uri.args["counter"]?.toLong() ?: Constants.DEFAULT_HOTP_COUNTER
                 createHotpAccount(label, issuer, secret, algorithm, digits, counter)
             }
-            else -> throw IllegalArgumentException("Undefined type: $type")
+            else -> throw CreationError.UNDEFINED_TYPE.asException()
         }
     }
 
-    fun createTotpAccount(
+    suspend fun createTotpAccount(
         label: String,
         issuer: String?,
         secret: String,
         algorithm: String,
         digits: Int,
         interval: Long
-    ) {
-        if (interval < 1) throw InvalidIntervalException()
+    ): Account {
+        if (interval < 1) throw CreationError.INVALID_INTERVAL.asException()
         val key = Base32.decode(secret)
         validateAccount(label, key)
         val parsed = parseLabel(label)
         val account = TotpAccount(label, parsed.name, issuer ?: parsed.issuer,
             key, algorithm, digits, interval)
-        storage.add(account)
+        repository.add(account)
+        return account
     }
 
-    fun createHotpAccount(
+    suspend fun createHotpAccount(
         label: String,
         issuer: String?,
         secret: String,
         algorithm: String,
         digits: Int,
         counter: Long
-    ) {
-        if (counter < 0) throw InvalidCounterException()
+    ): Account {
+        if (counter < 0) throw CreationError.INVALID_COUNTER.asException()
         val key = Base32.decode(secret)
         validateAccount(label, key)
         val parsed = parseLabel(label)
         val account = HotpAccount(label, parsed.name, issuer ?: parsed.issuer,
             key, algorithm, digits, counter)
-        storage.add(account)
-    }
-
-    fun save(account: Account) {
-        storage.edit(account)
+        repository.add(account)
+        return account
     }
 
     private fun parseLabel(label: String): ParsedLabel {
@@ -89,20 +83,15 @@ class AccountManager @Inject constructor(
     }
 
     private fun validateAccount(label: String, secret: ByteArray) {
+        if (repository.get(label) != null)
+            throw CreationError.ALREADY_EXISTS.asException()
+
         if (label.length < 3)
-            throw ShortLabelException()
+            throw CreationError.SHORT_LABEL.asException()
 
         if (secret.size < 6)
-            throw ShortSecretException()
+            throw CreationError.SHORT_SECRET.asException()
     }
 }
 
-class ParsedLabel(val name: String, val issuer: String?)
-
-class InvalidUriSchemeException : RuntimeException()
-
-class ShortLabelException : RuntimeException()
-class ShortSecretException : RuntimeException()
-
-class InvalidIntervalException : RuntimeException()
-class InvalidCounterException : RuntimeException()
+private class ParsedLabel(val name: String, val issuer: String?)
