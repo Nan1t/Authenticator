@@ -14,4 +14,6 @@ interface AccountStorage {
 
     fun delete(account: Account)
 
+    fun export(): String
+
 }

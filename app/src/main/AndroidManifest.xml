@@ -3,6 +3,8 @@
     package="ua.nanit.otpmanager">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
 
@@ -21,11 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".presentation.addnew.ScanCodeActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

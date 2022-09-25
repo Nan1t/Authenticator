@@ -16,16 +16,15 @@ import javax.inject.Inject
 class AccountsViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val repository: AccountRepository,
-    private val manager: AccountManager
 ) : ViewModel() {
 
     val accounts: StateFlow<List<Account>> = repository.accounts
-    val edited = Event<Account>()
+    val updateResult = Event<Account>()
 
     fun edit(acc: Account) {
         viewModelScope.launch(dispatcher) {
             repository.edit(acc)
-            edited.postValue(acc)
+            updateResult.postValue(acc)
         }
     }
 

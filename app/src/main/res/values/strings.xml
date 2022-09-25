@@ -1,6 +1,7 @@
 <resources>
     <string name="appName">OTP Manager</string>
 
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
 
     <string name="menu.main.import">Import</string>
@@ -24,6 +25,13 @@
     <string name="account.delete">Delete account</string>
     <string name="account.delete.title">Delete this account?</string>
     <string name="account.delete.warning">Before deleting %1$s, ensure you disabled 2FA for this account!</string>
+    <string name="account.export.success">Accounts exported into Downloads/accounts.json</string>
+    <string name="account.export.error">Error while exporting accounts</string>
+    <string name="account.export.permission">Storage write permission is required to export accounts!</string>
+
+    <string name="account.import.success">Accounts successfully imported!</string>
+    <string name="account.import.error">Error while importing accounts</string>
+    <string name="account.import.permission">Storage read permission is required to import accounts!</string>
 
     <string name="manual.title">New account</string>
     <string name="manual.submit">Create account</string>
@@ -38,6 +46,7 @@
 
     <string name="scan.title">Scan code</string>
     <string name="scan.hint">QR code must be inside red frame to scan</string>
+    <string name="scan.camera.missing">Camera not found on this device!</string>
     <string name="scan.permission.required">Camera permission is required for scanning!</string>
 
     <string name="error.undefined">Undefined error</string>

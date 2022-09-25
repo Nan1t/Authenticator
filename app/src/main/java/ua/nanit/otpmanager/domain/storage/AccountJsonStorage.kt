@@ -38,6 +38,11 @@ class AccountJsonStorage @Inject constructor(
         editFile { it.remove(account.label.lowercase()) }
     }
 
+    override fun export(): String {
+        val format = Json { prettyPrint = true }
+        return format.encodeToString(getOrParseData())
+    }
+
     private fun editFile(data: (AccountCache) -> Unit) {
         val parsed = getOrParseData()
         data(parsed)

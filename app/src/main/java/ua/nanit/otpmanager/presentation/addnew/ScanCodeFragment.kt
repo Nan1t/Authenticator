@@ -4,45 +4,59 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
+import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ua.nanit.otpmanager.R
-import ua.nanit.otpmanager.databinding.ActivityScanBinding
+import ua.nanit.otpmanager.databinding.FragScanBinding
 import ua.nanit.otpmanager.domain.QrImageReader
 import ua.nanit.otpmanager.presentation.ext.display
+import ua.nanit.otpmanager.presentation.ext.showCloseableSnackbar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.max
 
 @AndroidEntryPoint
-class ScanCodeActivity : AppCompatActivity() {
+class ScanCodeFragment : Fragment() {
 
     companion object {
-        private const val PERMISSION_REQUEST_CODE = 0
         private const val PERMISSION = Manifest.permission.CAMERA
     }
 
-    private lateinit var binding: ActivityScanBinding
+    private lateinit var binding: FragScanBinding
 
     private val viewModel: AddViewModel by viewModels()
     private var executor: ExecutorService? = null
     private var analyzerBlocked = AtomicBoolean(false)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityScanBinding.inflate(layoutInflater, null, false)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragScanBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val navController = findNavController()
 
         if (!hasCamera()) {
-            Toast.makeText(this, "No camera!", Toast.LENGTH_SHORT).show()
-            finish()
+            showCloseableSnackbar(R.string.scan_camera_missing)
+            navController.navigateUp()
             return
         }
 
@@ -51,35 +65,25 @@ class ScanCodeActivity : AppCompatActivity() {
         if (isGrantedPermissions()) {
             openCamera()
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(PERMISSION), PERMISSION_REQUEST_CODE)
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+                if (granted) {
+                    openCamera()
+                } else {
+                    showCloseableSnackbar(R.string.scan_permission_required)
+                    navController.navigateUp()
+                }
+            }.launch(PERMISSION)
         }
 
-        viewModel.success.observe(this) {
+        viewModel.success.observe(viewLifecycleOwner) {
             val msg = getString(R.string.accounts_add_success, it.name)
-            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-            finish()
+            Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show()
+            navController.navigateUp()
         }
 
-        viewModel.error.observe(this) {
-            Toast.makeText(this, it.display(this), Toast.LENGTH_SHORT).show()
-            finish()
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (isGrantedPermissions()) {
-                openCamera()
-            } else {
-                Toast.makeText(this, R.string.scan_permission_required, Toast.LENGTH_SHORT).show()
-                finish()
-            }
+        viewModel.error.observe(viewLifecycleOwner) {
+            showCloseableSnackbar(it.display(requireContext()))
+            navController.navigateUp()
         }
     }
 
@@ -89,7 +93,8 @@ class ScanCodeActivity : AppCompatActivity() {
     }
 
     private fun openCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+        val ctx = requireContext()
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(ctx)
         val executor = executor ?: return
 
         cameraProviderFuture.addListener({
@@ -114,7 +119,7 @@ class ScanCodeActivity : AppCompatActivity() {
             } catch(ex: Exception) {
                 Log.e(null, "Camera use cases binding failed", ex)
             }
-        }, ContextCompat.getMainExecutor(this))
+        }, ContextCompat.getMainExecutor(ctx))
     }
 
     private fun analyzeFrame(viewSize: Int, frameSize: Int, img: ImageProxy) {
@@ -146,9 +151,10 @@ class ScanCodeActivity : AppCompatActivity() {
     }
 
     private fun isGrantedPermissions(): Boolean =
-        ContextCompat.checkSelfPermission(this, PERMISSION) ==
+        ContextCompat.checkSelfPermission(requireContext(), PERMISSION) ==
                 PackageManager.PERMISSION_GRANTED
 
     private fun hasCamera(): Boolean =
-        packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)
+        requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)
+
 }

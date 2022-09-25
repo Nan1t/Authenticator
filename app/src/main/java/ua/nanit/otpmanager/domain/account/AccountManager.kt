@@ -3,11 +3,13 @@ package ua.nanit.otpmanager.domain.account
 import ua.nanit.otpmanager.domain.Constants
 import ua.nanit.otpmanager.domain.Base32
 import ua.nanit.otpmanager.domain.UriParser
+import ua.nanit.otpmanager.domain.storage.AccountStorage
 import java.util.regex.Pattern
 import javax.inject.Inject
 
 class AccountManager @Inject constructor(
-    private val repository: AccountRepository
+    private val repository: AccountRepository,
+    private val storage: AccountStorage
 ) {
 
     private val labelPattern = Pattern.compile(":")
@@ -73,6 +75,10 @@ class AccountManager @Inject constructor(
             key, algorithm, digits, counter)
         repository.add(account)
         return account
+    }
+
+    fun export(): String {
+        return storage.export()
     }
 
     private fun parseLabel(label: String): ParsedLabel {

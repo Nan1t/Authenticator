@@ -3,7 +3,6 @@ package ua.nanit.otpmanager.presentation.accounts
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
@@ -21,7 +20,7 @@ import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.FragAccountsBinding
 import ua.nanit.otpmanager.domain.account.Account
-import ua.nanit.otpmanager.presentation.addnew.ScanCodeActivity
+import ua.nanit.otpmanager.presentation.export.AccountExporter
 
 @AndroidEntryPoint
 class AccountsFragment : AccountListener, Fragment() {
@@ -36,6 +35,7 @@ class AccountsFragment : AccountListener, Fragment() {
 
     private lateinit var binding: FragAccountsBinding
     private lateinit var clipboardManager: ClipboardManager
+    private lateinit var exporter: AccountExporter
 
     private var fabEnabled = false
 
@@ -52,6 +52,7 @@ class AccountsFragment : AccountListener, Fragment() {
         val navController = findNavController()
         clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE)
                 as ClipboardManager
+        exporter = AccountExporter(this)
 
         setupMainMenu()
         enableFab(false)
@@ -71,12 +72,10 @@ class AccountsFragment : AccountListener, Fragment() {
 
         binding.addScanBtn.setOnClickListener {
             enableFab(false)
-            startActivity(Intent(requireContext(), ScanCodeActivity::class.java))
+            navController.navigate(R.id.actionNavScanCode)
         }
 
-        viewModel.edited.observe(viewLifecycleOwner) {
-            adapter.update(it)
-        }
+        viewModel.updateResult.observe(viewLifecycleOwner, adapter::update)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
@@ -138,7 +137,16 @@ class AccountsFragment : AccountListener, Fragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return true
+                return when (menuItem.itemId) {
+                    R.id.menuImport -> {
+                        true
+                    }
+                    R.id.menuExport -> {
+                        exporter.export()
+                        true
+                    }
+                    else -> false
+                }
             }
         }, viewLifecycleOwner)
     }

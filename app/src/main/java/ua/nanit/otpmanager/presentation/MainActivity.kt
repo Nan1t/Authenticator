@@ -23,5 +23,12 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.fragmentContainer)
         val toolbarConf = AppBarConfiguration(setOf(R.id.navAccounts))
         binding.toolbar.setupWithNavController(navController, toolbarConf)
+
+        navController.addOnDestinationChangedListener { _, dest, _ ->
+            when (dest.id) {
+                R.id.navScanCode -> supportActionBar?.hide()
+                else -> supportActionBar?.show()
+            }
+        }
     }
 }

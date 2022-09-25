@@ -37,5 +37,4 @@ class AddTotpFragment : Fragment() {
             viewModel.createTotp(name, secret, interval)
         }
     }
-
 }

@@ -17,7 +17,14 @@
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/idle"
             app:popEnterAnim="@anim/idle"
-            app:popExitAnim="@anim/slide_out_left" />
+            app:popExitAnim="@anim/slide_out_left"/>
+
+        <action android:id="@+id/actionNavScanCode"
+            app:destination="@id/navScanCode"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/idle"
+            app:popEnterAnim="@anim/idle"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
 
     <fragment
@@ -25,5 +32,10 @@
         android:label="@string/manual.title"
         android:name="ua.nanit.otpmanager.presentation.addnew.AddAccountFragment"
         tools:layout="@layout/frag_add"/>
+
+    <fragment android:id="@+id/navScanCode"
+        android:label="@string/scan.title"
+        android:name="ua.nanit.otpmanager.presentation.addnew.ScanCodeFragment"
+        tools:layout="@layout/frag_scan"/>
 
 </navigation>
