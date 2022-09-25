@@ -15,21 +15,28 @@ sealed class Account {
     abstract var password: String
 
     override fun equals(other: Any?): Boolean {
+        if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
         other as Account
 
         return label == other.label
                 && name == other.name
+                && issuer == other.issuer
                 && secret.contentEquals(other.secret)
-                && password == other.password
+                && algorithm == other.algorithm
+                && digits == other.digits
     }
 
     override fun hashCode(): Int {
         var result = label.hashCode()
         result = 31 * result + name.hashCode()
+        result = 31 * result + (issuer?.hashCode() ?: 0)
         result = 31 * result + secret.contentHashCode()
-        result = 31 * result + password.hashCode()
+        result = 31 * result + algorithm.hashCode()
+        result = 31 * result + digits
         return result
     }
+
+
 }

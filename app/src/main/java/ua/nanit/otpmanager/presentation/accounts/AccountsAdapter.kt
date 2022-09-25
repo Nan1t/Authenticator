@@ -1,5 +1,7 @@
 package ua.nanit.otpmanager.presentation.accounts
 
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +13,13 @@ import ua.nanit.otpmanager.domain.account.HotpAccount
 import ua.nanit.otpmanager.domain.account.TotpAccount
 import ua.nanit.otpmanager.domain.otp.formatAsOtp
 import ua.nanit.otpmanager.domain.time.TotpListener
-import ua.nanit.otpmanager.domain.time.TotpTimer
 import ua.nanit.otpmanager.presentation.custom.SimpleDiffCallback
 
 class AccountsAdapter(
     private val listener: AccountListener
 ) : RecyclerView.Adapter<AccountsAdapter.AccountHolder>() {
 
+    private val handler = Handler(Looper.getMainLooper())
     private var data: List<Account> = emptyList()
 
     fun updateAll(newData: List<Account>) {
@@ -25,6 +27,15 @@ class AccountsAdapter(
         val result = DiffUtil.calculateDiff(callback, false)
         data = newData
         result.dispatchUpdatesTo(this)
+    }
+
+    fun update(acc: Account) {
+        for (i in data.indices) {
+            if (acc == data[i]) {
+                notifyItemChanged(i)
+                return
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountHolder {
@@ -40,14 +51,14 @@ class AccountsAdapter(
     override fun getItemCount(): Int = data.size
 
     inner class AccountHolder(
-        val binding: ItemAccountBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+        private val binding: ItemAccountBinding
+    ) : RecyclerView.ViewHolder(binding.root), TotpListener {
 
         fun bind(acc: Account) {
-            binding.accountName.text = acc.name
             binding.password.text = acc.password.formatAsOtp()
-            binding.root.setOnClickListener { listener.onCopy(acc.password) }
-            binding.root.setOnLongClickListener { listener.onMenuClick(acc, it); true }
+            binding.accountName.text = acc.name
+            itemView.setOnClickListener { listener.onCopy(acc.password) }
+            itemView.setOnLongClickListener { listener.onMenuClick(acc, it); true }
 
             when (acc) {
                 is TotpAccount -> bindTotp(acc)
@@ -55,26 +66,19 @@ class AccountsAdapter(
             }
         }
 
+        override fun onTick(progress: Int) {
+            handler.post { binding.progressBar.setProgressCompat(progress, true) }
+        }
+
+        override fun onUpdate(password: String) {
+            handler.post { binding.password.text = password.formatAsOtp() }
+        }
+
         private fun bindTotp(acc: TotpAccount) {
             binding.progressBar.visibility = View.VISIBLE
             binding.refreshBtn.visibility = View.GONE
-
             binding.progressBar.max = acc.interval.toInt() - 1
-            binding.progressBar.setProgressCompat(acc.secondsRemain(), false)
-
-            TotpTimer.subscribe(acc, object : TotpListener {
-                override fun onTick(progress: Int) {
-                    itemView.post {
-                        binding.progressBar.setProgressCompat(progress, true)
-                    }
-                }
-
-                override fun onUpdate() {
-                    itemView.post {
-                        binding.password.text = acc.password.formatAsOtp()
-                    }
-                }
-            })
+            acc.listener = this
         }
 
         private fun bindHotp(acc: HotpAccount) {
@@ -84,6 +88,7 @@ class AccountsAdapter(
                 if (acc.increment()) {
                     binding.password.text = acc.password.formatAsOtp()
                     listener.onHotpIncrement(acc)
+                    notifyItemChanged(adapterPosition)
                 }
             }
         }

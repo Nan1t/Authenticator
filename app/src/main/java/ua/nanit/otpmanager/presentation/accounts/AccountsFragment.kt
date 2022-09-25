@@ -74,6 +74,10 @@ class AccountsFragment : AccountListener, Fragment() {
             startActivity(Intent(requireContext(), ScanCodeActivity::class.java))
         }
 
+        viewModel.edited.observe(viewLifecycleOwner) {
+            adapter.update(it)
+        }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.accounts.collect {

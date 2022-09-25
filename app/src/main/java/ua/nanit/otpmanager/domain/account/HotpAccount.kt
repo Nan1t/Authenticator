@@ -37,11 +37,12 @@ class HotpAccount(
         return false
     }
 
+    private fun generate(): String {
+        return HotpGenerator.INSTANCE.generate(secret, counter, algorithm, digits)
+    }
+
     private fun isReadyForUpdate(): Boolean {
         return System.currentTimeMillis() > lastUpdate + UPDATE_COOLDOWN
     }
-
-    private fun generate(): String =
-        HotpGenerator.INSTANCE.generate(secret, counter, algorithm, digits)
 
 }

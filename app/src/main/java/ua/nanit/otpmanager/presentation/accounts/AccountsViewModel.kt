@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.domain.account.Account
 import ua.nanit.otpmanager.domain.account.AccountManager
 import ua.nanit.otpmanager.domain.account.AccountRepository
+import ua.nanit.otpmanager.presentation.Event
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,10 +20,12 @@ class AccountsViewModel @Inject constructor(
 ) : ViewModel() {
 
     val accounts: StateFlow<List<Account>> = repository.accounts
+    val edited = Event<Account>()
 
     fun edit(acc: Account) {
         viewModelScope.launch(dispatcher) {
             repository.edit(acc)
+            edited.postValue(acc)
         }
     }
 

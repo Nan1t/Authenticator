@@ -1,20 +1,22 @@
 package ua.nanit.otpmanager.domain.time
 
 import ua.nanit.otpmanager.domain.account.TotpAccount
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 object TotpTimer {
 
     private val scheduler = Executors.newSingleThreadScheduledExecutor()
-    private val listeners = HashMap<String, TotpTask>()
+    private val listeners = ConcurrentHashMap<String, TotpTask>()
 
     fun start() {
         scheduler.scheduleAtFixedRate(::tick, 0, 1, TimeUnit.SECONDS)
     }
 
-    fun subscribe(acc: TotpAccount, listener: TotpListener) {
-        listeners[acc.label] = TotpTask(acc, listener)
+    fun subscribe(acc: TotpAccount) {
+        val task = TotpTask(acc)
+        listeners[acc.label] = task
     }
 
     fun unsubscribe(acc: TotpAccount) {
@@ -32,13 +34,10 @@ object TotpTimer {
 
 interface TotpListener {
     fun onTick(progress: Int)
-    fun onUpdate()
+    fun onUpdate(password: String)
 }
 
-class TotpTask(
-    private val account: TotpAccount,
-    private val listener: TotpListener
-) {
+class TotpTask(val account: TotpAccount) {
 
     private var last = account.secondsRemain()
 
@@ -49,11 +48,11 @@ class TotpTask(
 
         if (remain > last) {
             account.update()
-            listener.onUpdate()
+            account.listener?.onUpdate(account.password)
         }
 
         last = remain
-        listener.onTick(remain - 1)
+        account.listener?.onTick(remain - 1)
     }
 
 }

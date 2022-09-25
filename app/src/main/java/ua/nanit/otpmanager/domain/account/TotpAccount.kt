@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import ua.nanit.otpmanager.domain.time.SystemClock
 import ua.nanit.otpmanager.domain.otp.TotpGenerator
+import ua.nanit.otpmanager.domain.time.TotpListener
 import ua.nanit.otpmanager.domain.time.TotpTimer
 
 @Serializable
@@ -22,18 +23,30 @@ class TotpAccount(
     @Transient
     override var password: String = generate()
 
+    @Transient
+    var listener: TotpListener? = null
+        set(value) {
+            field = value
+            value?.onTick(secondsRemain())
+        }
+
     init {
         TotpTimer.subscribe(this)
+    }
+
+    protected fun finalize() {
+        listener = null
+        TotpTimer.unsubscribe(this)
     }
 
     fun update() {
         password = generate()
     }
 
+    private fun generate(): String =
+        TotpGenerator.INSTANCE.generate(secret, interval, algorithm, digits)
+
     fun secondsRemain(): Int {
         return (interval - SystemClock.epochSeconds() % interval).toInt()
     }
-
-    private fun generate(): String =
-        TotpGenerator.INSTANCE.generate(secret, interval, algorithm, digits)
 }
