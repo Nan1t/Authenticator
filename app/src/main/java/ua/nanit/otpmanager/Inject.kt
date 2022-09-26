@@ -31,6 +31,7 @@ object BaseModule {
         return Dispatchers.IO
     }
 
+    @Provides
     fun provideBase64Coder(): Base64Coder {
         return AndroidBase64Coder
     }

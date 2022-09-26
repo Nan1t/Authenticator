@@ -47,7 +47,20 @@
 
     <fragment android:id="@+id/navExport"
         android:label="@string/account.export"
-        android:name="ua.nanit.otpmanager.presentation.migration.AccountExportFragment"
-        tools:layout="@layout/frag_export" />
+        android:name="ua.nanit.otpmanager.presentation.migration.ExportFragment"
+        tools:layout="@layout/frag_export">
+
+        <action android:id="@+id/actionNavExportQr"
+            app:destination="@id/navExportQr"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/idle"
+            app:popEnterAnim="@anim/idle"
+            app:popExitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment android:id="@+id/navExportQr"
+        android:label="@string/account.export.qr"
+        android:name="ua.nanit.otpmanager.presentation.migration.ExportQrCodeFragment"
+        tools:layout="@layout/frag_export_qr" />
 
 </navigation>

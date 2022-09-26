@@ -3,22 +3,22 @@ package ua.nanit.otpmanager.domain.migration
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoIntegerType
 import kotlinx.serialization.protobuf.ProtoNumber
+import kotlinx.serialization.protobuf.ProtoPacked
 import kotlinx.serialization.protobuf.ProtoType
 
 @Serializable
-data class MigrationPayload(
-    @ProtoNumber(5)
-    val batchId: Int,
-    @ProtoType(ProtoIntegerType.SIGNED)
-    @ProtoNumber(4)
-    val batchIndex: Int,
-    @ProtoType(ProtoIntegerType.SIGNED)
-    @ProtoNumber(3)
-    val batchSize: Int,
+data class MigrationPayload constructor(
     @ProtoNumber(1)
+    @ProtoPacked
     val otpParameters: List<OtpParams>,
     @ProtoNumber(2)
     val version: Int,
+    @ProtoNumber(3)
+    val batchSize: Int,
+    @ProtoNumber(4)
+    val batchIndex: Int,
+    @ProtoNumber(5)
+    val batchId: Int,
 )
 
 @Serializable

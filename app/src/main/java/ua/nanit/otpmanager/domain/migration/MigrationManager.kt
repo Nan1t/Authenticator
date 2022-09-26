@@ -5,9 +5,9 @@ import kotlinx.serialization.protobuf.ProtoBuf
 import ua.nanit.otpmanager.domain.account.AccountRepository
 import ua.nanit.otpmanager.domain.encode.Base64Coder
 import java.net.URI
+import java.net.URLEncoder
 import java.util.*
 import javax.inject.Inject
-import kotlin.math.ceil
 
 class MigrationManager @Inject constructor(
     private val storage: AccountRepository,
@@ -22,15 +22,36 @@ class MigrationManager @Inject constructor(
     }
 
     private val mapper = AccountMapper()
+    private var cachedPayload: List<URI>? = null
 
-    fun createUris(): List<URI> {
+    fun getPayload(index: Int): URI? {
+        var payload = cachedPayload
+
+        if (payload == null) {
+            payload = createPayloadUri()
+            cachedPayload = payload
+        }
+
+        if (payload.isEmpty() || index < 0 || index >= payload.size)
+            return null
+
+        return payload[index]
+    }
+
+    private fun createPayloadUri(): List<URI> {
         val payload = createPayload()
+
+        if (payload.isEmpty())
+            return emptyList()
+
         val uris = LinkedList<URI>()
 
         for (elem in payload) {
             val bytes = ProtoBuf.encodeToByteArray(elem)
-            val base64Str = base64Coder.encode(bytes)
-            uris.add(URI("$URI_SCHEMA://$URI_HOST?data=$base64Str"))
+            val encoded = base64Coder.encode(bytes)
+            val data = URLEncoder.encode(encoded, "UTF-8")
+            val uri = "$URI_SCHEMA://$URI_HOST?data=$data"
+            uris.add(URI.create(uri))
         }
 
         return uris
@@ -38,9 +59,14 @@ class MigrationManager @Inject constructor(
 
     private fun createPayload(): List<MigrationPayload> {
         val migrationAccounts = storage.getAll().map(mapper::mapToOtpParams)
+
+        if (migrationAccounts.isEmpty())
+            return emptyList()
+
         val result = LinkedList<MigrationPayload>()
 
-        val batchSize = ceil(migrationAccounts.size.toFloat() / 10).toInt()
+        val batchId = -2140734236
+        val batchSize = migrationAccounts.size / 10
         var payload = LinkedList<OtpParams>()
         var batchIndex = 0
         var i = 1
@@ -48,11 +74,11 @@ class MigrationManager @Inject constructor(
         for (account in migrationAccounts) {
             if (i == BATCH_SIZE) {
                 result.add(MigrationPayload(
-                    0,
-                    batchIndex,
-                    batchSize,
                     payload,
-                    VERSION
+                    VERSION,
+                    batchSize,
+                    batchIndex,
+                    batchId
                 ))
                 payload = LinkedList()
                 batchIndex++
@@ -66,12 +92,14 @@ class MigrationManager @Inject constructor(
 
         if (payload.isNotEmpty())
             result.add(MigrationPayload(
-                0,
-                batchIndex,
-                batchSize,
                 payload,
-                VERSION
+                VERSION,
+                batchSize,
+                batchIndex,
+                batchId
             ))
+
+        println(result)
 
         return result
     }

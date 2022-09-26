@@ -2,6 +2,7 @@ package ua.nanit.otpmanager.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,6 +19,8 @@ class MainActivity : AppCompatActivity(), Navigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+
         binding = ActivityMainBinding.inflate(layoutInflater, null, false)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
@@ -47,7 +50,7 @@ class MainActivity : AppCompatActivity(), Navigator {
     }
 
     override fun navToExportQr() {
-        TODO("Not yet implemented")
+        navController.navigate(R.id.actionNavExportQr)
     }
 
     override fun navToImport() {

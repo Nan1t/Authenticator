@@ -11,7 +11,7 @@ import java.net.URI
 
 object QrCodeParser {
 
-    private const val IMAGE_SIZE = 1024
+    const val IMAGE_SIZE = 512
 
     private val reader = QRCodeReader()
     private val writer = QRCodeWriter()

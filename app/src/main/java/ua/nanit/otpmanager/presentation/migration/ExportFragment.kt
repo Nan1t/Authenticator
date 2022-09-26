@@ -17,7 +17,7 @@ import ua.nanit.otpmanager.presentation.ext.navigator
 import ua.nanit.otpmanager.presentation.ext.showCloseableSnackbar
 import ua.nanit.otpmanager.service.FileExportService
 
-class AccountExportFragment : Fragment() {
+class ExportFragment : Fragment() {
 
     private lateinit var binding: FragExportBinding
     private lateinit var writePermLauncher: ActivityResultLauncher<String>
@@ -33,9 +33,7 @@ class AccountExportFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.exportFile.setOnClickListener { exportFile() }
-        binding.exportQr.setOnClickListener {
-
-        }
+        binding.exportQr.setOnClickListener { navigator().navToExportQr() }
 
         writePermLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
