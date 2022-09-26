@@ -16,13 +16,13 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.FragScanBinding
-import ua.nanit.otpmanager.domain.QrImageReader
+import ua.nanit.otpmanager.domain.QrCodeParser
 import ua.nanit.otpmanager.presentation.ext.display
+import ua.nanit.otpmanager.presentation.ext.navigator
 import ua.nanit.otpmanager.presentation.ext.showCloseableSnackbar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -52,11 +52,9 @@ class ScanCodeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val navController = findNavController()
-
         if (!hasCamera()) {
             showCloseableSnackbar(R.string.scan_camera_missing)
-            navController.navigateUp()
+            navigator().navUp()
             return
         }
 
@@ -70,7 +68,7 @@ class ScanCodeFragment : Fragment() {
                     openCamera()
                 } else {
                     showCloseableSnackbar(R.string.scan_permission_required)
-                    navController.navigateUp()
+                    navigator().navUp()
                 }
             }.launch(PERMISSION)
         }
@@ -78,12 +76,12 @@ class ScanCodeFragment : Fragment() {
         viewModel.success.observe(viewLifecycleOwner) {
             val msg = getString(R.string.accounts_add_success, it.name)
             Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show()
-            navController.navigateUp()
+            navigator().navUp()
         }
 
         viewModel.error.observe(viewLifecycleOwner) {
             showCloseableSnackbar(it.display(requireContext()))
-            navController.navigateUp()
+            navigator().navUp()
         }
     }
 
@@ -139,7 +137,7 @@ class ScanCodeFragment : Fragment() {
             val resizedFrame = (frameSize * multiplier).toInt()
             val frameX = img.width / 2 - resizedFrame / 2
             val frameY = img.height / 2 - resizedFrame / 2
-            val uri = QrImageReader.read(yuvBytes, img.width, img.height, frameX, frameY, resizedFrame)
+            val uri = QrCodeParser.readImage(yuvBytes, img.width, img.height, frameX, frameY, resizedFrame)
 
             if (uri != null) {
                 analyzerBlocked.set(true)

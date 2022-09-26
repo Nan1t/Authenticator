@@ -1,18 +1,16 @@
 package ua.nanit.otpmanager.domain.account
 
 import ua.nanit.otpmanager.domain.Constants
-import ua.nanit.otpmanager.domain.Base32
+import ua.nanit.otpmanager.domain.encode.Base32
 import ua.nanit.otpmanager.domain.UriParser
+import ua.nanit.otpmanager.domain.otp.DigestAlgorithm
 import ua.nanit.otpmanager.domain.storage.AccountStorage
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 class AccountManager @Inject constructor(
     private val repository: AccountRepository,
     private val storage: AccountStorage
 ) {
-
-    private val labelPattern = Pattern.compile(":")
 
     suspend fun createByUri(rawUri: String): Account {
         val uri = UriParser.parse(rawUri)
@@ -52,9 +50,11 @@ class AccountManager @Inject constructor(
         if (interval < 1) throw CreationError.INVALID_INTERVAL.asException()
         val key = Base32.decode(secret)
         validateAccount(label, key)
-        val parsed = parseLabel(label)
+        val parsed = LabelParser.parse(label)
+        val digestAlgorithm = DigestAlgorithm.fromValue(algorithm)
+            ?: throw CreationError.UNSUPPORTED_ALGORITHM.asException()
         val account = TotpAccount(label, parsed.name, issuer ?: parsed.issuer,
-            key, algorithm, digits, interval)
+            key, digestAlgorithm, digits, interval)
         repository.add(account)
         return account
     }
@@ -70,9 +70,11 @@ class AccountManager @Inject constructor(
         if (counter < 0) throw CreationError.INVALID_COUNTER.asException()
         val key = Base32.decode(secret)
         validateAccount(label, key)
-        val parsed = parseLabel(label)
+        val parsed = LabelParser.parse(label)
+        val digestAlgorithm = DigestAlgorithm.fromValue(algorithm)
+            ?: throw CreationError.UNSUPPORTED_ALGORITHM.asException()
         val account = HotpAccount(label, parsed.name, issuer ?: parsed.issuer,
-            key, algorithm, digits, counter)
+            key, digestAlgorithm, digits, counter)
         repository.add(account)
         return account
     }
@@ -81,17 +83,7 @@ class AccountManager @Inject constructor(
         return storage.export()
     }
 
-    private fun parseLabel(label: String): ParsedLabel {
-        val arr = label.split(labelPattern, 2)
-        val name = arr[0]
-        val issuer = if (arr.size == 2) arr[1] else null
-        return ParsedLabel(name, issuer)
-    }
-
     private fun validateAccount(label: String, secret: ByteArray) {
-        if (repository.get(label) != null)
-            throw CreationError.ALREADY_EXISTS.asException()
-
         if (label.length < 3)
             throw CreationError.SHORT_LABEL.asException()
 
@@ -99,5 +91,3 @@ class AccountManager @Inject constructor(
             throw CreationError.SHORT_SECRET.asException()
     }
 }
-
-private class ParsedLabel(val name: String, val issuer: String?)

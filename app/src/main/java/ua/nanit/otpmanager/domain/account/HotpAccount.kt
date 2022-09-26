@@ -3,6 +3,7 @@ package ua.nanit.otpmanager.domain.account
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import ua.nanit.otpmanager.domain.otp.DigestAlgorithm
 import ua.nanit.otpmanager.domain.otp.HotpGenerator
 
 @Serializable
@@ -12,7 +13,7 @@ class HotpAccount(
     override var name: String,
     override val issuer: String?,
     override val secret: ByteArray,
-    override val algorithm: String,
+    override val algorithm: DigestAlgorithm,
     override val digits: Int,
     var counter: Long
 ) : Account() {

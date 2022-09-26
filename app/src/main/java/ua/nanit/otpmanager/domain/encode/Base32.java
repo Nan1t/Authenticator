@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package ua.nanit.otpmanager.domain;
+package ua.nanit.otpmanager.domain.encode;
 
 
 /* (PD) 2006 The Bitzi Corporation

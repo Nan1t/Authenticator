@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.FragAddBinding
 import ua.nanit.otpmanager.presentation.ext.display
+import ua.nanit.otpmanager.presentation.ext.navigator
 
 @AndroidEntryPoint
 class AddAccountFragment : Fragment() {
@@ -39,7 +39,7 @@ class AddAccountFragment : Fragment() {
         viewModel.success.observe(viewLifecycleOwner) {
             val msg = getString(R.string.accounts_add_success, it.name)
             Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show()
-            findNavController().navigateUp()
+            navigator().navUp()
         }
 
         viewModel.error.observe(viewLifecycleOwner) {

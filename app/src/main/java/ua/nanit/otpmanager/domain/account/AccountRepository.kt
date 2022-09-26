@@ -10,7 +10,9 @@ class AccountRepository @Inject constructor(
     private val storage: AccountStorage
 ) {
 
-    val accounts = MutableStateFlow(storage.getAll())
+    val accounts = MutableStateFlow(getAll())
+
+    fun getAll(): List<Account> = storage.getAll()
 
     fun get(label: String): Account? {
         return storage.get(label)

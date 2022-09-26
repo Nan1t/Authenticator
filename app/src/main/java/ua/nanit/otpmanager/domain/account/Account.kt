@@ -1,6 +1,7 @@
 package ua.nanit.otpmanager.domain.account
 
 import kotlinx.serialization.Serializable
+import ua.nanit.otpmanager.domain.otp.DigestAlgorithm
 
 @Serializable
 sealed class Account {
@@ -9,7 +10,7 @@ sealed class Account {
     abstract var name: String
     abstract val issuer: String?
     abstract val secret: ByteArray
-    abstract val algorithm: String
+    abstract val algorithm: DigestAlgorithm
     abstract val digits: Int
 
     abstract var password: String
@@ -37,6 +38,4 @@ sealed class Account {
         result = 31 * result + digits
         return result
     }
-
-
 }

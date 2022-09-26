@@ -25,6 +25,13 @@
             app:exitAnim="@anim/idle"
             app:popEnterAnim="@anim/idle"
             app:popExitAnim="@anim/slide_out_left"/>
+
+        <action android:id="@+id/actionNavExport"
+            app:destination="@id/navExport"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/idle"
+            app:popEnterAnim="@anim/idle"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
 
     <fragment
@@ -37,5 +44,10 @@
         android:label="@string/scan.title"
         android:name="ua.nanit.otpmanager.presentation.addnew.ScanCodeFragment"
         tools:layout="@layout/frag_scan"/>
+
+    <fragment android:id="@+id/navExport"
+        android:label="@string/account.export"
+        android:name="ua.nanit.otpmanager.presentation.migration.AccountExportFragment"
+        tools:layout="@layout/frag_export" />
 
 </navigation>

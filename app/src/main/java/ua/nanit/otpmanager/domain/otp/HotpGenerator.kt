@@ -8,7 +8,7 @@ import kotlin.math.pow
 
 open class HotpGenerator : OtpGenerator {
 
-    override fun generate(secret: ByteArray, value: Long, algorithm: String, digits: Int): String {
+    override fun generate(secret: ByteArray, value: Long, algorithm: DigestAlgorithm, digits: Int): String {
         val hash = hash(algorithm, secret, value.toBytes())
         val offset = hash.last().and(0x0f).toInt()
         val truncated = truncate(hash, offset)
@@ -16,8 +16,8 @@ open class HotpGenerator : OtpGenerator {
         return code.toString().padStart(digits, '0')
     }
 
-    private fun hash(algorithm: String, key: ByteArray, value: ByteArray): ByteArray {
-        return Mac.getInstance("Hmac$algorithm").run {
+    private fun hash(algorithm: DigestAlgorithm, key: ByteArray, value: ByteArray): ByteArray {
+        return Mac.getInstance("Hmac${algorithm.value}").run {
             init(SecretKeySpec(key, "RAW"))
             doFinal(value)
         }

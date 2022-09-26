@@ -2,6 +2,7 @@ package ua.nanit.otpmanager.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -10,9 +11,10 @@ import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.ActivityMainBinding
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Navigator {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        val navController = findNavController(R.id.fragmentContainer)
+        navController = findNavController(R.id.fragmentContainer)
         val toolbarConf = AppBarConfiguration(setOf(R.id.navAccounts))
         binding.toolbar.setupWithNavController(navController, toolbarConf)
 
@@ -30,5 +32,41 @@ class MainActivity : AppCompatActivity() {
                 else -> supportActionBar?.show()
             }
         }
+    }
+
+    override fun navToManualAdd() {
+        navController.navigate(R.id.actionNavAddManual)
+    }
+
+    override fun navToScanCode() {
+        navController.navigate(R.id.actionNavScanCode)
+    }
+
+    override fun navToExport() {
+        navController.navigate(R.id.actionNavExport)
+    }
+
+    override fun navToExportQr() {
+        TODO("Not yet implemented")
+    }
+
+    override fun navToImport() {
+        TODO("Not yet implemented")
+    }
+
+    override fun navToImportQr() {
+        TODO("Not yet implemented")
+    }
+
+    override fun navToSettings() {
+        TODO("Not yet implemented")
+    }
+
+    override fun navToAbout() {
+        TODO("Not yet implemented")
+    }
+
+    override fun navUp() {
+        navController.navigateUp()
     }
 }

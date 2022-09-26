@@ -12,7 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +19,7 @@ import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.FragAccountsBinding
 import ua.nanit.otpmanager.domain.account.Account
-import ua.nanit.otpmanager.presentation.export.AccountExporter
+import ua.nanit.otpmanager.presentation.ext.navigator
 
 @AndroidEntryPoint
 class AccountsFragment : AccountListener, Fragment() {
@@ -35,7 +34,6 @@ class AccountsFragment : AccountListener, Fragment() {
 
     private lateinit var binding: FragAccountsBinding
     private lateinit var clipboardManager: ClipboardManager
-    private lateinit var exporter: AccountExporter
 
     private var fabEnabled = false
 
@@ -49,10 +47,8 @@ class AccountsFragment : AccountListener, Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val navController = findNavController()
         clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE)
                 as ClipboardManager
-        exporter = AccountExporter(this)
 
         setupMainMenu()
         enableFab(false)
@@ -67,12 +63,12 @@ class AccountsFragment : AccountListener, Fragment() {
 
         binding.addManualBtn.setOnClickListener {
             enableFab(false)
-            navController.navigate(R.id.actionNavAddManual)
+            navigator().navToManualAdd()
         }
 
         binding.addScanBtn.setOnClickListener {
             enableFab(false)
-            navController.navigate(R.id.actionNavScanCode)
+            navigator().navToScanCode()
         }
 
         viewModel.updateResult.observe(viewLifecycleOwner, adapter::update)
@@ -139,10 +135,19 @@ class AccountsFragment : AccountListener, Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menuImport -> {
+                        navigator().navToImport()
                         true
                     }
                     R.id.menuExport -> {
-                        exporter.export()
+                        navigator().navToExport()
+                        true
+                    }
+                    R.id.menuSettings -> {
+                        navigator().navToSettings()
+                        true
+                    }
+                    R.id.menuAbout -> {
+                        navigator().navToAbout()
                         true
                     }
                     else -> false

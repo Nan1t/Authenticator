@@ -9,6 +9,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import ua.nanit.otpmanager.domain.encode.AndroidBase64Coder
+import ua.nanit.otpmanager.domain.encode.Base64Coder
 import ua.nanit.otpmanager.domain.storage.AccountJsonStorage
 import ua.nanit.otpmanager.domain.storage.AccountStorage
 import java.io.File
@@ -29,6 +31,10 @@ object BaseModule {
         return Dispatchers.IO
     }
 
+    fun provideBase64Coder(): Base64Coder {
+        return AndroidBase64Coder
+    }
+
 }
 
 @Module
@@ -36,6 +42,6 @@ object BaseModule {
 interface BindingsModule {
 
     @Binds
-    fun getAccountStorage(jsonStorage: AccountJsonStorage): AccountStorage
+    fun bindAccountStorage(jsonStorage: AccountJsonStorage): AccountStorage
 
 }

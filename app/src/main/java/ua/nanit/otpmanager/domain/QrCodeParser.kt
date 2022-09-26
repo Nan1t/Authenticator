@@ -1,20 +1,25 @@
 package ua.nanit.otpmanager.domain
 
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.PlanarYUVLuminanceSource
+import com.google.zxing.common.BitMatrix
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
+import com.google.zxing.qrcode.QRCodeWriter
+import java.net.URI
 
-object QrImageReader {
+object QrCodeParser {
+
+    private const val IMAGE_SIZE = 1024
 
     private val reader = QRCodeReader()
+    private val writer = QRCodeWriter()
 
-    fun read(
+    fun readImage(
         yuvData: ByteArray,
-        width: Int,
-        height: Int,
-        frameX: Int,
-        frameY: Int,
+        width: Int, height: Int,
+        frameX: Int, frameY: Int,
         frameSize: Int,
     ): String? {
         return try {
@@ -30,6 +35,10 @@ object QrImageReader {
         } catch (th: Throwable) {
             null
         }
+    }
+
+    fun createImage(uri: URI): BitMatrix {
+        return writer.encode(uri.toString(), BarcodeFormat.QR_CODE, IMAGE_SIZE, IMAGE_SIZE)
     }
 
 }

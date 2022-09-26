@@ -1,6 +1,6 @@
 package ua.nanit.otpmanager.service
 
-import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.ContentValues
@@ -10,20 +10,16 @@ import android.os.Environment
 import android.os.IBinder
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
-import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.domain.account.AccountManager
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AccountExportService : Service() {
+class FileExportService : Service() {
 
     companion object {
         const val NOTIFICATION_ID = 1
@@ -38,11 +34,12 @@ class AccountExportService : Service() {
     lateinit var manager: AccountManager
 
     override fun onCreate() {
+        super.onCreate()
         notificationManager = getSystemService() ?: return
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, baseNotification())
+        startForeground(NOTIFICATION_ID, baseNotification().build())
 
         coroutineScope.launch(Dispatchers.IO) {
             val data = manager.export()
@@ -69,12 +66,10 @@ class AccountExportService : Service() {
                 file.createNewFile()
 
             file.writeText(data)
-            updateNotification(R.string.account_export_success)
+            stopWithNotification(true)
         } catch (ex: Exception) {
             ex.printStackTrace()
-            updateNotification(R.string.account_export_error)
-        } finally {
-            stopSelf()
+            stopWithNotification(false)
         }
     }
 
@@ -93,29 +88,34 @@ class AccountExportService : Service() {
                 close()
             }
 
-            updateNotification(R.string.account_export_success)
+            stopWithNotification(true)
         } else {
-            updateNotification(R.string.account_export_error)
+            stopWithNotification(false)
+        }
+    }
+
+    private fun stopWithNotification(success: Boolean) {
+        stopSelf()
+
+        val builder = baseNotification()
+
+        if (success) {
+            builder.setContentTitle(getString(R.string.account_export_success))
+            builder.setContentText(getString(R.string.account_export_success_desc))
+            builder.setSmallIcon(R.drawable.ic_round_check)
+        } else {
+            builder.setContentTitle(getString(R.string.account_export_error))
+            builder.setSmallIcon(R.drawable.ic_round_error_outline)
         }
 
-        stopSelf()
+        notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
-    private fun updateNotification(@StringRes resId: Int) {
-        val notification = NotificationCompat.Builder(this, "otpauth")
-            .setContentTitle("Exporting 2FA accounts ...")
-            .setContentText(getString(resId))
-            .build()
-
-        notificationManager.notify(NOTIFICATION_ID, notification)
-
-        println("Updates notify to ${getString(resId)}")
-    }
-
-    private fun baseNotification(): Notification {
-        return NotificationCompat.Builder(this, "otpauth")
-            .setContentTitle("Exporting 2FA accounts ...")
-            .build()
+    private fun baseNotification(): NotificationCompat.Builder {
+        return NotificationCompat.Builder(this, NotificationChannel.DEFAULT_CHANNEL_ID)
+            .setCategory(NotificationCompat.CATEGORY_STATUS)
+            .setContentTitle(getString(R.string.account_export_process))
+            .setSmallIcon(R.drawable.ic_round_import_export)
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

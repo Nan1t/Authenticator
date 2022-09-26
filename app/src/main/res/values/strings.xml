@@ -8,14 +8,12 @@
     <string name="menu.main.export">Export</string>
     <string name="menu.main.settings">Settings</string>
     <string name="menu.main.about">About</string>
-
     <string name="menu.edit.change">Edit</string>
     <string name="menu.edit.delete">Delete</string>
 
     <string name="accounts.copied">Copied!</string>
     <string name="accounts.increment">Increment counter</string>
     <string name="accounts.options">Account options</string>
-
     <string name="accounts.add.scan">Scan code</string>
     <string name="accounts.add.manual">Enter manually</string>
     <string name="accounts.add.success">Successfully added account %1$s</string>
@@ -25,10 +23,22 @@
     <string name="account.delete">Delete account</string>
     <string name="account.delete.title">Delete this account?</string>
     <string name="account.delete.warning">Before deleting %1$s, ensure you disabled 2FA for this account!</string>
-    <string name="account.export.success">Accounts exported into Downloads/accounts.json</string>
+
+    <string name="account.export">Export accounts</string>
+    <string name="account.export.about">Select way to export your accounts</string>
+    <string name="account.export.file">Export in file</string>
+    <string name="account.export.qrcode">Export using QR code</string>
+    <string name="account.export.started">Export started. Check the notification for its progress</string>
+    <string name="account.export.process">Exporting 2FA accounts …</string>
+    <string name="account.export.success">Accounts successfully exported</string>
+    <string name="account.export.success.desc">Exported into Downloads/accounts.json</string>
     <string name="account.export.error">Error while exporting accounts</string>
     <string name="account.export.permission">Storage write permission is required to export accounts!</string>
 
+    <string name="account.import">Import accounts</string>
+    <string name="account.import.file">Import from file</string>
+    <string name="account.import.qrcode">Import using QR code</string>
+    <string name="account.import.started">Import started. Check the notification for its progress</string>
     <string name="account.import.success">Accounts successfully imported!</string>
     <string name="account.import.error">Error while importing accounts</string>
     <string name="account.import.permission">Storage read permission is required to import accounts!</string>

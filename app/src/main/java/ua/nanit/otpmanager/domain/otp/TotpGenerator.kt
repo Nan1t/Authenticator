@@ -8,7 +8,7 @@ class TotpGenerator(
     private val clock: Clock = SystemClock
 ) : HotpGenerator() {
 
-    override fun generate(secret: ByteArray, value: Long, algorithm: String, digits: Int): String {
+    override fun generate(secret: ByteArray, value: Long, algorithm: DigestAlgorithm, digits: Int): String {
         return super.generate(secret, counter(value), algorithm, digits)
     }
 
