@@ -25,7 +25,7 @@ class MigrationManager @Inject constructor(
     private val mapper = AccountMapper()
     private var cachedPayload: List<URI>? = null
 
-    fun getPayload(index: Int): URI? {
+    fun getPayload(index: Int): Payload? {
         var payload = cachedPayload
 
         if (payload == null) {
@@ -36,7 +36,7 @@ class MigrationManager @Inject constructor(
         if (payload.isEmpty() || index < 0 || index >= payload.size)
             return null
 
-        return payload[index]
+        return Payload(payload[index], index+1, payload.size)
     }
 
     private fun createPayloadUri(): List<URI> {
@@ -66,7 +66,7 @@ class MigrationManager @Inject constructor(
 
         val result = LinkedList<MigrationPayload>()
 
-        val batchId = -2140734236
+        val batchId = migrationAccounts.hashCode()
         val batchSize = ceil(migrationAccounts.size.toFloat() / 10).toInt()
         var payload = LinkedList<OtpParams>()
         var batchIndex = 0
@@ -74,13 +74,7 @@ class MigrationManager @Inject constructor(
 
         for (account in migrationAccounts) {
             if (i == BATCH_SIZE) {
-                result.add(MigrationPayload(
-                    payload,
-                    VERSION,
-                    batchSize,
-                    batchIndex,
-                    batchId
-                ))
+                result.add(MigrationPayload(payload, VERSION, batchSize, batchIndex, batchId))
                 payload = LinkedList()
                 batchIndex++
                 i = 1
@@ -92,17 +86,15 @@ class MigrationManager @Inject constructor(
         }
 
         if (payload.isNotEmpty())
-            result.add(MigrationPayload(
-                payload,
-                VERSION,
-                batchSize,
-                batchIndex,
-                batchId
-            ))
-
-        println(result)
+            result.add(MigrationPayload(payload, VERSION, batchSize, batchIndex, batchId))
 
         return result
     }
 
 }
+
+data class Payload(
+    val uri: URI,
+    val page: Int,
+    val pages: Int
+)

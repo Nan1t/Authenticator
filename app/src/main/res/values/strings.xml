@@ -5,6 +5,7 @@
     <string name="cancel">Cancel</string>
     <string name="prev">Previous</string>
     <string name="next">Next</string>
+    <string name="finish">Finish</string>
 
     <string name="menu.main.import">Import</string>
     <string name="menu.main.export">Export</string>
@@ -37,7 +38,9 @@
     <string name="account.export.error">Error while exporting accounts</string>
     <string name="account.export.permission">Storage write permission is required to export accounts!</string>
     <string name="account.export.qr">Export accounts</string>
-    <string name="account.export.qr.about">Open authenticator app on another device and scan QR code below.\n\nThis code can be scanned by any application that supports Google Authenticator migration via QR code (including this app)</string>
+    <string name="account.export.qr.about">Open authenticator app on another device and scan QR code below.</string>
+    <string name="account.export.qr.tip">This code can be scanned by any application that supports Google Authenticator migration via QR code (including this app)</string>
+    <string name="account.export.qr.page">%1$d/%2$d</string>
 
     <string name="account.import">Import accounts</string>
     <string name="account.import.file">Import from file</string>

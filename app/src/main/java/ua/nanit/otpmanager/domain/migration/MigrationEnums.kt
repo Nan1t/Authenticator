@@ -3,6 +3,11 @@ package ua.nanit.otpmanager.domain.migration
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 
+/**
+ * Protobuf enums for Google Authenticator migration format
+ * This format is proprietary so there is no link to specification
+ */
+
 @Serializable
 enum class OtpType {
     @ProtoNumber(0)
@@ -27,12 +32,12 @@ enum class DigitCount {
 enum class MigrationAlgorithm {
     @ProtoNumber(0)
     UNSPECIFIED,
-    @ProtoNumber(4)
-    MD_5,
     @ProtoNumber(1)
     SHA_1,
     @ProtoNumber(2)
     SHA_256,
     @ProtoNumber(3)
-    SHA_512
+    SHA_512,
+    @ProtoNumber(4)
+    MD_5,
 }

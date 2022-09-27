@@ -28,13 +28,6 @@ class MainActivity : AppCompatActivity(), Navigator {
         navController = findNavController(R.id.fragmentContainer)
         val toolbarConf = AppBarConfiguration(setOf(R.id.navAccounts))
         binding.toolbar.setupWithNavController(navController, toolbarConf)
-
-        navController.addOnDestinationChangedListener { _, dest, _ ->
-            when (dest.id) {
-                R.id.navScanCode -> supportActionBar?.hide()
-                else -> supportActionBar?.show()
-            }
-        }
     }
 
     override fun navToManualAdd() {
@@ -71,5 +64,9 @@ class MainActivity : AppCompatActivity(), Navigator {
 
     override fun navUp() {
         navController.navigateUp()
+    }
+
+    override fun navUpToMain() {
+        navController.popBackStack(R.id.navAccounts, false)
     }
 }

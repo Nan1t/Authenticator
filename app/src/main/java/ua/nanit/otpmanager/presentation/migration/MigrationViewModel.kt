@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.domain.migration.MigrationManager
+import ua.nanit.otpmanager.domain.migration.Payload
 import java.net.URI
 import javax.inject.Inject
 import kotlin.math.max
@@ -19,7 +20,7 @@ class MigrationViewModel @Inject constructor(
 
     private var page: Int = 0
 
-    val payload = MutableLiveData<URI>()
+    val payload = MutableLiveData<Payload>()
 
     init {
         this.page = 0
@@ -47,5 +48,4 @@ class MigrationViewModel @Inject constructor(
         this.page--
         updatePage()
     }
-
 }

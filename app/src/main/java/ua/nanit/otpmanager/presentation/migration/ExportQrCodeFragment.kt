@@ -12,8 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.FragExportQrBinding
 import ua.nanit.otpmanager.domain.QrCodeParser
+import ua.nanit.otpmanager.presentation.ext.navigator
 import java.net.URI
 
 @AndroidEntryPoint
@@ -40,13 +42,33 @@ class ExportQrCodeFragment : Fragment() {
         binding.codeImage.visibility = View.GONE
         binding.prevBtn.visibility = View.GONE
         binding.nextBtn.visibility = View.GONE
+        binding.finishBtn.visibility = View.GONE
+
+        binding.prevBtn.setOnClickListener { viewModel.prevPage() }
+        binding.nextBtn.setOnClickListener { viewModel.nextPage() }
+        binding.finishBtn.setOnClickListener { navigator().navUpToMain() }
 
         viewModel.payload.observe(viewLifecycleOwner) {
-            displayQrImage(it)
+            binding.page.text = getString(R.string.account_export_qr_page, it.page, it.pages)
+            binding.prevBtn.visibility = View.VISIBLE
+            binding.nextBtn.visibility = View.VISIBLE
+            binding.finishBtn.visibility = View.INVISIBLE
+
+            if (it.page <= 1) {
+                binding.prevBtn.visibility = View.GONE
+            } else if (it.page == it.pages) {
+                binding.nextBtn.visibility = View.GONE
+                binding.finishBtn.visibility = View.VISIBLE
+            }
+
+            displayQrImage(it.uri)
         }
     }
 
     private fun displayQrImage(uri: URI) {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.codeImage.visibility = View.INVISIBLE
+
         lifecycleScope.launch(Dispatchers.IO) {
             val matrix = QrCodeParser.createImage(uri)
 
@@ -58,7 +80,7 @@ class ExportQrCodeFragment : Fragment() {
             }
 
             binding.codeImage.post {
-                binding.progressBar.visibility = View.GONE
+                binding.progressBar.visibility = View.INVISIBLE
                 binding.codeImage.visibility = View.VISIBLE
                 binding.codeImage.setImageBitmap(bitmap)
             }

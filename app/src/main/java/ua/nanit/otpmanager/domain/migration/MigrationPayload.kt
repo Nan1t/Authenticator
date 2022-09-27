@@ -1,10 +1,12 @@
 package ua.nanit.otpmanager.domain.migration
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.protobuf.ProtoIntegerType
 import kotlinx.serialization.protobuf.ProtoNumber
-import kotlinx.serialization.protobuf.ProtoPacked
-import kotlinx.serialization.protobuf.ProtoType
+
+/**
+ * Protobuf entities for Google Authenticator migration format
+ * This format is proprietary so there is no link to specification
+ */
 
 @Serializable
 data class MigrationPayload constructor(

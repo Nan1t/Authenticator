@@ -20,4 +20,6 @@ interface Navigator {
 
     fun navUp()
 
+    fun navUpToMain()
+
 }
