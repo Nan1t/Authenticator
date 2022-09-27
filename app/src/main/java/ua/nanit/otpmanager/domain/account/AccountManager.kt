@@ -4,12 +4,10 @@ import ua.nanit.otpmanager.domain.Constants
 import ua.nanit.otpmanager.domain.encode.Base32
 import ua.nanit.otpmanager.domain.UriParser
 import ua.nanit.otpmanager.domain.otp.DigestAlgorithm
-import ua.nanit.otpmanager.domain.storage.AccountStorage
 import javax.inject.Inject
 
 class AccountManager @Inject constructor(
     private val repository: AccountRepository,
-    private val storage: AccountStorage
 ) {
 
     suspend fun createByUri(rawUri: String): Account {
@@ -77,10 +75,6 @@ class AccountManager @Inject constructor(
             key, digestAlgorithm, digits, counter)
         repository.add(account)
         return account
-    }
-
-    fun export(): String {
-        return storage.export()
     }
 
     private fun validateAccount(label: String, secret: ByteArray) {

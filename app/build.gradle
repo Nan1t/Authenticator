@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    def ktxSer = "1.4.0"
     def navigation = "2.5.1"
     def camerax = "1.1.0"
     def zxing = "3.5.0"
@@ -48,8 +49,8 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.38.1"
     kapt "com.google.dagger:hilt-compiler:2.38.1"
 
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.4.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$ktxSer"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$ktxSer"
 
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation"
@@ -67,6 +68,7 @@ dependencies {
 
     implementation "com.google.zxing:core:$zxing"
     implementation "com.google.zxing:javase:$zxing"
+    implementation 'net.lingala.zip4j:zip4j:2.11.2'
 
     testImplementation "junit:junit:4.13.2"
     androidTestImplementation "androidx.test.ext:junit:1.1.3"

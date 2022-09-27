@@ -3,100 +3,54 @@ package ua.nanit.otpmanager.service
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
-import android.content.ContentValues
 import android.content.Intent
-import android.os.Build
-import android.os.Environment
 import android.os.IBinder
-import android.provider.MediaStore
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import ua.nanit.otpmanager.R
-import ua.nanit.otpmanager.domain.account.AccountManager
+import ua.nanit.otpmanager.domain.migration.FileMigration
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class FileExportService : Service() {
 
     companion object {
-        const val NOTIFICATION_ID = 1
+        const val EXTRA_PIN_CODE = "pinCode"
+        private const val NOTIFICATION_ID = 1
     }
 
-    private val job = SupervisorJob()
-    private val coroutineScope = CoroutineScope(job)
-
-    private lateinit var notificationManager: NotificationManager
+    private val coroutineScope = CoroutineScope(SupervisorJob())
 
     @Inject
-    lateinit var manager: AccountManager
-
-    override fun onCreate() {
-        super.onCreate()
-        notificationManager = getSystemService() ?: return
-    }
+    lateinit var migration: FileMigration
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val pinCode = intent?.getStringExtra(EXTRA_PIN_CODE)
+            ?: throw IllegalArgumentException("Missing pin code extra")
+
         startForeground(NOTIFICATION_ID, baseNotification().build())
 
         coroutineScope.launch(Dispatchers.IO) {
-            val data = manager.export()
-
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                exportAccountsLegacy(data)
-            } else {
-                exportAccountsQ(data)
+            try {
+                val success = migration.export(pinCode)
+                stopWithNotification(success)
+            } catch (ex: Exception) {
+                ex.printStackTrace()
             }
         }
 
         return START_STICKY
     }
 
-    private fun exportAccountsLegacy(data: String) {
-        try {
-            val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val file = dir.resolve("accounts.json")
-
-            if (!dir.exists())
-                dir.mkdirs()
-
-            if (!file.exists())
-                file.createNewFile()
-
-            file.writeText(data)
-            stopWithNotification(true)
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-            stopWithNotification(false)
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun exportAccountsQ(data: String) {
-        val values = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, "accounts")
-            put(MediaStore.MediaColumns.MIME_TYPE, "text/json")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-        }
-        val uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
-
-        if (uri != null) {
-            contentResolver.openOutputStream(uri)?.apply {
-                write(data.toByteArray())
-                close()
-            }
-
-            stopWithNotification(true)
-        } else {
-            stopWithNotification(false)
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineScope.cancel()
     }
 
     private fun stopWithNotification(success: Boolean) {
-        stopSelf()
-
+        val notificationManager = getSystemService<NotificationManager>() ?: return
         val builder = baseNotification()
 
         if (success) {
@@ -109,6 +63,7 @@ class FileExportService : Service() {
         }
 
         notificationManager.notify(NOTIFICATION_ID, builder.build())
+        stopSelf()
     }
 
     private fun baseNotification(): NotificationCompat.Builder {

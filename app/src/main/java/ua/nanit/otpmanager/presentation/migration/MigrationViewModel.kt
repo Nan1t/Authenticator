@@ -6,21 +6,19 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import ua.nanit.otpmanager.domain.migration.MigrationManager
-import ua.nanit.otpmanager.domain.migration.Payload
-import java.net.URI
+import ua.nanit.otpmanager.domain.migration.UriMigration
 import javax.inject.Inject
 import kotlin.math.max
 
 @HiltViewModel
 class MigrationViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
-    private val migrationManager: MigrationManager
+    private val migration: UriMigration
 ) : ViewModel() {
 
     private var page: Int = 0
 
-    val payload = MutableLiveData<Payload>()
+    val payload = MutableLiveData<UriMigration.Payload>()
 
     init {
         this.page = 0
@@ -31,7 +29,7 @@ class MigrationViewModel @Inject constructor(
         page = max(0, page)
 
         viewModelScope.launch(dispatcher) {
-            val data = migrationManager.getPayload(page)
+            val data = migration.export(page)
 
             if (data != null) {
                 payload.postValue(data!!)

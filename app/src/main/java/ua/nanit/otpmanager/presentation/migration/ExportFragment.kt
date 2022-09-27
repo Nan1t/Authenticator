@@ -21,6 +21,9 @@ class ExportFragment : Fragment() {
 
     private lateinit var binding: FragExportBinding
     private lateinit var writePermLauncher: ActivityResultLauncher<String>
+    private val pinCodeDialog = lazy { PinCodeDialog(requireContext(), R.string.account_export_pin_info) {
+        exportFile(it)
+    }}
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,26 +35,34 @@ class ExportFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.exportFile.setOnClickListener { exportFile() }
+        binding.exportFile.setOnClickListener { openPinDialog() }
         binding.exportQr.setOnClickListener { navigator().navToExportQr() }
 
         writePermLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
-                exportFile()
+                openPinDialog()
             } else {
                 showCloseableSnackbar(R.string.account_export_permission)
             }
         }
     }
 
-    private fun exportFile() {
+    private fun openPinDialog() {
         if (isWritingPermsGranted()) {
-            requireContext().startService(Intent(requireContext(), FileExportService::class.java))
-            showCloseableSnackbar(R.string.account_export_started)
-            navigator().navUp()
+            pinCodeDialog.value.show()
         } else {
             writePermLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
+    }
+
+    private fun exportFile(pin: String) {
+        val intent = Intent(requireContext(), FileExportService::class.java).apply {
+            putExtra(FileExportService.EXTRA_PIN_CODE, pin)
+        }
+
+        requireContext().startService(intent)
+        showCloseableSnackbar(R.string.account_export_started)
+        navigator().navUp()
     }
 
     private fun isWritingPermsGranted(): Boolean =

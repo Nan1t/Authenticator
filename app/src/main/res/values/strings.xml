@@ -41,6 +41,7 @@
     <string name="account.export.qr.about">Open authenticator app on another device and scan QR code below.</string>
     <string name="account.export.qr.tip">This code can be scanned by any application that supports Google Authenticator migration via QR code (including this app)</string>
     <string name="account.export.qr.page">%1$d/%2$d</string>
+    <string name="account.export.pin.info">Remember this pin code! This pin code used to encrypted backup file to prevent access for other applications and users</string>
 
     <string name="account.import">Import accounts</string>
     <string name="account.import.file">Import from file</string>
@@ -49,6 +50,10 @@
     <string name="account.import.success">Accounts successfully imported!</string>
     <string name="account.import.error">Error while importing accounts</string>
     <string name="account.import.permission">Storage read permission is required to import accounts!</string>
+    <string name="account.import.pin.info">This is a pin code you used to encrypt backup file</string>
+
+    <string name="account.backup.pin">Backup pin code</string>
+    <string name="account.backup.pin.invalid">Invalid pin code</string>
 
     <string name="manual.title">New account</string>
     <string name="manual.submit">Create account</string>

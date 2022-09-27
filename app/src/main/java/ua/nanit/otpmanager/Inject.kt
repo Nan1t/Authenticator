@@ -1,6 +1,7 @@
 package ua.nanit.otpmanager
 
 import android.content.Context
+import android.os.Build
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -11,6 +12,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import ua.nanit.otpmanager.domain.encode.AndroidBase64Coder
 import ua.nanit.otpmanager.domain.encode.Base64Coder
+import ua.nanit.otpmanager.domain.migration.FileMigration
+import ua.nanit.otpmanager.domain.migration.android.LegacyFileSaver
+import ua.nanit.otpmanager.domain.migration.android.ModernFileSaver
 import ua.nanit.otpmanager.domain.storage.AccountJsonStorage
 import ua.nanit.otpmanager.domain.storage.AccountStorage
 import java.io.File
@@ -34,6 +38,15 @@ object BaseModule {
     @Provides
     fun provideBase64Coder(): Base64Coder {
         return AndroidBase64Coder
+    }
+
+    @Provides
+    fun provideFileSaver(@ApplicationContext ctx: Context): FileMigration.FileSaver {
+        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            LegacyFileSaver()
+        } else {
+            ModernFileSaver(ctx)
+        }
     }
 
 }

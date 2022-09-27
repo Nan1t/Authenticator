@@ -48,20 +48,20 @@ class ExportQrCodeFragment : Fragment() {
         binding.nextBtn.setOnClickListener { viewModel.nextPage() }
         binding.finishBtn.setOnClickListener { navigator().navUpToMain() }
 
-        viewModel.payload.observe(viewLifecycleOwner) {
-            binding.page.text = getString(R.string.account_export_qr_page, it.page, it.pages)
+        viewModel.payload.observe(viewLifecycleOwner) { payload ->
+            binding.page.text = getString(R.string.account_export_qr_page, payload.page, payload.pages)
             binding.prevBtn.visibility = View.VISIBLE
             binding.nextBtn.visibility = View.VISIBLE
             binding.finishBtn.visibility = View.INVISIBLE
 
-            if (it.page <= 1) {
+            if (payload.page <= 1) {
                 binding.prevBtn.visibility = View.GONE
-            } else if (it.page == it.pages) {
+            } else if (payload.page == payload.pages) {
                 binding.nextBtn.visibility = View.GONE
                 binding.finishBtn.visibility = View.VISIBLE
             }
 
-            displayQrImage(it.uri)
+            displayQrImage(payload.uri)
         }
     }
 

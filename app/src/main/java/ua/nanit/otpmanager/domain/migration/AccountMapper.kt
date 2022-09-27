@@ -10,6 +10,11 @@ import ua.nanit.otpmanager.domain.otp.DigestAlgorithm
 class AccountMapper {
 
     fun mapToOtpParams(account: Account): OtpParams {
+        val counter = when (account) {
+            is HotpAccount -> account.counter
+            is TotpAccount -> account.interval
+        }
+
         return OtpParams(
             account.secret,
             account.name,
@@ -17,7 +22,7 @@ class AccountMapper {
             account.algorithm.toMigration(),
             account.digits.toDigitsCount(),
             account.otpType(),
-            if (account is HotpAccount) account.counter else null
+            counter
         )
     }
 
@@ -35,8 +40,7 @@ class AccountMapper {
                     params.secret,
                     params.algorithm.toDigest(),
                     params.digits.toNumber(),
-                    // Seems like Google Authenticator migration has no interval field
-                    Constants.DEFAULT_TOTP_INTERVAL
+                    params.counter ?: Constants.DEFAULT_TOTP_INTERVAL
                 )
             }
             OtpType.HOTP -> {
@@ -47,7 +51,7 @@ class AccountMapper {
                     params.secret,
                     params.algorithm.toDigest(),
                     params.digits.toNumber(),
-                    params.counter ?: 0
+                    params.counter ?: Constants.DEFAULT_HOTP_COUNTER
                 )
             }
         }
