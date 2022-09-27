@@ -2,6 +2,7 @@ package ua.nanit.otpmanager
 
 import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
+import kotlinx.serialization.protobuf.schema.ProtoBufSchemaGenerator
 import org.junit.Test
 import ua.nanit.otpmanager.domain.migration.MigrationPayload
 import java.net.URLDecoder

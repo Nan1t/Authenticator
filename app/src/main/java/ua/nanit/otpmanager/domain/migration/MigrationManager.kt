@@ -8,6 +8,7 @@ import java.net.URI
 import java.net.URLEncoder
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.ceil
 
 class MigrationManager @Inject constructor(
     private val storage: AccountRepository,
@@ -66,7 +67,7 @@ class MigrationManager @Inject constructor(
         val result = LinkedList<MigrationPayload>()
 
         val batchId = -2140734236
-        val batchSize = migrationAccounts.size / 10
+        val batchSize = ceil(migrationAccounts.size.toFloat() / 10).toInt()
         var payload = LinkedList<OtpParams>()
         var batchIndex = 0
         var i = 1

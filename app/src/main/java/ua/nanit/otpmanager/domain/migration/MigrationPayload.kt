@@ -9,32 +9,31 @@ import kotlinx.serialization.protobuf.ProtoType
 @Serializable
 data class MigrationPayload constructor(
     @ProtoNumber(1)
-    @ProtoPacked
-    val otpParameters: List<OtpParams>,
+    val otpParameters: List<OtpParams> = emptyList(),
     @ProtoNumber(2)
-    val version: Int,
+    val version: Int = 0,
     @ProtoNumber(3)
-    val batchSize: Int,
+    val batchSize: Int = 0,
     @ProtoNumber(4)
-    val batchIndex: Int,
+    val batchIndex: Int = 0,
     @ProtoNumber(5)
-    val batchId: Int,
+    val batchId: Int = 0,
 )
 
 @Serializable
 data class OtpParams(
     @ProtoNumber(1)
-    val secret: ByteArray,
+    val secret: ByteArray = ByteArray(0),
     @ProtoNumber(2)
-    val name: String,
+    val name: String = "",
     @ProtoNumber(3)
     val issuer: String?,
     @ProtoNumber(4)
-    val algorithm: MigrationAlgorithm,
+    val algorithm: MigrationAlgorithm = MigrationAlgorithm.SHA_1,
     @ProtoNumber(5)
-    val digits: DigitCount,
+    val digits: DigitCount = DigitCount.SIX,
     @ProtoNumber(6)
-    val type: OtpType,
+    val type: OtpType = OtpType.TOTP,
     @ProtoNumber(7)
     val counter: Long?,
 )
