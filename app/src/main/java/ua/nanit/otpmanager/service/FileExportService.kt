@@ -63,7 +63,7 @@ class FileExportService : Service() {
         }
 
         notificationManager.notify(NOTIFICATION_ID, builder.build())
-        stopSelf()
+        //stopSelf()
     }
 
     private fun baseNotification(): NotificationCompat.Builder {

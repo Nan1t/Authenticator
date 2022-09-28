@@ -7,6 +7,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import ua.nanit.otpmanager.domain.migration.FileMigration
+import java.io.OutputStream
 
 /**
  * Save file into Downloads folder on Android Q+
@@ -14,7 +15,7 @@ import ua.nanit.otpmanager.domain.migration.FileMigration
 class ModernFileSaver(private val ctx: Context) : FileMigration.FileSaver {
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    override fun save(data: ByteArray, name: String, extension: String): Boolean {
+    override fun save(name: String, extension: String, os: (OutputStream) -> Unit): Boolean {
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "application/$extension")
@@ -23,14 +24,12 @@ class ModernFileSaver(private val ctx: Context) : FileMigration.FileSaver {
         val uri = ctx.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
 
         return if (uri != null) {
-            ctx.contentResolver.openOutputStream(uri)?.apply {
-                write(data)
-                close()
+            ctx.contentResolver.openOutputStream(uri)?.use {
+                os(it)
             }
             true
         } else {
             false
         }
     }
-    
 }
