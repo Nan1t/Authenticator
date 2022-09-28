@@ -8,6 +8,14 @@ abstract class AbstractMigration(
 
     private val mapper = AccountMapper()
 
+    protected suspend fun importPayload(payload: MigrationPayload) {
+        val accounts = payload.otpParameters.map(mapper::mapToAccount)
+
+        for (account in accounts) {
+            repository.add(account)
+        }
+    }
+
     protected fun getOtpParams(): List<OtpParams> =
         repository.getAll().map(mapper::mapToOtpParams)
 

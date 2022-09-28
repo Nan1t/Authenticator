@@ -8,9 +8,13 @@ interface Navigator {
 
     fun navToExport()
 
+    fun navToExportFile()
+
     fun navToExportQr()
 
     fun navToImport()
+
+    fun navToImportFile()
 
     fun navToImportQr()
 

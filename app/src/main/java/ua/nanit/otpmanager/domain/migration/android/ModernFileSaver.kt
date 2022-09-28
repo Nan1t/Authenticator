@@ -15,21 +15,16 @@ import java.io.OutputStream
 class ModernFileSaver(private val ctx: Context) : FileMigration.FileSaver {
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    override fun save(name: String, extension: String, os: (OutputStream) -> Unit): Boolean {
+    override fun save(name: String, extension: String, os: (OutputStream) -> Unit) {
         val values = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            put(MediaStore.MediaColumns.DISPLAY_NAME, "$name.$extension")
             put(MediaStore.MediaColumns.MIME_TYPE, "application/$extension")
             put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
         }
         val uri = ctx.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
 
-        return if (uri != null) {
-            ctx.contentResolver.openOutputStream(uri)?.use {
-                os(it)
-            }
-            true
-        } else {
-            false
+        if (uri != null) {
+            ctx.contentResolver.openOutputStream(uri)?.use(os)
         }
     }
 }

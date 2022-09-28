@@ -2,15 +2,13 @@
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/navAccounts">
 
     <fragment
         android:id="@+id/navAccounts"
         android:name="ua.nanit.otpmanager.presentation.accounts.AccountsFragment"
-        android:label="@string/appName"
-        tools:layout="@layout/frag_accounts">
+        android:label="@string/appName">
 
         <action android:id="@+id/actionNavAddManual"
             app:destination="@id/navAddManual"
@@ -32,23 +30,36 @@
             app:exitAnim="@anim/idle"
             app:popEnterAnim="@anim/idle"
             app:popExitAnim="@anim/slide_out_left"/>
+
+        <action android:id="@+id/actionNavImport"
+            app:destination="@id/navImport"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/idle"
+            app:popEnterAnim="@anim/idle"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
 
     <fragment
         android:id="@+id/navAddManual"
         android:label="@string/manual.title"
-        android:name="ua.nanit.otpmanager.presentation.addnew.AddAccountFragment"
-        tools:layout="@layout/frag_add"/>
+        android:name="ua.nanit.otpmanager.presentation.addnew.AddAccountFragment" />
 
     <fragment android:id="@+id/navScanCode"
         android:label="@string/scan.title"
-        android:name="ua.nanit.otpmanager.presentation.addnew.ScanCodeFragment"
-        tools:layout="@layout/frag_scan"/>
+        android:name="ua.nanit.otpmanager.presentation.addnew.ScanCodeFragment" />
+
+    <!-- IMPORT / EXPORT FRAGMENTS -->
 
     <fragment android:id="@+id/navExport"
         android:label="@string/account.export"
-        android:name="ua.nanit.otpmanager.presentation.migration.ExportFragment"
-        tools:layout="@layout/frag_export">
+        android:name="ua.nanit.otpmanager.presentation.migration.ExportFragment">
+
+        <action android:id="@+id/actionNavExportFile"
+            app:destination="@id/navExportFile"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/idle"
+            app:popEnterAnim="@anim/idle"
+            app:popExitAnim="@anim/slide_out_left"/>
 
         <action android:id="@+id/actionNavExportQr"
             app:destination="@id/navExportQr"
@@ -58,9 +69,28 @@
             app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
 
+    <fragment android:id="@+id/navExportFile"
+        android:label="@string/account.export.file"
+        android:name="ua.nanit.otpmanager.presentation.migration.file.ExportFileFragment" />
+
     <fragment android:id="@+id/navExportQr"
-        android:label="@string/account.export.qr"
-        android:name="ua.nanit.otpmanager.presentation.migration.ExportQrCodeFragment"
-        tools:layout="@layout/frag_export_qr" />
+        android:label="@string/account.export.qrcode"
+        android:name="ua.nanit.otpmanager.presentation.migration.qrcode.ExportQrFragment" />
+
+    <fragment android:id="@+id/navImport"
+        android:label="@string/account.import"
+        android:name="ua.nanit.otpmanager.presentation.migration.ImportFragment">
+
+        <action android:id="@+id/actionNavImportFile"
+            app:destination="@id/navImportFile"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/idle"
+            app:popEnterAnim="@anim/idle"
+            app:popExitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment android:id="@+id/navImportFile"
+        android:label="@string/account.import.file"
+        android:name="ua.nanit.otpmanager.presentation.migration.file.ImportFileFragment" />
 
 </navigation>

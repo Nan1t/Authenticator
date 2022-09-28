@@ -42,7 +42,7 @@ class UriMigration @Inject constructor(
     }
 
     private fun createPayloadUri(): List<URI> {
-        val payload = generatePayload()
+        val payload = createPayloadBatch()
 
         if (payload.isEmpty())
             return emptyList()
@@ -60,7 +60,7 @@ class UriMigration @Inject constructor(
         return uris
     }
 
-    private fun generatePayload(): List<MigrationPayload> {
+    private fun createPayloadBatch(): List<MigrationPayload> {
         val otpParams = getOtpParams()
 
         if (otpParams.isEmpty())

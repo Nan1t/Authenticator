@@ -1,4 +1,4 @@
-package ua.nanit.otpmanager.presentation.migration
+package ua.nanit.otpmanager.presentation.migration.qrcode
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +11,7 @@ import javax.inject.Inject
 import kotlin.math.max
 
 @HiltViewModel
-class MigrationViewModel @Inject constructor(
+class QrCodeViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val migration: UriMigration
 ) : ViewModel() {
@@ -25,7 +25,17 @@ class MigrationViewModel @Inject constructor(
         updatePage()
     }
 
-    fun updatePage() {
+    fun nextPage() {
+        this.page++
+        updatePage()
+    }
+
+    fun prevPage() {
+        this.page--
+        updatePage()
+    }
+
+    private fun updatePage() {
         page = max(0, page)
 
         viewModelScope.launch(dispatcher) {
@@ -35,15 +45,5 @@ class MigrationViewModel @Inject constructor(
                 payload.postValue(data!!)
             }
         }
-    }
-
-    fun nextPage() {
-        this.page++
-        updatePage()
-    }
-
-    fun prevPage() {
-        this.page--
-        updatePage()
     }
 }

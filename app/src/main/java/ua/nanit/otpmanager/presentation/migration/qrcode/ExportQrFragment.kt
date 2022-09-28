@@ -1,4 +1,4 @@
-package ua.nanit.otpmanager.presentation.migration
+package ua.nanit.otpmanager.presentation.migration.qrcode
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -19,9 +19,9 @@ import ua.nanit.otpmanager.presentation.ext.navigator
 import java.net.URI
 
 @AndroidEntryPoint
-class ExportQrCodeFragment : Fragment() {
+class ExportQrFragment : Fragment() {
 
-    private val viewModel: MigrationViewModel by viewModels()
+    private val viewModel: QrCodeViewModel by viewModels()
 
     private lateinit var binding: FragExportQrBinding
     private lateinit var bitmap: Bitmap
@@ -49,7 +49,7 @@ class ExportQrCodeFragment : Fragment() {
         binding.finishBtn.setOnClickListener { navigator().navUpToMain() }
 
         viewModel.payload.observe(viewLifecycleOwner) { payload ->
-            binding.page.text = getString(R.string.account_export_qr_page, payload.page, payload.pages)
+            binding.page.text = getString(R.string.account_export_qrcode_page, payload.page, payload.pages)
             binding.prevBtn.visibility = View.VISIBLE
             binding.nextBtn.visibility = View.VISIBLE
             binding.finishBtn.visibility = View.INVISIBLE

@@ -42,16 +42,24 @@ class MainActivity : AppCompatActivity(), Navigator {
         navController.navigate(R.id.actionNavExport)
     }
 
+    override fun navToExportFile() {
+        navController.navigate(R.id.actionNavExportFile)
+    }
+
     override fun navToExportQr() {
         navController.navigate(R.id.actionNavExportQr)
     }
 
     override fun navToImport() {
-        TODO("Not yet implemented")
+        navController.navigate(R.id.actionNavImport)
+    }
+
+    override fun navToImportFile() {
+        navController.navigate(R.id.actionNavImportFile)
     }
 
     override fun navToImportQr() {
-        TODO("Not yet implemented")
+        navController.navigate(R.id.actionNavImportFile)
     }
 
     override fun navToSettings() {

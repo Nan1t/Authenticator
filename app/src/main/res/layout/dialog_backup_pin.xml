@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.textfield.TextInputLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
     android:id="@+id/pinCodeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
-    android:hint="@string/account.backup.pin">
+    android:hint="@string/account.migration.pin">
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/pinCode"
@@ -19,5 +20,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="@string/account.import.pin.info"/>
+        tools:text="@string/account.export.file.pin"/>
 </com.google.android.material.textfield.TextInputLayout>
