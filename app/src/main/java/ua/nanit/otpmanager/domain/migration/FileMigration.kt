@@ -1,7 +1,5 @@
 package ua.nanit.otpmanager.domain.migration
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.encodeToByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
@@ -50,16 +48,13 @@ class FileMigration @Inject constructor(
     }
 
     suspend fun import(input: InputStream, pin: String): Int {
-        return withContext(Dispatchers.IO) {
-            ZipInputStream(input, pin.toCharArray()).use { stream ->
-                val entry = stream.nextEntry
-                val data = ByteArray(entry.uncompressedSize.toInt())
-                stream.read(data)
-                val payload: MigrationPayload = ProtoBuf.decodeFromByteArray(data)
-                importPayload(payload)
+        return ZipInputStream(input, pin.toCharArray()).use { stream ->
+            stream.nextEntry
+            val data = stream.readBytes()
+            val payload: MigrationPayload = ProtoBuf.decodeFromByteArray(data)
+            val count = importPayload(payload)
 
-                payload.otpParameters.size
-            }
+            count
         }
     }
 

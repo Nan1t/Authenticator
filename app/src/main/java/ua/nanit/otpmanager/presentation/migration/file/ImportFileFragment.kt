@@ -1,6 +1,10 @@
 package ua.nanit.otpmanager.presentation.migration.file
 
 import android.Manifest
+import android.os.Bundle
+import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ua.nanit.otpmanager.R
@@ -17,7 +21,7 @@ class ImportFileFragment : FileMigrationFragment() {
             R.string.account_import_file_pin,
             onConfirm = { pin ->
                 setProcessing(true)
-                //viewModel.export(pin)
+                viewModel.import(pin)
             },
             onCancel = { navigator().navUp() }
         )
@@ -25,20 +29,57 @@ class ImportFileFragment : FileMigrationFragment() {
 
     override val permission: String = Manifest.permission.READ_EXTERNAL_STORAGE
 
+    lateinit var fileDialog: ActivityResultLauncher<Array<String>>
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setProcessing(false)
+
+        fileDialog = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            if (uri != null) {
+                val stream = requireContext().contentResolver.openInputStream(uri)
+
+                if (stream != null) {
+                    viewModel.selectFile(stream)
+                    return@registerForActivityResult
+                }
+            }
+
+            showCloseableSnackbar("File cannot be opened or not found")
+            navigator().navUp()
+        }
+
+        if (isPermissionGranted()) {
+            openFileDialog()
+        } else {
+            requestPermission()
+        }
+
+        viewModel.errorResult.observe(viewLifecycleOwner) { msg ->
+            showCloseableSnackbar(getString(R.string.error, msg))
+            navigator().navUp()
+        }
+
+        viewModel.fileResult.observe(viewLifecycleOwner) {
+            pinDialog.value.show()
+        }
+
+        viewModel.importResult.observe(viewLifecycleOwner) { count ->
+            showCloseableSnackbar(getString(R.string.account_import_success, count))
+            navigator().navUpToMain()
+        }
+    }
+
     override fun onPermissionResult(result: Boolean) {
         if (result) {
-            pinDialog.value.show()
+            openFileDialog()
         } else {
             showCloseableSnackbar(R.string.account_import_permission)
         }
     }
 
-    private fun import(pin: String) {
-        if (isPermissionGranted()) {
-            // TODO viewModel.import()
-        } else {
-            requestPermission()
-        }
+    private fun openFileDialog() {
+        fileDialog.launch(arrayOf("application/*"))
     }
-
 }

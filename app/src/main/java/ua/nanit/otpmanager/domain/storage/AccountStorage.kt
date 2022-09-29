@@ -10,6 +10,8 @@ interface AccountStorage {
 
     fun add(account: Account)
 
+    fun addAll(accounts: List<Account>)
+
     fun edit(account: Account)
 
     fun delete(account: Account)

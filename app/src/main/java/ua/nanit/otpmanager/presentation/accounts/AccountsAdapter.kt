@@ -13,6 +13,7 @@ import ua.nanit.otpmanager.domain.account.HotpAccount
 import ua.nanit.otpmanager.domain.account.TotpAccount
 import ua.nanit.otpmanager.domain.otp.formatAsOtp
 import ua.nanit.otpmanager.domain.time.TotpListener
+import ua.nanit.otpmanager.domain.time.TotpTimer
 import ua.nanit.otpmanager.presentation.custom.SimpleDiffCallback
 
 class AccountsAdapter(
@@ -54,31 +55,51 @@ class AccountsAdapter(
         private val binding: ItemAccountBinding
     ) : RecyclerView.ViewHolder(binding.root), TotpListener {
 
+        private var holden: TotpAccount? = null
+        private var lastSecond: Int = 0
+
+        init {
+            TotpTimer.subscribe(this)
+        }
+
         fun bind(acc: Account) {
-            binding.password.text = acc.password.formatAsOtp()
-            binding.accountName.text = acc.name
-            itemView.setOnClickListener { listener.onCopy(acc.password) }
-            itemView.setOnLongClickListener { listener.onMenuClick(acc, it); true }
+            holden = null
+            lastSecond = 0
 
             when (acc) {
                 is TotpAccount -> bindTotp(acc)
                 is HotpAccount -> bindHotp(acc)
             }
+
+            binding.password.text = acc.password.formatAsOtp()
+            binding.accountName.text = acc.name
+            itemView.setOnClickListener { listener.onCopy(acc.password) }
+            itemView.setOnLongClickListener { listener.onMenuClick(acc, it); true }
         }
 
-        override fun onTick(progress: Int) {
-            handler.post { binding.progressBar.setProgressCompat(progress, true) }
-        }
+        override fun onTick() {
+            holden?.let { account ->
+                val remain = account.secondsRemain()
 
-        override fun onUpdate(password: String) {
-            handler.post { binding.password.text = password.formatAsOtp() }
+                if (remain > lastSecond) {
+                    account.update()
+                    handler.post { binding.password.text = account.password.formatAsOtp() }
+                }
+
+                lastSecond = remain
+                handler.post { binding.progressBar.setProgressCompat(remain - 1, true) }
+            }
         }
 
         private fun bindTotp(acc: TotpAccount) {
             binding.progressBar.visibility = View.VISIBLE
             binding.refreshBtn.visibility = View.GONE
             binding.progressBar.max = acc.interval.toInt() - 1
-            acc.listener = this
+
+            lastSecond = acc.secondsRemain()
+            holden = acc
+            acc.update()
+            onTick()
         }
 
         private fun bindHotp(acc: HotpAccount) {

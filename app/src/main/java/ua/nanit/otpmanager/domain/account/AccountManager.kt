@@ -78,6 +78,9 @@ class AccountManager @Inject constructor(
     }
 
     private fun validateAccount(label: String, secret: ByteArray) {
+        if (repository.get(label) != null)
+            throw CreationError.ALREADY_EXISTS.asException()
+
         if (label.length < 3)
             throw CreationError.SHORT_LABEL.asException()
 

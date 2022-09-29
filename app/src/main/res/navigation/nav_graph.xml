@@ -87,10 +87,21 @@
             app:exitAnim="@anim/idle"
             app:popEnterAnim="@anim/idle"
             app:popExitAnim="@anim/slide_out_left"/>
+
+        <action android:id="@+id/actionNavImportQr"
+            app:destination="@id/navImportQr"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/idle"
+            app:popEnterAnim="@anim/idle"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
 
     <fragment android:id="@+id/navImportFile"
         android:label="@string/account.import.file"
         android:name="ua.nanit.otpmanager.presentation.migration.file.ImportFileFragment" />
+
+    <fragment android:id="@+id/navImportQr"
+        android:label="@string/account.import.qrcode"
+        android:name="ua.nanit.otpmanager.presentation.migration.qrcode.ImportQrFragment" />
 
 </navigation>

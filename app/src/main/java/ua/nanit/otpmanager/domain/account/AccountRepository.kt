@@ -23,6 +23,11 @@ class AccountRepository @Inject constructor(
         emitUpdate()
     }
 
+    suspend fun addAll(accounts: List<Account>) {
+        storage.addAll(accounts)
+        emitUpdate()
+    }
+
     suspend fun edit(account: Account) {
         storage.edit(account)
         emitUpdate()

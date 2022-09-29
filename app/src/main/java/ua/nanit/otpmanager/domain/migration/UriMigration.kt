@@ -1,10 +1,13 @@
 package ua.nanit.otpmanager.domain.migration
 
+import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.encodeToByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
+import ua.nanit.otpmanager.domain.UriParser
 import ua.nanit.otpmanager.domain.account.AccountRepository
 import ua.nanit.otpmanager.domain.encode.Base64Coder
 import java.net.URI
+import java.net.URLDecoder
 import java.net.URLEncoder
 import java.util.*
 import javax.inject.Inject
@@ -21,11 +24,33 @@ class UriMigration @Inject constructor(
     companion object {
         private const val VERSION = 1
         private const val BATCH_SIZE = 10
-        private const val URI_SCHEMA = "otpauth-migration"
+        private const val URI_SCHEME = "otpauth-migration"
         private const val URI_HOST = "offline"
     }
 
     private var payloadCache: List<URI>? = null
+
+    suspend fun import(uri: String): ImportResult {
+        val parsed = UriParser.parse(uri)
+
+        if (parsed.uri.scheme != URI_SCHEME)
+            throw IllegalArgumentException("Wrong URI scheme")
+
+        if (parsed.uri.host != URI_HOST)
+            throw IllegalArgumentException("Wrong URI host")
+
+        val dataStr = parsed.args["data"]
+            ?: throw IllegalArgumentException("Missing data argument")
+        val payload = decodePayload(dataStr)
+
+        if (payload.version > VERSION)
+            throw IllegalArgumentException("Unsupported migration version")
+
+        val count = importPayload(payload)
+        val isLast = payload.batchIndex >= payload.batchSize - 1
+
+        return ImportResult(count, isLast)
+    }
 
     fun export(index: Int): Payload? {
         var payload = payloadCache
@@ -50,10 +75,8 @@ class UriMigration @Inject constructor(
         val uris = LinkedList<URI>()
 
         for (elem in payload) {
-            val bytes = ProtoBuf.encodeToByteArray(elem)
-            val encoded = base64Coder.encode(bytes)
-            val data = URLEncoder.encode(encoded, "UTF-8")
-            val uri = "${URI_SCHEMA}://${URI_HOST}?data=$data"
+            val data = encodePayload(elem)
+            val uri = "${URI_SCHEME}://${URI_HOST}?data=$data"
             uris.add(URI.create(uri))
         }
 
@@ -93,9 +116,26 @@ class UriMigration @Inject constructor(
         return result
     }
 
+    private fun decodePayload(data: String): MigrationPayload {
+        val urlDecoded = URLDecoder.decode(data, Charsets.UTF_8.name())
+        val base64Decoded = base64Coder.decode(urlDecoded)
+        return ProtoBuf.decodeFromByteArray(base64Decoded)
+    }
+
+    private fun encodePayload(payload: MigrationPayload): String {
+        val bytes = ProtoBuf.encodeToByteArray(payload)
+        val base64Encoded = base64Coder.encode(bytes)
+        return URLEncoder.encode(base64Encoded, Charsets.UTF_8.name())
+    }
+
     class Payload(
         val uri: URI,
         val page: Int,
         val pages: Int
+    )
+
+    class ImportResult(
+        val count: Int,
+        val last: Boolean
     )
 }

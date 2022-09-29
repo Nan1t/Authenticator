@@ -21,7 +21,7 @@ import java.net.URI
 @AndroidEntryPoint
 class ExportQrFragment : Fragment() {
 
-    private val viewModel: QrCodeViewModel by viewModels()
+    private val viewModel: QrMigrationViewModel by viewModels()
 
     private lateinit var binding: FragExportQrBinding
     private lateinit var bitmap: Bitmap
@@ -44,11 +44,11 @@ class ExportQrFragment : Fragment() {
         binding.nextBtn.visibility = View.GONE
         binding.finishBtn.visibility = View.GONE
 
-        binding.prevBtn.setOnClickListener { viewModel.prevPage() }
-        binding.nextBtn.setOnClickListener { viewModel.nextPage() }
+        binding.prevBtn.setOnClickListener { viewModel.exportPrevPage() }
+        binding.nextBtn.setOnClickListener { viewModel.exportNextPage() }
         binding.finishBtn.setOnClickListener { navigator().navUpToMain() }
 
-        viewModel.payload.observe(viewLifecycleOwner) { payload ->
+        viewModel.exportPayload.observe(viewLifecycleOwner) { payload ->
             binding.page.text = getString(R.string.account_export_qrcode_page, payload.page, payload.pages)
             binding.prevBtn.visibility = View.VISIBLE
             binding.nextBtn.visibility = View.VISIBLE
@@ -56,7 +56,9 @@ class ExportQrFragment : Fragment() {
 
             if (payload.page <= 1) {
                 binding.prevBtn.visibility = View.GONE
-            } else if (payload.page == payload.pages) {
+            }
+
+            if (payload.page == payload.pages) {
                 binding.nextBtn.visibility = View.GONE
                 binding.finishBtn.visibility = View.VISIBLE
             }

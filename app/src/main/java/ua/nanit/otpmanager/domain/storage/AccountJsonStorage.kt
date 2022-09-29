@@ -27,7 +27,19 @@ class AccountJsonStorage @Inject constructor(
     }
 
     override fun add(account: Account) {
-        editFile { it[account.label.lowercase()] = account }
+        editFile { cache ->
+            if (!cache.contains(account.key()))
+                cache[account.key()] = account
+        }
+    }
+
+    override fun addAll(accounts: List<Account>) {
+        editFile { cache ->
+            for (account in accounts) {
+                if (!cache.contains(account.key()))
+                    cache[account.key()] = account
+            }
+        }
     }
 
     override fun edit(account: Account) {
@@ -35,7 +47,9 @@ class AccountJsonStorage @Inject constructor(
     }
 
     override fun delete(account: Account) {
-        editFile { it.remove(account.label.lowercase()) }
+        editFile { cache ->
+            cache.remove(account.key())
+        }
     }
 
     override fun export(): String {
@@ -71,4 +85,6 @@ class AccountJsonStorage @Inject constructor(
     }
 
     private fun resolveFile(): File = dir.resolve("accounts.json")
+
+    private fun Account.key() = this.label.lowercase()
 }

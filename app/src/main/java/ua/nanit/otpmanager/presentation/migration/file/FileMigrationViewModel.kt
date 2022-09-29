@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.domain.migration.FileMigration
 import ua.nanit.otpmanager.presentation.Event
+import ua.nanit.otpmanager.presentation.ext.catchError
 import java.io.InputStream
 import javax.inject.Inject
 
@@ -17,9 +18,10 @@ class FileMigrationViewModel @Inject constructor(
     private val fileMigration: FileMigration
 ) : ViewModel() {
 
+    val errorResult = Event<String>()
     val exportResult = MutableLiveData<String>()
     val importResult = MutableLiveData<Int>()
-    val errorResult = Event<String>()
+    val fileResult = MutableLiveData<InputStream>()
 
     fun export(pin: String) {
         viewModelScope.launch(dispatcher) {
@@ -29,19 +31,18 @@ class FileMigrationViewModel @Inject constructor(
         }
     }
 
-    fun import(input: InputStream, pin: String) {
+    fun import(pin: String) {
         viewModelScope.launch(dispatcher) {
             catchError(errorResult) {
-                importResult.postValue(fileMigration.import(input, pin))
+                val stream = fileResult.value
+                    ?: throw IllegalArgumentException("File is not selected")
+
+                importResult.postValue(fileMigration.import(stream, pin))
             }
         }
     }
-}
 
-suspend fun catchError(errorLd: MutableLiveData<String>, runnable: suspend () -> Unit) {
-    try {
-        runnable()
-    } catch (ex: Exception) {
-        errorLd.postValue(ex.message ?: "")
+    fun selectFile(stream: InputStream) {
+        fileResult.value = stream
     }
 }

@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), Navigator {
     }
 
     override fun navToImportQr() {
-        navController.navigate(R.id.actionNavImportFile)
+        navController.navigate(R.id.actionNavImportQr)
     }
 
     override fun navToSettings() {

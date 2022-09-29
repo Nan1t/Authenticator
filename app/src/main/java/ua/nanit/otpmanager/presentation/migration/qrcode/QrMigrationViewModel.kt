@@ -7,30 +7,42 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.domain.migration.UriMigration
+import ua.nanit.otpmanager.presentation.Event
+import ua.nanit.otpmanager.presentation.ext.catchError
 import javax.inject.Inject
 import kotlin.math.max
 
 @HiltViewModel
-class QrCodeViewModel @Inject constructor(
+class QrMigrationViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val migration: UriMigration
 ) : ViewModel() {
 
     private var page: Int = 0
 
-    val payload = MutableLiveData<UriMigration.Payload>()
+    val errorResult = Event<String>()
+    val exportPayload = MutableLiveData<UriMigration.Payload>()
+    val importResult = Event<UriMigration.ImportResult>()
 
     init {
         this.page = 0
         updatePage()
     }
 
-    fun nextPage() {
+    fun import(uri: String) {
+        viewModelScope.launch(dispatcher) {
+            catchError(errorResult) {
+                importResult.postValue(migration.import(uri))
+            }
+        }
+    }
+
+    fun exportNextPage() {
         this.page++
         updatePage()
     }
 
-    fun prevPage() {
+    fun exportPrevPage() {
         this.page--
         updatePage()
     }
@@ -42,7 +54,7 @@ class QrCodeViewModel @Inject constructor(
             val data = migration.export(page)
 
             if (data != null) {
-                payload.postValue(data!!)
+                exportPayload.postValue(data!!)
             }
         }
     }

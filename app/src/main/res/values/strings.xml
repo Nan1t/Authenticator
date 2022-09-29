@@ -33,7 +33,6 @@
     <string name="account.export.about">Select way to export your accounts</string>
     <string name="account.export.file">Export in file</string>
     <string name="account.export.file.pin">Remember this pin code! This pin code is used to encrypt backup file</string>
-    <string name="account.export.file.process">Exporting 2FA accounts …</string>
     <string name="account.export.file.success">Accounts successfully exported into Downloads/%1$s</string>
     <string name="account.export.qrcode">Export with QR code</string>
     <string name="account.export.qrcode.about">Open authenticator app on another device and scan QR code below.</string>
@@ -43,10 +42,8 @@
 
     <string name="account.import">Import accounts</string>
     <string name="account.import.about">Select way how to import accounts</string>
+    <string name="account.import.success">Imported %1$d accounts!</string>
     <string name="account.import.file">Import from file</string>
-    <string name="account.import.file.error">Cannot open selected file. Ensure that this is really accounts backup file</string>
-    <string name="account.import.file.process">Importing 2FA accounts …</string>
-    <string name="account.import.file.success">Accounts successfully imported!</string>
     <string name="account.import.file.pin">This is a pin code you used to encrypt backup file</string>
     <string name="account.import.qrcode">Import using QR code</string>
     <string name="account.import.permission">Read permission is required to import accounts!</string>
