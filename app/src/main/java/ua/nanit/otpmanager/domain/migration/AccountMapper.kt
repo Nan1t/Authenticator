@@ -28,15 +28,19 @@ class AccountMapper {
 
     fun mapToAccount(params: OtpParams): Account {
         val parsed = LabelParser.parse(params.name)
-        val label = LabelParser.build(parsed.name, params.issuer)
+        val issuer = (params.issuer ?: parsed.issuer)?.trim()
+        val label = LabelParser.build(parsed.name, issuer).trim()
+        val name = parsed.name.trim()
+
+        println("Label: $label; Name: $name")
 
         return when (params.type) {
             OtpType.OTP_TYPE_UNSPECIFIED,
             OtpType.TOTP -> {
                 TotpAccount(
                     label,
-                    parsed.name,
-                    params.issuer,
+                    name,
+                    issuer,
                     params.secret,
                     params.algorithm.toDigest(),
                     params.digits.toNumber(),
@@ -46,8 +50,8 @@ class AccountMapper {
             OtpType.HOTP -> {
                 HotpAccount(
                     label,
-                    parsed.name,
-                    params.issuer,
+                    name,
+                    issuer,
                     params.secret,
                     params.algorithm.toDigest(),
                     params.digits.toNumber(),

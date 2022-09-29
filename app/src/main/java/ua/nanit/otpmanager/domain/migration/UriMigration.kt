@@ -7,7 +7,6 @@ import ua.nanit.otpmanager.domain.UriParser
 import ua.nanit.otpmanager.domain.account.AccountRepository
 import ua.nanit.otpmanager.domain.encode.Base64Coder
 import java.net.URI
-import java.net.URLDecoder
 import java.net.URLEncoder
 import java.util.*
 import javax.inject.Inject
@@ -117,8 +116,7 @@ class UriMigration @Inject constructor(
     }
 
     private fun decodePayload(data: String): MigrationPayload {
-        val urlDecoded = URLDecoder.decode(data, Charsets.UTF_8.name())
-        val base64Decoded = base64Coder.decode(urlDecoded)
+        val base64Decoded = base64Coder.decode(data)
         return ProtoBuf.decodeFromByteArray(base64Decoded)
     }
 

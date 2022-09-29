@@ -71,8 +71,8 @@ class AccountsAdapter(
                 is HotpAccount -> bindHotp(acc)
             }
 
+            binding.accountName.text = if (acc.issuer != null) "${acc.issuer} (${acc.name})" else acc.name
             binding.password.text = acc.password.formatAsOtp()
-            binding.accountName.text = acc.name
             itemView.setOnClickListener { listener.onCopy(acc.password) }
             itemView.setOnLongClickListener { listener.onMenuClick(acc, it); true }
         }
