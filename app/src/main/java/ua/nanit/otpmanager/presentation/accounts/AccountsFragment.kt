@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -88,22 +87,8 @@ class AccountsFragment : AccountListener, Fragment() {
     }
 
     override fun onMenuClick(account: Account, anchor: View) {
-        val menu = PopupMenu(requireContext(), anchor)
-        menu.inflate(R.menu.editor)
-        menu.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.menuEdit -> {
-                    renameDialog.value.show(account)
-                    true
-                }
-                R.id.menuDelete -> {
-                    deleteDialog.value.show(account)
-                    true
-                }
-                else -> false
-            }
-        }
-        menu.show()
+        AccountContextMenu(requireContext(), anchor, account,
+            renameDialog.value, deleteDialog.value).show()
     }
 
     override fun onHotpIncrement(acc: Account) {
