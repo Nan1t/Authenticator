@@ -17,7 +17,7 @@ class AccountMapper {
 
         return OtpParams(
             account.secret,
-            account.name,
+            LabelParser.build(account.name, account.issuer),
             account.issuer,
             account.algorithm.toMigration(),
             account.digits.toDigitsCount(),
@@ -31,8 +31,6 @@ class AccountMapper {
         val issuer = (params.issuer ?: parsed.issuer)?.trim()
         val label = LabelParser.build(parsed.name, issuer).trim()
         val name = parsed.name.trim()
-
-        println("Label: $label; Name: $name")
 
         return when (params.type) {
             OtpType.OTP_TYPE_UNSPECIFIED,
@@ -85,6 +83,7 @@ class AccountMapper {
 
     private fun DigestAlgorithm.toMigration(): MigrationAlgorithm {
         return when (this) {
+            DigestAlgorithm.MD_5 -> MigrationAlgorithm.MD_5
             DigestAlgorithm.SHA_1 -> MigrationAlgorithm.SHA_1
             DigestAlgorithm.SHA_256 -> MigrationAlgorithm.SHA_256
             DigestAlgorithm.SHA_512 -> MigrationAlgorithm.SHA_512
@@ -94,7 +93,7 @@ class AccountMapper {
     private fun MigrationAlgorithm.toDigest(): DigestAlgorithm {
         return when (this) {
             MigrationAlgorithm.UNSPECIFIED,
-            MigrationAlgorithm.MD_5 -> throw IllegalArgumentException("Undefined algorithm")
+            MigrationAlgorithm.MD_5 -> DigestAlgorithm.MD_5
             MigrationAlgorithm.SHA_1 -> DigestAlgorithm.SHA_1
             MigrationAlgorithm.SHA_256 -> DigestAlgorithm.SHA_256
             MigrationAlgorithm.SHA_512 -> DigestAlgorithm.SHA_512
