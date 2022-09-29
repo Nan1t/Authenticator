@@ -87,11 +87,15 @@ class AccountsAdapter(
                 }
 
                 lastSecond = remain
-                handler.post { binding.progressBar.setProgressCompat(remain - 1, true) }
+                handler.post {
+                    binding.progressBar.setProgressCompat(remain - 1, true)
+                    binding.remainTime.text = remain.toString()
+                }
             }
         }
 
         private fun bindTotp(acc: TotpAccount) {
+            binding.remainTime.visibility = View.VISIBLE
             binding.progressBar.visibility = View.VISIBLE
             binding.refreshBtn.visibility = View.GONE
             binding.progressBar.max = acc.interval.toInt() - 1
@@ -103,6 +107,7 @@ class AccountsAdapter(
         }
 
         private fun bindHotp(acc: HotpAccount) {
+            binding.remainTime.visibility = View.GONE
             binding.progressBar.visibility = View.GONE
             binding.refreshBtn.visibility = View.VISIBLE
             binding.refreshBtn.setOnClickListener {

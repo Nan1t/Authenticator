@@ -25,6 +25,14 @@
             android:layout_gravity="center"
             android:progress="75" />
 
+        <TextView
+            android:id="@+id/remainTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="14sp"
+            tools:text="30"/>
+
         <ImageButton
             android:id="@+id/refreshBtn"
             android:layout_width="wrap_content"
@@ -33,7 +41,8 @@
             android:padding="16dp"
             android:background="?attr/selectableItemBackground"
             android:src="@drawable/ic_round_refresh"
-            android:contentDescription="@string/accounts.increment" />
+            android:contentDescription="@string/accounts.increment"
+            tools:visibility="invisible"/>
     </FrameLayout>
 
     <LinearLayout
