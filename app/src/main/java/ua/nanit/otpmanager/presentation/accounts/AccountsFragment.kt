@@ -5,10 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.app.ActivityCompat
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -22,8 +19,6 @@ import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.FragAccountsBinding
 import ua.nanit.otpmanager.domain.account.Account
 import ua.nanit.otpmanager.presentation.ext.navigator
-import ua.nanit.otpmanager.presentation.ext.settingsPreferences
-import ua.nanit.otpmanager.presentation.ext.switchNightMode
 
 @AndroidEntryPoint
 class AccountsFragment : AccountListener, Fragment() {
@@ -54,10 +49,11 @@ class AccountsFragment : AccountListener, Fragment() {
         clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE)
                 as ClipboardManager
 
-        setupMainMenu()
-        enableFab(false)
-
         val adapter = AccountsAdapter(this)
+        val menuProvider = AccountsMainMenu(requireActivity(), navigator())
+
+        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
+        enableFab(false)
 
         binding.accountsList.layoutManager = LinearLayoutManager(requireContext())
         binding.accountsList.adapter = adapter
@@ -128,41 +124,5 @@ class AccountsFragment : AccountListener, Fragment() {
             binding.addScanBtn.hide()
             binding.addScanText.visibility = View.GONE
         }
-    }
-
-    private fun setupMainMenu() {
-        requireActivity().addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.main, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.menuImport -> {
-                        navigator().navToImport()
-                        true
-                    }
-                    R.id.menuExport -> {
-                        navigator().navToExport()
-                        true
-                    }
-                    R.id.menuSwitchTheme -> {
-                        switchTheme()
-                        true
-                    }
-                    R.id.menuAbout -> {
-                        navigator().navToAbout()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner)
-    }
-
-    private fun switchTheme() {
-        val activity = requireActivity()
-        activity.switchNightMode()
-        ActivityCompat.recreate(activity)
     }
 }
