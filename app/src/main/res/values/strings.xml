@@ -11,7 +11,7 @@
 
     <string name="menu.main.import">Import</string>
     <string name="menu.main.export">Export</string>
-    <string name="menu.main.settings">Settings</string>
+    <string name="menu.main.theme">Switch theme</string>
     <string name="menu.main.about">About</string>
     <string name="menu.edit.change">Edit</string>
     <string name="menu.edit.delete">Delete</string>

@@ -5,7 +5,9 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.app.ActivityCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,6 +22,8 @@ import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.FragAccountsBinding
 import ua.nanit.otpmanager.domain.account.Account
 import ua.nanit.otpmanager.presentation.ext.navigator
+import ua.nanit.otpmanager.presentation.ext.settingsPreferences
+import ua.nanit.otpmanager.presentation.ext.switchNightMode
 
 @AndroidEntryPoint
 class AccountsFragment : AccountListener, Fragment() {
@@ -142,8 +146,8 @@ class AccountsFragment : AccountListener, Fragment() {
                         navigator().navToExport()
                         true
                     }
-                    R.id.menuSettings -> {
-                        navigator().navToSettings()
+                    R.id.menuSwitchTheme -> {
+                        switchTheme()
                         true
                     }
                     R.id.menuAbout -> {
@@ -154,5 +158,11 @@ class AccountsFragment : AccountListener, Fragment() {
                 }
             }
         }, viewLifecycleOwner)
+    }
+
+    private fun switchTheme() {
+        val activity = requireActivity()
+        activity.switchNightMode()
+        ActivityCompat.recreate(activity)
     }
 }

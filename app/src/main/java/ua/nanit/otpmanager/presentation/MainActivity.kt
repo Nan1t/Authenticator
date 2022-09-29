@@ -62,10 +62,6 @@ class MainActivity : AppCompatActivity(), Navigator {
         navController.navigate(R.id.actionNavImportQr)
     }
 
-    override fun navToSettings() {
-        TODO("Not yet implemented")
-    }
-
     override fun navToAbout() {
         TODO("Not yet implemented")
     }

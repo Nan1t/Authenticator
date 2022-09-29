@@ -18,8 +18,6 @@ interface Navigator {
 
     fun navToImportQr()
 
-    fun navToSettings()
-
     fun navToAbout()
 
     fun navUp()

@@ -7,8 +7,8 @@
     <item android:id="@+id/menuExport"
         android:title="@string/menu.main.export"/>
 
-    <item android:id="@+id/menuSettings"
-        android:title="@string/menu.main.settings"/>
+    <item android:id="@+id/menuSwitchTheme"
+        android:title="@string/menu.main.theme"/>
 
     <item android:id="@+id/menuAbout"
         android:title="@string/menu.main.about"/>
