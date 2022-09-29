@@ -41,8 +41,7 @@
             android:padding="16dp"
             android:background="?attr/selectableItemBackground"
             android:src="@drawable/ic_round_refresh"
-            android:contentDescription="@string/accounts.increment"
-            tools:visibility="invisible"/>
+            android:contentDescription="@string/accounts.increment" />
     </FrameLayout>
 
     <LinearLayout
