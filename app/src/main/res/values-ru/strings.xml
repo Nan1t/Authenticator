@@ -53,7 +53,7 @@
     <string name="manual.counter">Начальное значение счетчика</string>
     <string name="manual.digits">"Кол-во цифр"</string>
     <string name="scan.title">Сканировать QR-код</string>
-    <string name="scan.hint">QR-код должен быть внутри красной рамки</string>
+    <string name="scan.hint">QR-код должен быть внутри рамки</string>
     <string name="scan.camera.missing">Камера не найдена на этом устройстве!</string>
     <string name="scan.permission.required">Разрешение для камеры необходимо для чтения QR кода!</string>
     <string name="settings.nightMode">Темная тема</string>

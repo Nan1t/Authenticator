@@ -65,7 +65,7 @@
     <string name="manual.digits">Digits count</string>
 
     <string name="scan.title">Scan code</string>
-    <string name="scan.hint">QR code must be inside red frame to scan</string>
+    <string name="scan.hint">QR code must be inside a frame to scan</string>
     <string name="scan.camera.missing">Camera not found on this device!</string>
     <string name="scan.permission.required">Camera permission is required for scanning!</string>
 

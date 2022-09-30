@@ -27,7 +27,7 @@ class ImportQrFragment : BaseScannerFragment() {
             if (result.last) {
                 navigator().navUpToMain()
             } else {
-                unblockScanner()
+                openScanner()
             }
         }
     }

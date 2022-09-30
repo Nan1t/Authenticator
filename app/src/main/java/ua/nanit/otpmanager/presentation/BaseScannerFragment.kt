@@ -6,28 +6,18 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import ua.nanit.otpmanager.R
-import ua.nanit.otpmanager.databinding.FragScanBinding
-import ua.nanit.otpmanager.domain.QrCodeParser
+import ua.nanit.otpmanager.databinding.FragProgressBinding
 import ua.nanit.otpmanager.presentation.ext.navigator
 import ua.nanit.otpmanager.presentation.ext.showCloseableSnackbar
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.math.max
 
 abstract class BaseScannerFragment : Fragment() {
 
@@ -35,114 +25,65 @@ abstract class BaseScannerFragment : Fragment() {
         private const val PERMISSION = Manifest.permission.CAMERA
     }
 
-    private lateinit var binding: FragScanBinding
+    private lateinit var binding: FragProgressBinding
+    private lateinit var scannerLauncher: ActivityResultLauncher<ScanOptions>
+    private lateinit var navigator: Navigator
     private lateinit var vibrator: Vibrator
-
-    private var executor: ExecutorService? = null
-    private var analyzerBlocked = AtomicBoolean(false)
+    private lateinit var options: ScanOptions
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragScanBinding.inflate(inflater, container, false)
+        binding = FragProgressBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         vibrator = requireContext().getSystemService() ?: return
+        navigator = navigator()
+
+        options = ScanOptions()
+        options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+        options.setPrompt(getString(R.string.scan_hint))
+        options.setBarcodeImageEnabled(false)
+        options.setOrientationLocked(false)
+        options.setBeepEnabled(false)
+
+        scannerLauncher = registerForActivityResult(ScanContract()) {
+            if (it.contents != null) {
+                vibrateCompat()
+                processUri(it.contents)
+            } else {
+                navigator.navUp()
+            }
+        }
 
         if (!hasCamera()) {
             showCloseableSnackbar(R.string.scan_camera_missing)
-            navigator().navUp()
+            navigator.navUp()
             return
         }
 
-        executor = Executors.newSingleThreadExecutor()
-
         if (isGrantedPermissions()) {
-            openCamera()
+            openScanner()
         } else {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
                 if (granted) {
-                    openCamera()
+                    openScanner()
                 } else {
                     showCloseableSnackbar(R.string.scan_permission_required)
-                    navigator().navUp()
+                    navigator.navUp()
                 }
             }.launch(PERMISSION)
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        executor?.shutdown()
-    }
-
     protected abstract fun processUri(uri: String)
 
-    protected fun unblockScanner() {
-        analyzerBlocked.set(false)
-    }
-
-    private fun openCamera() {
-        val ctx = requireContext()
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(ctx)
-        val executor = executor ?: return
-
-        cameraProviderFuture.addListener({
-            val provider = cameraProviderFuture.get()
-            val preview = Preview.Builder().build()
-            val analyzer = ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_BLOCK_PRODUCER)
-                .setImageQueueDepth(1)
-                .build()
-            val viewSize = max(binding.cameraPreview.width, binding.cameraPreview.height)
-            val frameSize = binding.frame.width // Assume it's a square (it must)
-
-            preview.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
-            analyzer.setAnalyzer(executor) {
-                analyzeFrame(viewSize, frameSize, it)
-            }
-
-            try {
-                provider.unbindAll()
-                provider.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA,
-                    preview, analyzer)
-            } catch(ex: Exception) {
-                Log.e(null, "Camera use cases binding failed", ex)
-            }
-        }, ContextCompat.getMainExecutor(ctx))
-    }
-
-    private fun analyzeFrame(viewSize: Int, frameSize: Int, img: ImageProxy) {
-        if (!analyzerBlocked.get()) {
-            val yBuffer = img.planes[0].buffer
-            val vuBuffer = img.planes[2].buffer
-
-            val ySize = yBuffer.remaining()
-            val vuSize = vuBuffer.remaining()
-
-            val yuvBytes = ByteArray(ySize + vuSize)
-
-            yBuffer.get(yuvBytes, 0, ySize)
-            vuBuffer.get(yuvBytes, ySize, vuSize)
-
-            val multiplier = max(img.width, img.height).toFloat() / viewSize
-            val resizedFrame = (frameSize * multiplier).toInt()
-            val frameX = img.width / 2 - resizedFrame / 2
-            val frameY = img.height / 2 - resizedFrame / 2
-            val uri = QrCodeParser.readImage(yuvBytes, img.width, img.height, frameX, frameY, resizedFrame)
-
-            if (uri != null) {
-                analyzerBlocked.set(true)
-                vibrateCompat()
-                processUri(uri)
-            }
-        }
-
-        img.close()
+    protected fun openScanner() {
+        scannerLauncher.launch(options)
     }
 
     private fun vibrateCompat() {
