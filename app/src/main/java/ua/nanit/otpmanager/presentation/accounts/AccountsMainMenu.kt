@@ -1,17 +1,13 @@
 package ua.nanit.otpmanager.presentation.accounts
 
-import android.app.Activity
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.core.app.ActivityCompat
 import androidx.core.view.MenuProvider
 import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.presentation.Navigator
-import ua.nanit.otpmanager.presentation.ext.switchNightMode
 
 class AccountsMainMenu(
-    private val activity: Activity,
     private val navigator: Navigator
 ) : MenuProvider {
 
@@ -29,8 +25,8 @@ class AccountsMainMenu(
                 navigator.navToExport()
                 true
             }
-            R.id.menuSwitchTheme -> {
-                switchTheme()
+            R.id.menuSettings -> {
+                navigator.navToSettings()
                 true
             }
             R.id.menuAbout -> {
@@ -39,10 +35,5 @@ class AccountsMainMenu(
             }
             else -> false
         }
-    }
-
-    private fun switchTheme() {
-        activity.switchNightMode()
-        ActivityCompat.recreate(activity)
     }
 }

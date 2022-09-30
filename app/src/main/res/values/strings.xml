@@ -1,7 +1,7 @@
 <resources>
-    <string name="appName">OTP Manager</string>
+    <string name="appName" translatable="false">OTP Manager</string>
 
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="cancel">Cancel</string>
     <string name="prev">Previous</string>
     <string name="next">Next</string>
@@ -9,9 +9,11 @@
     <string name="wait">Wait …</string>
     <string name="error">Error: %1$s</string>
 
+    <string name="biometric">Authenticate</string>
+
     <string name="menu.main.import">Import</string>
     <string name="menu.main.export">Export</string>
-    <string name="menu.main.theme">Switch theme</string>
+    <string name="menu.main.settings">Settings</string>
     <string name="menu.main.about">About</string>
     <string name="menu.edit.change">Edit</string>
     <string name="menu.edit.delete">Delete</string>
@@ -35,9 +37,9 @@
     <string name="account.export.file.pin">Remember this pin code! This pin code is used to encrypt backup file</string>
     <string name="account.export.file.success">Accounts successfully exported into Downloads/%1$s</string>
     <string name="account.export.qrcode">Export with QR code</string>
-    <string name="account.export.qrcode.about">Open authenticator app on another device and scan QR code below.</string>
+    <string name="account.export.qrcode.about">Open authenticator app on another device and scan QR code below</string>
     <string name="account.export.qrcode.tip">This code also can be scanned by any application that supports Google Authenticator migration via QR code</string>
-    <string name="account.export.qrcode.page">%1$d/%2$d</string>
+    <string name="account.export.qrcode.page" translatable="false">%1$d/%2$d</string>
     <string name="account.export.permission">Write permission is required to export accounts!</string>
 
     <string name="account.import">Import accounts</string>
@@ -66,6 +68,12 @@
     <string name="scan.hint">QR code must be inside red frame to scan</string>
     <string name="scan.camera.missing">Camera not found on this device!</string>
     <string name="scan.permission.required">Camera permission is required for scanning!</string>
+
+    <string name="settings.nightMode">Night mode</string>
+    <string name="settings.locale">Language</string>
+    <string name="settings.security">Security mode</string>
+    <string name="settings.security.desc">Request pin or fingerprint on start</string>
+    <string name="settings.security.unavailable">First, enable one of the security options on this device!</string>
 
     <string name="error.undefined">Undefined error</string>
     <string name="error.exists">Account with such name already exists</string>

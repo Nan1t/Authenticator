@@ -48,8 +48,9 @@ class AccountsFragment : AccountListener, Fragment() {
         clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE)
                 as ClipboardManager
 
+        val navigator = navigator()
         val adapter = AccountsAdapter(this)
-        val menuProvider = AccountsMainMenu(requireActivity(), navigator())
+        val menuProvider = AccountsMainMenu(navigator)
 
         requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
         enableFab(false)
@@ -62,12 +63,12 @@ class AccountsFragment : AccountListener, Fragment() {
 
         binding.addManualBtn.setOnClickListener {
             enableFab(false)
-            navigator().navToManualAdd()
+            navigator.navToManualAdd()
         }
 
         binding.addScanBtn.setOnClickListener {
             enableFab(false)
-            navigator().navToScanCode()
+            navigator.navToScanCode()
         }
 
         viewModel.updateResult.observe(viewLifecycleOwner, adapter::update)

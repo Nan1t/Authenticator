@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="locales">
+        <item>English</item>
+        <item>Українська</item>
+        <item>Русский</item>
+    </string-array>
+
+    <string-array name="localeValues">
+        <item>en</item>
+        <item>ua</item>
+        <item>ru</item>
+    </string-array>
+</resources>

@@ -37,6 +37,13 @@
             app:exitAnim="@anim/idle"
             app:popEnterAnim="@anim/idle"
             app:popExitAnim="@anim/slide_out_left"/>
+
+        <action android:id="@+id/actionNavSettings"
+            app:destination="@id/navSettings"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/idle"
+            app:popEnterAnim="@anim/idle"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
 
     <fragment
@@ -103,5 +110,9 @@
     <fragment android:id="@+id/navImportQr"
         android:label="@string/account.import.qrcode"
         android:name="ua.nanit.otpmanager.presentation.migration.qrcode.ImportQrFragment" />
+
+    <fragment android:id="@+id/navSettings"
+        android:label="@string/menu.main.settings"
+        android:name="ua.nanit.otpmanager.presentation.settings.SettingsFragment" />
 
 </navigation>

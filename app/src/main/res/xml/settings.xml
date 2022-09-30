@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference android:key="nightMode"
+        android:title="@string/settings.nightMode"
+        app:icon="@drawable/ic_moon" />
+
+    <SwitchPreference android:key="securityMode"
+        android:title="@string/settings.security"
+        app:summary="@string/settings.security.desc"
+        app:icon="@drawable/ic_round_security" />
+
+    <ListPreference android:key="locale"
+        android:title="@string/settings.locale"
+        app:icon="@drawable/ic_round_translate"
+        app:useSimpleSummaryProvider="true" />
+
+</PreferenceScreen>
