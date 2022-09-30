@@ -5,73 +5,78 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.camera.view.PreviewView
-        android:id="@+id/cameraPreview"
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/barcodeScanner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_height="match_parent">
+    </com.journeyapps.barcodescanner.DecoratedBarcodeView>
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/translucent"
-        app:layout_constraintBottom_toTopOf="@id/frame"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <androidx.camera.view.PreviewView-->
+<!--        android:id="@+id/cameraPreview"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"/>-->
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/translucent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frame" />
+<!--    <View-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@color/translucent"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/frame"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/translucent"
-        app:layout_constraintBottom_toBottomOf="@id/frame"
-        app:layout_constraintEnd_toStartOf="@id/frame"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/frame" />
+<!--    <View-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@color/translucent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/frame" />-->
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/translucent"
-        app:layout_constraintEnd_toEndOf="@id/cameraPreview"
-        app:layout_constraintStart_toEndOf="@id/frame"
-        app:layout_constraintTop_toTopOf="@id/frame"
-        app:layout_constraintBottom_toBottomOf="@id/frame"/>
+<!--    <View-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@color/translucent"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/frame"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/frame"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@id/frame" />-->
 
-    <View
-        android:id="@+id/frame"
-        android:layout_width="512px"
-        android:layout_height="512px"
-        android:background="@drawable/frame"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <View-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@color/translucent"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/cameraPreview"-->
+<!--        app:layout_constraintStart_toEndOf="@id/frame"-->
+<!--        app:layout_constraintTop_toTopOf="@id/frame"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/frame"/>-->
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/cameraPreview"
-        app:layout_constraintTop_toBottomOf="@id/frame">
+<!--    <View-->
+<!--        android:id="@+id/frame"-->
+<!--        android:layout_width="512px"-->
+<!--        android:layout_height="512px"-->
+<!--        android:background="@drawable/frame"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="@string/scan.hint" />
-    </androidx.cardview.widget.CardView>
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/cardView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:cardCornerRadius="4dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="4dp"-->
+<!--            android:text="@string/scan.hint" />-->
+<!--    </androidx.cardview.widget.CardView>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

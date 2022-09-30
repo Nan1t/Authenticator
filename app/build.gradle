@@ -41,7 +41,7 @@ android {
 dependencies {
     def ktxSer = "1.4.0"
     def navigation = "2.5.1"
-    def camerax = "1.1.0"
+    def camerax = "1.2.0-beta02"
     def zxing = "3.5.0"
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5" // for ZXing

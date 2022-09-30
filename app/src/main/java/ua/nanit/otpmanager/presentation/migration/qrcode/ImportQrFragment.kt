@@ -24,10 +24,11 @@ class ImportQrFragment : BaseScannerFragment() {
 
         viewModel.importResult.observe(viewLifecycleOwner) { result ->
             showCloseableSnackbar(getString(R.string.account_import_success, result.count))
+
             if (result.last) {
                 navigator().navUpToMain()
             } else {
-                openScanner()
+                unblockScanner()
             }
         }
     }

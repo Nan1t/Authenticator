@@ -6,84 +6,99 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.view.*
-import androidx.activity.result.ActivityResultLauncher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
-import com.journeyapps.barcodescanner.ScanContract
-import com.journeyapps.barcodescanner.ScanOptions
+import com.google.zxing.BarcodeFormat
+import com.journeyapps.barcodescanner.BarcodeCallback
+import com.journeyapps.barcodescanner.BarcodeResult
+import com.journeyapps.barcodescanner.CaptureManager
+import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import ua.nanit.otpmanager.R
-import ua.nanit.otpmanager.databinding.FragProgressBinding
+import ua.nanit.otpmanager.databinding.FragScanBinding
 import ua.nanit.otpmanager.presentation.ext.navigator
 import ua.nanit.otpmanager.presentation.ext.showCloseableSnackbar
+import java.util.concurrent.atomic.AtomicBoolean
 
-abstract class BaseScannerFragment : Fragment() {
+abstract class BaseScannerFragment : Fragment(), BarcodeCallback {
 
     companion object {
         private const val PERMISSION = Manifest.permission.CAMERA
     }
 
-    private lateinit var binding: FragProgressBinding
-    private lateinit var scannerLauncher: ActivityResultLauncher<ScanOptions>
-    private lateinit var navigator: Navigator
+    private lateinit var binding: FragScanBinding
     private lateinit var vibrator: Vibrator
-    private lateinit var options: ScanOptions
+    private lateinit var captureManager: CaptureManager
+
+    private val locker = AtomicBoolean(false)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragProgressBinding.inflate(inflater, container, false)
+        binding = FragScanBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        vibrator = requireContext().getSystemService() ?: return
-        navigator = navigator()
-
-        options = ScanOptions()
-        options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
-        options.setPrompt(getString(R.string.scan_hint))
-        options.setBarcodeImageEnabled(false)
-        options.setOrientationLocked(false)
-        options.setBeepEnabled(false)
-
-        scannerLauncher = registerForActivityResult(ScanContract()) {
-            if (it.contents != null) {
-                vibrateCompat()
-                processUri(it.contents)
-            } else {
-                navigator.navUp()
-            }
-        }
-
         if (!hasCamera()) {
             showCloseableSnackbar(R.string.scan_camera_missing)
-            navigator.navUp()
+            navigator().navUp()
             return
         }
 
+        vibrator = requireContext().getSystemService() ?: return
+        captureManager = CaptureManager(requireActivity(), binding.barcodeScanner)
+
         if (isGrantedPermissions()) {
-            openScanner()
+            openCamera()
         } else {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
                 if (granted) {
-                    openScanner()
+                    openCamera()
                 } else {
                     showCloseableSnackbar(R.string.scan_permission_required)
-                    navigator.navUp()
+                    navigator().navUp()
                 }
             }.launch(PERMISSION)
         }
     }
 
+    override fun barcodeResult(result: BarcodeResult) {
+        if (locker.get()) return
+
+        if (result.text != null) {
+            locker.set(true)
+            vibrateCompat()
+            processUri(result.text)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.barcodeScanner.resume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.barcodeScanner.pause()
+    }
+
     protected abstract fun processUri(uri: String)
 
-    protected fun openScanner() {
-        scannerLauncher.launch(options)
+    protected fun unblockScanner() {
+        locker.set(false)
+    }
+
+    private fun openCamera() {
+        binding.barcodeScanner.barcodeView.decoderFactory =
+            DefaultDecoderFactory(listOf(BarcodeFormat.QR_CODE))
+        binding.barcodeScanner.decodeContinuous(this)
     }
 
     private fun vibrateCompat() {

@@ -22,12 +22,21 @@ object QrCodeParser {
         frameX: Int, frameY: Int,
         frameSize: Int,
     ): String? {
+        return readImage(yuvData, width, height, frameX, frameY, frameSize, frameSize)
+    }
+
+    fun readImage(
+        yuvData: ByteArray,
+        width: Int, height: Int,
+        frameX: Int, frameY: Int,
+        frameWidth: Int, frameHeight: Int
+    ): String? {
         return try {
             val source = PlanarYUVLuminanceSource(
                 yuvData,
                 width, height,
                 frameX, frameY,
-                frameSize, frameSize,
+                frameWidth, frameHeight,
                 false
             )
             val bitmap = BinaryBitmap(HybridBinarizer(source))
