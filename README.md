@@ -4,7 +4,6 @@ Simple and convenient OTP (One Time Password) manager for Android.
 
 ## Task list
 
-* About screen
 * Translations (UA, RU)
 * App icon
 

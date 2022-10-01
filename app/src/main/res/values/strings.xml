@@ -20,7 +20,6 @@
 
     <string name="accounts.copied">Password copied!</string>
     <string name="accounts.increment">Increment counter</string>
-    <string name="accounts.options">Account options</string>
     <string name="accounts.add.scan">Scan code</string>
     <string name="accounts.add.manual">Enter manually</string>
     <string name="accounts.add.success">Successfully added account %1$s</string>

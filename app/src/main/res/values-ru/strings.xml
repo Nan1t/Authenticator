@@ -16,10 +16,9 @@
     <string name="menu.edit.change">Изменить</string>
     <string name="menu.edit.delete">Удалить</string>
 
-    <string name="accounts.copied">Пароль скопировано!</string>
+    <string name="accounts.copied">Пароль скопирован!</string>
     <string name="accounts.increment">Увеличить счетчик</string>
-    <string name="accounts.options">Настройки аккаунта</string>
-    <string name="accounts.add.scan">Сканировать QR код</string>
+    <string name="accounts.add.scan">Сканировать QR-код</string>
     <string name="accounts.add.manual">Ввести вручную</string>
     <string name="accounts.add.success">Аккаунт %1$s успешно добавлен</string>
 
@@ -32,12 +31,12 @@
     <string name="account.export">Экспортировать аккаунты</string>
     <string name="account.export.about">Выберите способ экспорта аккаунтов</string>
     <string name="account.export.file">Экспорт в файл</string>
-    <string name="account.export.file.pin">Запомните этот пин! Он будет использован для шифрования файла, содержащего ваши аккаунты</string>
-    <string name="account.export.file.success">Акаунты успешно выгружены в Загрузки/%1$s</string>
-    <string name="account.export.qrcode">Экспорт через QR код</string>
-    <string name="account.export.qrcode.about">Откройте другое приложение и отсканируйте QR код ниже</string>
+    <string name="account.export.file.pin">Запомните этот пин-код! Он будет использован для шифрования файла, содержащего ваши аккаунты</string>
+    <string name="account.export.file.success">Аккаунты успешно экспортированы в Загрузки/%1$s</string>
+    <string name="account.export.qrcode">Экспорт через QR-код</string>
+    <string name="account.export.qrcode.about">Откройте другое приложение и отсканируйте QR-код ниже</string>
     <string name="account.export.qrcode.tip">Этот код также может быть сканирован любым другим приложением, которое поддерживает формат экспорта от Google Authenticator</string>
-    <string name="account.export.permission">Права записи необходимы для экспорта аккаунтов!</string>
+    <string name="account.export.permission">Разрешение на запись необходимо для экспорта аккаунтов!</string>
 
     <string name="account.import">Импорт аккаунтов</string>
     <string name="account.import.about">Выберите способ импорта аккаунтов</string>
@@ -45,8 +44,8 @@
     <string name="account.import.file">Импорт из файла</string>
     <string name="account.import.file.error">Файл не найден, или не может быть открыт</string>
     <string name="account.import.file.pin">Это пин-код, который вы использовали при экспорте файла</string>
-    <string name="account.import.qrcode">Импорт через QR код</string>
-    <string name="account.import.permission">Права чтения необходимы для испорта аккаунтов!</string>
+    <string name="account.import.qrcode">Импорт через QR-код</string>
+    <string name="account.import.permission">Разрешение на чтение необходимо для импорта аккаунтов!</string>
 
     <string name="account.migration.pin">Пин-код</string>
     <string name="account.migration.pin.invalid">Некорректный или слабый пин-код</string>
@@ -57,15 +56,15 @@
     <string name="manual.tab.hotp">По счетчику (HOTP)</string>
     <string name="manual.name">Имя аккаунта</string>
     <string name="manual.secret">Секретный ключ</string>
-    <string name="manual.additional">Показать доп. параметры</string>
+    <string name="manual.additional">Доп. параметры</string>
     <string name="manual.interval">Период обновления</string>
     <string name="manual.counter">Начальное значение счетчика</string>
-    <string name="manual.digits">"Кол-во цифр"</string>
+    <string name="manual.digits">Кол-во цифр</string>
 
     <string name="scan.title">Сканировать QR-код</string>
-    <string name="scan.hint">QR-код должен быть внутри рамки</string>
+    <string name="scan.hint">Сканируемый QR-код должен быть внутри рамки</string>
     <string name="scan.camera.missing">Камера не найдена на этом устройстве!</string>
-    <string name="scan.permission.required">Разрешение для камеры необходимо для чтения QR кода!</string>
+    <string name="scan.permission.required">Разрешение для камеры необходимо для чтения QR-кода!</string>
 
     <string name="settings.nightMode">Темная тема</string>
     <string name="settings.locale">Язык</string>

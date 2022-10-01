@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cancel">Відмінити</string>
+    <string name="prev">Назад</string>
+    <string name="next">Далі</string>
+    <string name="finish">Завершити</string>
+    <string name="wait">Почекайте …</string>
+    <string name="error">Помилка: %1$s</string>
+
+    <string name="biometric">Аутентифікація</string>
+
+    <string name="menu.main.import">Імпорт</string>
+    <string name="menu.main.export">Експорт</string>
+    <string name="menu.main.settings">Налаштування</string>
+    <string name="menu.main.about">Про додаток</string>
+    <string name="menu.edit.change">Редагувати</string>
+    <string name="menu.edit.delete">Видалити</string>
+
+    <string name="accounts.copied">Пароль скопійовано!</string>
+    <string name="accounts.increment">Збільшити лічильник</string>
+    <string name="accounts.add.scan">Сканувати код</string>
+    <string name="accounts.add.manual">Ввести вручну</string>
+    <string name="accounts.add.success">Акаунт %1$s успішно доданий</string>
+
+    <string name="account.rename">Змінити ім\'я</string>
+    <string name="account.rename.title">Змінити ім\'я акаунту</string>
+    <string name="account.delete">Видалити акаунт</string>
+    <string name="account.delete.title">Видалити цей акаунт?</string>
+    <string name="account.delete.warning">Перед видаленням %1$s, переконайтесь, що ви відключили двуфакторну авторизацію для цього акаунту!</string>
+
+    <string name="account.export">Експорт аккаунтів</string>
+    <string name="account.export.about">Виберіть спосіб експорту ваших акаунтів</string>
+    <string name="account.export.file">Експорт у файл</string>
+    <string name="account.export.file.pin">Запам\'ятайте цей код! Він використовується для шифрування вихідного файлу</string>
+    <string name="account.export.file.success">Акаунти були експортовані у Завантаження/%1$s</string>
+    <string name="account.export.qrcode">Експорт через QR-код</string>
+    <string name="account.export.qrcode.about">Відкрийте цей додаток на іншому девайсі, та відскануйте код нижче</string>
+    <string name="account.export.qrcode.tip">Цей код також може бути відсканований любим додатком, який підтримує формат міграції від Google Authenticator</string>
+    <string name="account.export.permission">Дозвіл на запис необхідний для експорту акаунтів!</string>
+
+    <string name="account.import">Імпорт акаунтів</string>
+    <string name="account.import.about">Виберіть спосіб імпорту акаунтів</string>
+    <string name="account.import.success">Імпортовано %1$d акаунтів!</string>
+    <string name="account.import.file">Імпорт з файлу</string>
+    <string name="account.import.file.error">Файл не може бути відкритий, або не існує</string>
+    <string name="account.import.file.pin">Це пін-код, який ви створили при експорті акаунтів</string>
+    <string name="account.import.qrcode">Імпорт через QR-код</string>
+    <string name="account.import.permission">Дозвіл на зчитування необхідний для імпорту акаунтів!</string>
+
+    <string name="account.migration.pin">Пін-код</string>
+    <string name="account.migration.pin.invalid">Ненадійний пін-код</string>
+
+    <string name="manual.title">Новий акаунт</string>
+    <string name="manual.submit">Створити акаунт</string>
+    <string name="manual.tab.totp">За часом (TOTP)</string>
+    <string name="manual.tab.hotp">За лічильником (HOTP)</string>
+    <string name="manual.name">Ім\'я акаунту</string>
+    <string name="manual.secret">Секретний ключ</string>
+    <string name="manual.additional">Додаткові параметри</string>
+    <string name="manual.interval">Період оновлення</string>
+    <string name="manual.counter">Початковий лічильник</string>
+    <string name="manual.digits">Кількість цифр</string>
+
+    <string name="scan.title">Сканувати QR-код</string>
+    <string name="scan.hint">QR має бути в межах рамки для сканування</string>
+    <string name="scan.camera.missing">Камера не знайдена на цьому девайсі!</string>
+    <string name="scan.permission.required">Право на використання камери необхідно для сканування!</string>
+
+    <string name="settings.nightMode">Нічна тема</string>
+    <string name="settings.locale">Мова</string>
+    <string name="settings.security">Режим захисту</string>
+    <string name="settings.security.desc">Потребувати пін-код або відбиток пальця при вході</string>
+    <string name="settings.security.unavailable">Для початку увімкніть один з варіантів захисту у нашалштуваннях девайсу!</string>
+
+    <string name="about.version">Версія</string>
+    <string name="about.license">Ліцензія</string>
+    <string name="about.contacts">Контакти</string>
+    <string name="about.privacy">Політика конфіденціальності</string>
+    <string name="about.sources">Код програми</string>
+
+    <string name="error.undefined">Невідома помилка</string>
+    <string name="error.exists">Акаунт з таким ім\'ям вже існує</string>
+    <string name="error.invalidUri">Недійсний або помилковий URI</string>
+    <string name="error.undefinedType">Невідомий тип акаунту</string>
+    <string name="error.shortLabel">Надто коротке ім\'я акаунту</string>
+    <string name="error.shortSecret">Надто короткий секретний ключ</string>
+    <string name="error.invalidInterval">Невірне значення інтервалу</string>
+    <string name="error.invalidCounter">Невірне значення лічильника</string>
+</resources>
