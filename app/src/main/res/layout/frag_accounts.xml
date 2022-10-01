@@ -26,18 +26,24 @@
         app:layout_constraintBottom_toTopOf="@+id/addScanBtn"
         app:layout_constraintEnd_toEndOf="@+id/addScanBtn" />
 
-    <TextView
+    <androidx.cardview.widget.CardView
         android:id="@+id/addManualText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="@string/accounts.add.manual"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:background="?attr/colorSurface"
         app:layout_constraintBottom_toBottomOf="@+id/addManualBtn"
         app:layout_constraintEnd_toStartOf="@+id/addManualBtn"
-        app:layout_constraintTop_toTopOf="@+id/addManualBtn" />
+        app:layout_constraintTop_toTopOf="@+id/addManualBtn">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="8dp"
+            android:text="@string/accounts.add.manual"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addScanBtn"
@@ -49,18 +55,24 @@
         app:layout_constraintBottom_toTopOf="@+id/addAccountBtn"
         app:layout_constraintEnd_toEndOf="@+id/addAccountBtn" />
 
-    <TextView
+    <androidx.cardview.widget.CardView
         android:id="@+id/addScanText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="@string/accounts.add.scan"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:background="?attr/colorSurface"
         app:layout_constraintBottom_toBottomOf="@+id/addScanBtn"
         app:layout_constraintEnd_toStartOf="@+id/addScanBtn"
-        app:layout_constraintTop_toTopOf="@+id/addScanBtn" />
+        app:layout_constraintTop_toTopOf="@+id/addScanBtn">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="8dp"
+            android:text="@string/accounts.add.scan"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addAccountBtn"
@@ -70,5 +82,4 @@
         android:src="@drawable/ic_round_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

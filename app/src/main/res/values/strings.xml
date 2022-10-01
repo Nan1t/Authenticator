@@ -46,6 +46,7 @@
     <string name="account.import.about">Select way how to import accounts</string>
     <string name="account.import.success">Imported %1$d accounts!</string>
     <string name="account.import.file">Import from file</string>
+    <string name="account.import.file.error">File cannot be opened or not found</string>
     <string name="account.import.file.pin">This is a pin code you used to encrypt backup file</string>
     <string name="account.import.qrcode">Import using QR code</string>
     <string name="account.import.permission">Read permission is required to import accounts!</string>

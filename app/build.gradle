@@ -39,15 +39,14 @@ android {
 }
 
 dependencies {
+    def dagger = "2.38.1"
     def ktxSer = "1.4.0"
     def navigation = "2.5.1"
-    def camerax = "1.2.0-beta02"
-    def zxing = "3.5.0"
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5" // for ZXing
 
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
+    implementation "com.google.dagger:hilt-android:$dagger"
+    kapt "com.google.dagger:hilt-compiler:$dagger"
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$ktxSer"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$ktxSer"
@@ -57,21 +56,12 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.2.0"
     implementation "androidx.biometric:biometric:1.1.0"
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
-
-    implementation "androidx.camera:camera-core:$camerax"
-    implementation "androidx.camera:camera-camera2:$camerax"
-    implementation "androidx.camera:camera-lifecycle:$camerax"
-    implementation "androidx.camera:camera-view:$camerax"
-    implementation "androidx.camera:camera-extensions:$camerax"
+    implementation "net.lingala.zip4j:zip4j:2.11.2"
 
     implementation "androidx.core:core-ktx:1.8.0"
     implementation "androidx.appcompat:appcompat:1.5.0"
     implementation "com.google.android.material:material:1.6.1"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
-
-    implementation "com.google.zxing:core:$zxing"
-    implementation "com.google.zxing:javase:$zxing"
-    implementation 'net.lingala.zip4j:zip4j:2.11.2'
 
     testImplementation "junit:junit:4.13.2"
     androidTestImplementation "androidx.test.ext:junit:1.1.3"

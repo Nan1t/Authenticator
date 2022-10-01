@@ -6,24 +6,29 @@
     <string name="finish">Завершить</string>
     <string name="wait">Подождите …</string>
     <string name="error">Ошибка: %1$s</string>
+
     <string name="biometric">Аутентификация</string>
+
     <string name="menu.main.import">Импорт</string>
     <string name="menu.main.export">Экспорт</string>
     <string name="menu.main.settings">Настройки</string>
     <string name="menu.main.about">О приложении</string>
     <string name="menu.edit.change">Изменить</string>
     <string name="menu.edit.delete">Удалить</string>
+
     <string name="accounts.copied">Пароль скопировано!</string>
     <string name="accounts.increment">Увеличить счетчик</string>
     <string name="accounts.options">Настройки аккаунта</string>
     <string name="accounts.add.scan">Сканировать QR код</string>
     <string name="accounts.add.manual">Ввести вручную</string>
     <string name="accounts.add.success">Аккаунт %1$s успешно добавлен</string>
+
     <string name="account.rename">Переименовать</string>
     <string name="account.rename.title">Переименовать аккаунт</string>
     <string name="account.delete">Удалить аккаунт</string>
     <string name="account.delete.title">Удалить этот аккаунт?</string>
     <string name="account.delete.warning">Перед удалением %1$s, убедитесь, что вы отключити двухфакторную авторизацию для этого аккаунта!</string>
+
     <string name="account.export">Экспортировать аккаунты</string>
     <string name="account.export.about">Выберите способ экспорта аккаунтов</string>
     <string name="account.export.file">Экспорт в файл</string>
@@ -33,15 +38,19 @@
     <string name="account.export.qrcode.about">Откройте другое приложение и сканируйте QR код ниже</string>
     <string name="account.export.qrcode.tip">Этот код также может быть сканирован любым другим прилоежнием, которое поддерживает формат экспорта от Google Authenticator</string>
     <string name="account.export.permission">Права записи необходимы для экспорта аккаунтов!</string>
+
     <string name="account.import">Импорт аккаунтов</string>
     <string name="account.import.about">Выберите способ импорта аккаунтов</string>
     <string name="account.import.success">Импортировано %1$d аккаунтов!</string>
     <string name="account.import.file">Импорт из файла</string>
+    <string name="account.import.file.error">Файл не найден, или не может быть открыт</string>
     <string name="account.import.file.pin">Это пин-код, который вы использовали при экспорте файла</string>
     <string name="account.import.qrcode">Импорт через QR код</string>
     <string name="account.import.permission">Права чтения необходимы для испорта аккаунтов!</string>
+
     <string name="account.migration.pin">Пин-код</string>
     <string name="account.migration.pin.invalid">Некорректный или слабый пин-код</string>
+
     <string name="manual.title">Новый аккаунт</string>
     <string name="manual.submit">Создать аккаунт</string>
     <string name="manual.tab.totp">По времени (TOTP)</string>
@@ -52,15 +61,18 @@
     <string name="manual.interval">Период обновления</string>
     <string name="manual.counter">Начальное значение счетчика</string>
     <string name="manual.digits">"Кол-во цифр"</string>
+
     <string name="scan.title">Сканировать QR-код</string>
     <string name="scan.hint">QR-код должен быть внутри рамки</string>
     <string name="scan.camera.missing">Камера не найдена на этом устройстве!</string>
     <string name="scan.permission.required">Разрешение для камеры необходимо для чтения QR кода!</string>
+
     <string name="settings.nightMode">Темная тема</string>
     <string name="settings.locale">Язык</string>
     <string name="settings.security">Режим защиты</string>
     <string name="settings.security.desc">Запрашивать пароль или отпечаток при входе</string>
     <string name="settings.security.unavailable">Для начала активируйте один из вариантов защиты на этом устройстве!</string>
+
     <string name="error.undefined">Неизвестная ошибка</string>
     <string name="error.exists">Аккаунт с таким именем уже добавлен</string>
     <string name="error.invalidUri">Некорректный URI</string>

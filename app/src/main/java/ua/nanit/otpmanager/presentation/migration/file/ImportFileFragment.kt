@@ -46,7 +46,7 @@ class ImportFileFragment : FileMigrationFragment() {
                 }
             }
 
-            showCloseableSnackbar("File cannot be opened or not found")
+            showCloseableSnackbar(R.string.account_import_file_error)
             navigator().navUp()
         }
 
