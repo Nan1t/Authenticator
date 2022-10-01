@@ -62,7 +62,7 @@
     <string name="manual.digits">Кількість цифр</string>
 
     <string name="scan.title">Сканувати QR-код</string>
-    <string name="scan.hint">QR має бути в межах рамки для сканування</string>
+    <string name="scan.hint">QR-код має бути в межах рамки для сканування</string>
     <string name="scan.camera.missing">Камера не знайдена на цьому девайсі!</string>
     <string name="scan.permission.required">Право на використання камери необхідно для сканування!</string>
 

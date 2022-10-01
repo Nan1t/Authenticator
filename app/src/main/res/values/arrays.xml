@@ -8,7 +8,7 @@
 
     <string-array name="localeValues">
         <item>en</item>
-        <item>ua</item>
+        <item>uk</item>
         <item>ru</item>
     </string-array>
 </resources>

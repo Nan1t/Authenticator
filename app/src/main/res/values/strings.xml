@@ -9,7 +9,7 @@
     <string name="wait">Wait …</string>
     <string name="error">Error: %1$s</string>
 
-    <string name="biometric">Authenticate</string>
+    <string name="biometric">Authentication</string>
 
     <string name="menu.main.import">Import</string>
     <string name="menu.main.export">Export</string>
