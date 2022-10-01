@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity(), Navigator {
     }
 
     override fun navToAbout() {
-        TODO("Not yet implemented")
+        navController.navigate(R.id.actionNavAbout)
     }
 
     override fun navUp() {

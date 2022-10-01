@@ -12,38 +12,45 @@
 
         <action android:id="@+id/actionNavAddManual"
             app:destination="@id/navAddManual"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/idle"
-            app:popEnterAnim="@anim/idle"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
 
         <action android:id="@+id/actionNavScanCode"
             app:destination="@id/navScanCode"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/idle"
-            app:popEnterAnim="@anim/idle"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
 
         <action android:id="@+id/actionNavExport"
             app:destination="@id/navExport"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/idle"
-            app:popEnterAnim="@anim/idle"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
 
         <action android:id="@+id/actionNavImport"
             app:destination="@id/navImport"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/idle"
-            app:popEnterAnim="@anim/idle"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
 
         <action android:id="@+id/actionNavSettings"
             app:destination="@id/navSettings"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/idle"
-            app:popEnterAnim="@anim/idle"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+
+        <action android:id="@+id/actionNavAbout"
+            app:destination="@id/navAbout"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
 
     <fragment
@@ -63,17 +70,17 @@
 
         <action android:id="@+id/actionNavExportFile"
             app:destination="@id/navExportFile"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/idle"
-            app:popEnterAnim="@anim/idle"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
 
         <action android:id="@+id/actionNavExportQr"
             app:destination="@id/navExportQr"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/idle"
-            app:popEnterAnim="@anim/idle"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
 
     <fragment android:id="@+id/navExportFile"
@@ -90,17 +97,17 @@
 
         <action android:id="@+id/actionNavImportFile"
             app:destination="@id/navImportFile"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/idle"
-            app:popEnterAnim="@anim/idle"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
 
         <action android:id="@+id/actionNavImportQr"
             app:destination="@id/navImportQr"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/idle"
-            app:popEnterAnim="@anim/idle"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
 
     <fragment android:id="@+id/navImportFile"
@@ -114,5 +121,9 @@
     <fragment android:id="@+id/navSettings"
         android:label="@string/menu.main.settings"
         android:name="ua.nanit.otpmanager.presentation.settings.SettingsFragment" />
+
+    <fragment android:id="@+id/navAbout"
+        android:label="@string/menu.main.about"
+        android:name="ua.nanit.otpmanager.presentation.AboutFragment" />
 
 </navigation>

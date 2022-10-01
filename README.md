@@ -4,11 +4,9 @@ Simple and convenient OTP (One Time Password) manager for Android.
 
 ## Task list
 
-* Edit/Delete accounts
-* Import/Export
-* Settings page
-* Block by pin or fingerprint
 * About screen
+* Translations (UA, RU)
+* App icon
 
 ## Features
 
@@ -16,5 +14,5 @@ Simple and convenient OTP (One Time Password) manager for Android.
 * Scanning QR code
 * Manual code entering
 * Automatic and manual backups. Backup is JSON inside encrypted archive
-* Optionally block access to app by PIN or FingerPrint
+* Optionally block access to app by PIN or Fingerprint
 * Languages: English, Ukrainian, Russian

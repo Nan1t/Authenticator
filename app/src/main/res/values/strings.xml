@@ -76,6 +76,16 @@
     <string name="settings.security.desc">Request pin or fingerprint on start</string>
     <string name="settings.security.unavailable">First, enable one of the security options on this device!</string>
 
+    <string name="about.version">Version</string>
+    <string name="about.license">License</string>
+    <string name="about.license.value" translatable="false">GNU General Public License v3</string>
+    <string name="about.contacts">Contacts</string>
+    <string name="about.contacts.value" translatable="false">imnanit@gmail.com</string>
+    <string name="about.privacy">Privacy</string>
+    <string name="about.privacy.url" translatable="false">https://nan1t.github.io/exchange-sumo/privacy.html</string>
+    <string name="about.sources">Source code</string>
+    <string name="about.sources.url" translatable="false">https://github.com/Nan1t/OTPManager</string>
+
     <string name="error.undefined">Undefined error</string>
     <string name="error.exists">Account with such name already exists</string>
     <string name="error.invalidUri">Invalid creation URI</string>

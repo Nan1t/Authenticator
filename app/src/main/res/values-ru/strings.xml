@@ -35,8 +35,8 @@
     <string name="account.export.file.pin">Запомните этот пин! Он будет использован для шифрования файла, содержащего ваши аккаунты</string>
     <string name="account.export.file.success">Акаунты успешно выгружены в Загрузки/%1$s</string>
     <string name="account.export.qrcode">Экспорт через QR код</string>
-    <string name="account.export.qrcode.about">Откройте другое приложение и сканируйте QR код ниже</string>
-    <string name="account.export.qrcode.tip">Этот код также может быть сканирован любым другим прилоежнием, которое поддерживает формат экспорта от Google Authenticator</string>
+    <string name="account.export.qrcode.about">Откройте другое приложение и отсканируйте QR код ниже</string>
+    <string name="account.export.qrcode.tip">Этот код также может быть сканирован любым другим приложением, которое поддерживает формат экспорта от Google Authenticator</string>
     <string name="account.export.permission">Права записи необходимы для экспорта аккаунтов!</string>
 
     <string name="account.import">Импорт аккаунтов</string>
@@ -72,6 +72,12 @@
     <string name="settings.security">Режим защиты</string>
     <string name="settings.security.desc">Запрашивать пароль или отпечаток при входе</string>
     <string name="settings.security.unavailable">Для начала активируйте один из вариантов защиты на этом устройстве!</string>
+
+    <string name="about.version">Версия</string>
+    <string name="about.license">Лицензия</string>
+    <string name="about.contacts">Контакты</string>
+    <string name="about.privacy">Политика конфиденциальности</string>
+    <string name="about.sources">Исходный код</string>
 
     <string name="error.undefined">Неизвестная ошибка</string>
     <string name="error.exists">Аккаунт с таким именем уже добавлен</string>

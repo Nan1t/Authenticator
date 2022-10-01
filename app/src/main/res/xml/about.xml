@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:key="version"
+        android:title="@string/about.version"
+        app:iconSpaceReserved="false"/>
+
+    <Preference
+        android:key="license"
+        android:title="@string/about.license"
+        app:summary="@string/about.license.value"
+        app:iconSpaceReserved="false"/>
+
+    <Preference
+        android:key="contacts"
+        android:title="@string/about.contacts"
+        app:summary="@string/about.contacts.value"
+        app:iconSpaceReserved="false"/>
+
+    <Preference
+        android:key="privacy"
+        android:title="@string/about.privacy"
+        app:iconSpaceReserved="false"/>
+
+    <Preference
+        android:key="sources"
+        android:title="@string/about.sources"
+        app:iconSpaceReserved="false"/>
+
+</PreferenceScreen>
