@@ -32,12 +32,11 @@ class ExportFileFragment : FileMigrationFragment() {
 
         setProcessing(false)
 
-        if (savedInstanceState == null) {
-            if (isPermissionGranted()) {
-                pinDialog.value.show()
-            } else {
+        if (isPermissionGranted()) {
+            pinDialog.value.show()
+        } else {
+            if (savedInstanceState == null)
                 requestPermission()
-            }
         }
 
         viewModel.exportResult.observe(viewLifecycleOwner) { filename ->

@@ -10,6 +10,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import ua.nanit.otpmanager.BuildConfig
 import ua.nanit.otpmanager.R
 import ua.nanit.otpmanager.databinding.ActivityMainBinding
 import ua.nanit.otpmanager.presentation.ext.appSettings
@@ -28,7 +29,10 @@ class MainActivity : AppCompatActivity(), Navigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+
+        if (BuildConfig.BUILD_TYPE == "release") {
+            window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        }
 
         updateLocale()
         updateNightMode()
