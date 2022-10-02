@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity(), Navigator {
         private var authenticated = false
     }
 
-    private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +34,7 @@ class MainActivity : AppCompatActivity(), Navigator {
         updateNightMode()
 
         if (!requestAuthentication()) {
-            binding = ActivityMainBinding.inflate(layoutInflater, null, false)
+            val binding = ActivityMainBinding.inflate(layoutInflater, null, false)
             setContentView(binding.root)
             setSupportActionBar(binding.toolbar)
 

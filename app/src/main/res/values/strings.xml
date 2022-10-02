@@ -1,5 +1,5 @@
 <resources>
-    <string name="appName" translatable="false">OTP Manager</string>
+    <string name="appName" translatable="false">Authenticator</string>
 
     <string name="ok" translatable="false">OK</string>
     <string name="cancel">Cancel</string>
