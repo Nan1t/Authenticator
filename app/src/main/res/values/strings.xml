@@ -48,7 +48,7 @@
     <string name="account.import.file.error">File cannot be opened or not found</string>
     <string name="account.import.file.pin">This is a pin code you used to encrypt backup file</string>
     <string name="account.import.qrcode">Import using QR code</string>
-    <string name="account.import.qrcode.tip">С помощью QR-кода вы можете импортировать учетные записи из Google Authenticator или любого другого приложения, поддерживающего такой формат переноса</string>
+    <string name="account.import.qrcode.tip">Using QR code, you can import accounts from Google Authenticator or any else app which support such migration format</string>
     <string name="account.import.permission">Read permission is required to import accounts!</string>
 
     <string name="account.migration.pin">Backup pin code</string>

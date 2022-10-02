@@ -61,6 +61,12 @@ class MainActivity : AppCompatActivity(), Navigator {
                 authenticated = true
                 recreate()
             }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                if (errorCode == BiometricPrompt.ERROR_USER_CANCELED) {
+                    finish()
+                }
+            }
         })
 
         prompt.authenticate(info)

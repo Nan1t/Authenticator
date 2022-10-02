@@ -55,6 +55,7 @@ class ExportFileFragment : FileMigrationFragment() {
             pinDialog.value.show()
         } else {
             showCloseableSnackbar(R.string.account_export_permission)
+            navigator().navUp()
         }
     }
 }

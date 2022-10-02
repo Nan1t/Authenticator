@@ -75,6 +75,7 @@ class ImportFileFragment : FileMigrationFragment() {
         if (result) {
             openFileDialog()
         } else {
+            navigator().navUp()
             showCloseableSnackbar(R.string.account_import_permission)
         }
     }

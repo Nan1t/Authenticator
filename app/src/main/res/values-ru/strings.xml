@@ -45,7 +45,7 @@
     <string name="account.import.file.error">Файл не найден, или не может быть открыт</string>
     <string name="account.import.file.pin">Это пин-код, который вы использовали при экспорте файла</string>
     <string name="account.import.qrcode">Импорт через QR-код</string>
-    <string name="account.import.qrcode.tip">Hello</string>
+    <string name="account.import.qrcode.tip">С помощью QR-кода вы можете импортировать учетные записи из Google Authenticator или любого другого приложения, поддерживающего такой формат переноса</string>
     <string name="account.import.permission">Разрешение на чтение необходимо для импорта аккаунтов!</string>
 
     <string name="account.migration.pin">Пин-код</string>
