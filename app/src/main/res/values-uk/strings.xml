@@ -45,6 +45,7 @@
     <string name="account.import.file.error">Файл не може бути відкритий, або не існує</string>
     <string name="account.import.file.pin">Це пін-код, який ви створили при експорті акаунтів</string>
     <string name="account.import.qrcode">Імпорт через QR-код</string>
+    <string name="account.import.qrcode.tip">За допомогою QR-коду можна імпортувати акаунти з Google Authenticator або будь-якої іншої програми, яка підтримує такий формат перенесення</string>
     <string name="account.import.permission">Дозвіл на зчитування необхідний для імпорту акаунтів!</string>
 
     <string name="account.migration.pin">Пін-код</string>

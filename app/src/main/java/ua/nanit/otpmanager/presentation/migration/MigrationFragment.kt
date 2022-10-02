@@ -37,6 +37,7 @@ class ExportFragment : MigrationFragment() {
 class ImportFragment : MigrationFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.tip.visibility = View.VISIBLE
         binding.aboutText.setText(R.string.account_import_about)
         binding.fileBtn.setText(R.string.account_import_file)
         binding.qrCodeBtn.setText(R.string.account_import_qrcode)
