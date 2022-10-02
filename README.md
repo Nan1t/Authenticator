@@ -14,6 +14,11 @@ This is a simple and convenient OTP (One Time Password) manager for Android.
 * Multiple languages: English, Ukrainian, Russian
 * Light/Night theme
 
+## Requirements
+
+* Android 5.0 +
+* Camera (optional)
+
 ## Screenshots
 
 |               1 (Light)               |               2 (Light)               |               3 (Light)               |
