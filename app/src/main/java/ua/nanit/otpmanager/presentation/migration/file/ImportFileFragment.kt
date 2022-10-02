@@ -50,10 +50,12 @@ class ImportFileFragment : FileMigrationFragment() {
             navigator().navUp()
         }
 
-        if (isPermissionGranted()) {
-            openFileDialog()
-        } else {
-            requestPermission()
+        if (savedInstanceState == null) {
+            if (isPermissionGranted()) {
+                openFileDialog()
+            } else {
+                requestPermission()
+            }
         }
 
         viewModel.errorResult.observe(viewLifecycleOwner) { msg ->
@@ -81,6 +83,6 @@ class ImportFileFragment : FileMigrationFragment() {
     }
 
     private fun openFileDialog() {
-        fileDialog.launch(arrayOf("application/*"))
+        fileDialog.launch(arrayOf("application/zip"))
     }
 }

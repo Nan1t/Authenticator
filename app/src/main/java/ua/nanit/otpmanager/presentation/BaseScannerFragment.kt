@@ -58,14 +58,18 @@ abstract class BaseScannerFragment : Fragment(), BarcodeCallback {
         if (isGrantedPermissions()) {
             openCamera()
         } else {
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            val launcher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
                 if (granted) {
                     openCamera()
                 } else {
                     showCloseableSnackbar(R.string.scan_permission_required)
                     navigator().navUp()
                 }
-            }.launch(PERMISSION)
+            }
+
+            if (savedInstanceState == null) {
+                launcher.launch(PERMISSION)
+            }
         }
     }
 
