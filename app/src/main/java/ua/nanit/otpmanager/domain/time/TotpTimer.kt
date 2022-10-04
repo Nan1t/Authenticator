@@ -29,22 +29,3 @@ object TotpTimer {
 interface TotpListener {
     fun onTick()
 }
-
-class TotpTask(private val listener: TotpListener) {
-
-    //private var last = account.secondsRemain()
-
-    fun tick() {
-
-//        val remain = account.secondsRemain()
-//
-//        if (remain > last) {
-//            account.update()
-//            account.listener?.onUpdate(account.password)
-//        }
-//
-//        last = remain
-//        account.listener?.onTick(remain - 1)
-    }
-
-}
