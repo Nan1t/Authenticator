@@ -1,4 +1,4 @@
-# OTP Manager
+# Open Authenticator
 
 This is a simple and convenient OTP (One Time Password) manager for Android.
 
