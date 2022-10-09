@@ -1,4 +1,4 @@
-# OTP Manager
+# Open Authenticator
 
 This is a simple and convenient OTP (One Time Password) manager for Android.
 
@@ -21,10 +21,16 @@ This is a simple and convenient OTP (One Time Password) manager for Android.
 
 ## Screenshots
 
-|               1 (Light)               |               2 (Light)               |               3 (Light)               |
-|:-------------------------------------:|:-------------------------------------:|:-------------------------------------:|
-| ![img](media/screenshots/phone/1.png) | ![img](media/screenshots/phone/2.png) | ![img](media/screenshots/phone/3.png) |
+[<img width=200 alt="Light 1"
+src="media/screenshots/phone/1.png?raw=true">](media/screenshots/phone/1.png?raw=true)
+[<img width=200 alt="Light 2"
+src="media/screenshots/phone/2.png?raw=true">](media/screenshots/phone/2.png?raw=true)
+[<img width=200 alt="Light 3"
+src="media/screenshots/phone/3.png?raw=true">](media/screenshots/phone/3.png?raw=true)
 
-|               1 (Night)               |               2 (Night)               |               3 (Night)               |
-|:-------------------------------------:|:-------------------------------------:|:-------------------------------------:|
-| ![img](media/screenshots/phone/4.png) | ![img](media/screenshots/phone/5.png) | ![img](media/screenshots/phone/6.png) |
+[<img width=200 alt="Night 1"
+src="media/screenshots/phone/4.png?raw=true">](media/screenshots/phone/4.png?raw=true)
+[<img width=200 alt="Night 2"
+src="media/screenshots/phone/5.png?raw=true">](media/screenshots/phone/5.png?raw=true)
+[<img width=200 alt="Night 3"
+src="media/screenshots/phone/6.png?raw=true">](media/screenshots/phone/6.png?raw=true)
