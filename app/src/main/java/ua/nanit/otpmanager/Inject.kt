@@ -2,7 +2,6 @@ package ua.nanit.otpmanager
 
 import android.content.Context
 import android.os.Build
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,13 +48,8 @@ object BaseModule {
         }
     }
 
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-interface BindingsModule {
-
-    @Binds
-    fun bindAccountStorage(jsonStorage: AccountJsonStorage): AccountStorage
-
+    @Provides
+    fun provideAccountStorage(jsonStorage: AccountJsonStorage): AccountStorage {
+        return jsonStorage
+    }
 }
