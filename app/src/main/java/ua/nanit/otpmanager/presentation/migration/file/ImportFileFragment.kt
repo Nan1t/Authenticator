@@ -58,16 +58,16 @@ class ImportFileFragment : FileMigrationFragment() {
             }
         }
 
-        viewModel.errorResult.observe(viewLifecycleOwner) { msg ->
+        viewModel.observeErrorResult(viewLifecycleOwner) { msg ->
             showCloseableSnackbar(getString(R.string.error, msg))
             navigator().navUp()
         }
 
-        viewModel.fileResult.observe(viewLifecycleOwner) {
+        viewModel.observeFileResult(viewLifecycleOwner) {
             pinDialog.value.show()
         }
 
-        viewModel.importResult.observe(viewLifecycleOwner) { count ->
+        viewModel.observeImportResult(viewLifecycleOwner) { count ->
             showCloseableSnackbar(getString(R.string.account_import_success, count))
             navigator().navUpToMain()
         }

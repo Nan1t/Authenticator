@@ -39,13 +39,13 @@ class ExportFileFragment : FileMigrationFragment() {
                 requestPermission()
         }
 
-        viewModel.exportResult.observe(viewLifecycleOwner) { filename ->
+        viewModel.observeExportResult(viewLifecycleOwner) { filename ->
             setProcessing(false)
             showCloseableSnackbar(getString(R.string.account_export_file_success, filename))
             navigator().navUpToMain()
         }
 
-        viewModel.errorResult.observe(viewLifecycleOwner) { msg ->
+        viewModel.observeErrorResult(viewLifecycleOwner) { msg ->
             showCloseableSnackbar(getString(R.string.error, msg))
             navigator().navUpToMain()
         }

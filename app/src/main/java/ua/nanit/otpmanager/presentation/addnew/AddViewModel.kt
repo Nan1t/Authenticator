@@ -1,5 +1,7 @@
 package ua.nanit.otpmanager.presentation.addnew
 
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +18,16 @@ class AddViewModel @Inject constructor(
     private val manager: AccountManager
 ) : ViewModel() {
 
-    val success = Event<Account>()
-    val error = Event<CreationError>()
+    private val success = Event<Account>()
+    private val error = Event<CreationError>()
+
+    fun observeSuccess(owner: LifecycleOwner, observer: Observer<Account>) {
+        success.observe(owner, observer)
+    }
+
+    fun observeError(owner: LifecycleOwner, observer: Observer<CreationError>) {
+        error.observe(owner, observer)
+    }
 
     fun createByUri(uri: String) {
         viewModelScope.launch(dispatcher) {

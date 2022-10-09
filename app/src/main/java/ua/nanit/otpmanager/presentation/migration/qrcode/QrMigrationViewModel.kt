@@ -1,6 +1,8 @@
 package ua.nanit.otpmanager.presentation.migration.qrcode
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,13 +22,25 @@ class QrMigrationViewModel @Inject constructor(
 
     private var page: Int = 0
 
-    val errorResult = Event<String>()
-    val exportPayload = MutableLiveData<UriMigration.Payload>()
-    val importResult = Event<UriMigration.ImportResult>()
+    private val errorResult = Event<String>()
+    private val exportPayload = MutableLiveData<UriMigration.Payload>()
+    private val importResult = Event<UriMigration.ImportResult>()
 
     init {
         this.page = 0
         updatePage()
+    }
+
+    fun observeErrorResult(owner: LifecycleOwner, observer: Observer<String>) {
+        errorResult.observe(owner, observer)
+    }
+
+    fun observeExportPayload(owner: LifecycleOwner, observer: Observer<UriMigration.Payload>) {
+        exportPayload.observe(owner, observer)
+    }
+
+    fun observeImportResult(owner: LifecycleOwner, observer: Observer<UriMigration.ImportResult>) {
+        importResult.observe(owner, observer)
     }
 
     fun import(uri: String) {

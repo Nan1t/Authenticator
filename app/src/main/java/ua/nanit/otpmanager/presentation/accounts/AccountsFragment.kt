@@ -71,12 +71,12 @@ class AccountsFragment : AccountListener, Fragment() {
             navigator.navToScanCode()
         }
 
-        viewModel.updateResult.observe(viewLifecycleOwner, adapter::update)
+        viewModel.observeUpdate(viewLifecycleOwner, adapter::update)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.accounts.collect {
-                    adapter.updateAll(it)
+                viewModel.observeAccounts { accounts ->
+                    adapter.updateAll(accounts)
                 }
             }
         }

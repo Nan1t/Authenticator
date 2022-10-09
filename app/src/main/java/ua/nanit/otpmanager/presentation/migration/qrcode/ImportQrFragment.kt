@@ -17,12 +17,12 @@ class ImportQrFragment : BaseScannerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.errorResult.observe(viewLifecycleOwner) {
+        viewModel.observeErrorResult(viewLifecycleOwner) {
             showCloseableSnackbar(getString(R.string.error, it))
             navigator().navUp()
         }
 
-        viewModel.importResult.observe(viewLifecycleOwner) { result ->
+        viewModel.observeImportResult(viewLifecycleOwner) { result ->
             showCloseableSnackbar(getString(R.string.account_import_success, result.count))
 
             if (result.last) {

@@ -36,13 +36,13 @@ class AddAccountFragment : Fragment() {
         binding.viewPager.adapter = adapter
         TabLayoutMediator(binding.tabs, binding.viewPager, strategy).attach()
 
-        viewModel.success.observe(viewLifecycleOwner) {
+        viewModel.observeSuccess(viewLifecycleOwner) {
             val msg = getString(R.string.accounts_add_success, it.name)
             Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show()
             navigator().navUp()
         }
 
-        viewModel.error.observe(viewLifecycleOwner) {
+        viewModel.observeError(viewLifecycleOwner) {
             Snackbar.make(view, it.display(ctx), Snackbar.LENGTH_SHORT).show()
         }
     }

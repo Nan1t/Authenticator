@@ -48,7 +48,7 @@ class ExportQrFragment : Fragment() {
         binding.nextBtn.setOnClickListener { viewModel.exportNextPage() }
         binding.finishBtn.setOnClickListener { navigator().navUpToMain() }
 
-        viewModel.exportPayload.observe(viewLifecycleOwner) { payload ->
+        viewModel.observeExportPayload(viewLifecycleOwner) { payload ->
             binding.page.text = getString(R.string.account_export_qrcode_page, payload.page, payload.pages)
             binding.prevBtn.visibility = View.VISIBLE
             binding.nextBtn.visibility = View.VISIBLE

@@ -19,13 +19,13 @@ class ScanCodeFragment : BaseScannerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.success.observe(viewLifecycleOwner) {
+        viewModel.observeSuccess(viewLifecycleOwner) {
             val msg = getString(R.string.accounts_add_success, it.name)
             Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show()
             navigator().navUp()
         }
 
-        viewModel.error.observe(viewLifecycleOwner) {
+        viewModel.observeError(viewLifecycleOwner) {
             showCloseableSnackbar(it.display(requireContext()))
             navigator().navUp()
         }
