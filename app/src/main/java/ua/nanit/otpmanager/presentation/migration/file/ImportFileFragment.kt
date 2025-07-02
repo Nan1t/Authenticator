@@ -1,6 +1,5 @@
 package ua.nanit.otpmanager.presentation.migration.file
 
-import android.Manifest
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
@@ -27,8 +26,6 @@ class ImportFileFragment : FileMigrationFragment() {
             onCancel = { navigator().navUp() }
         )
     }
-
-    override val permission: String = Manifest.permission.READ_EXTERNAL_STORAGE
 
     private lateinit var fileDialog: ActivityResultLauncher<Array<String>>
 

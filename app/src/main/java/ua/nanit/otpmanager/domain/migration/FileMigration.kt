@@ -12,7 +12,6 @@ import net.lingala.zip4j.model.ZipParameters
 import net.lingala.zip4j.model.enums.EncryptionMethod
 import ua.nanit.otpmanager.domain.account.AccountRepository
 import java.io.InputStream
-import java.io.OutputStream
 import javax.inject.Inject
 
 /**
@@ -59,9 +58,5 @@ class FileMigration @Inject constructor(
 
             count
         }
-    }
-
-    interface FileSaver {
-        fun save(name: String, extension: String, os: (OutputStream) -> Unit)
     }
 }
