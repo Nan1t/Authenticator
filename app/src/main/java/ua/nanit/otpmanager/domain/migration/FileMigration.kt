@@ -1,5 +1,8 @@
 package ua.nanit.otpmanager.domain.migration
 
+import android.content.Context
+import android.net.Uri
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.encodeToByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
@@ -17,16 +20,16 @@ import javax.inject.Inject
  */
 class FileMigration @Inject constructor(
     repository: AccountRepository,
-    private val fileSaver: FileSaver
+    @ApplicationContext private val context: Context,
 ) : AbstractMigration(repository) {
 
     companion object {
         private const val INNER_FILE_NAME = "accounts.bin"
-        private const val FILE_NAME = "accounts"
-        private const val FILE_EXT = "zip"
+        const val FILE_NAME = "accounts"
+        const val FILE_EXT = "zip"
     }
 
-    fun export(pin: String): String {
+    fun export(pin: String, fileUri: Uri): String {
         val params = getOtpParams()
         val payload = MigrationPayload(params)
         val bytes = ProtoBuf.encodeToByteArray(payload)
@@ -36,8 +39,8 @@ class FileMigration @Inject constructor(
             fileNameInZip = INNER_FILE_NAME
         }
 
-        fileSaver.save(FILE_NAME, FILE_EXT) { fos ->
-            ZipOutputStream(fos, pin.toCharArray()).use { zipOs ->
+        context.contentResolver.openOutputStream(fileUri)?.use { out ->
+            ZipOutputStream(out, pin.toCharArray()).use { zipOs ->
                 zipOs.putNextEntry(zipParams)
                 zipOs.write(bytes, 0, bytes.size)
                 zipOs.closeEntry()

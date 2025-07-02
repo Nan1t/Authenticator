@@ -1,5 +1,6 @@
 package ua.nanit.otpmanager.presentation.migration.file
 
+import android.net.Uri
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -8,6 +9,7 @@ import ua.nanit.otpmanager.domain.migration.FileMigration
 import ua.nanit.otpmanager.presentation.Event
 import ua.nanit.otpmanager.presentation.ext.catchError
 import java.io.InputStream
+import java.io.OutputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,6 +22,8 @@ class FileMigrationViewModel @Inject constructor(
     private val exportResult = MutableLiveData<String>()
     private val importResult = MutableLiveData<Int>()
     private val fileResult = MutableLiveData<InputStream>()
+
+    private var pinCode: String? = null
 
     fun observeErrorResult(owner: LifecycleOwner, observer: Observer<String>) {
         errorResult.observe(owner, observer)
@@ -37,10 +41,16 @@ class FileMigrationViewModel @Inject constructor(
         fileResult.observe(owner, observer)
     }
 
-    fun export(pin: String) {
+    fun savePin(pin: String) {
+        pinCode = pin
+    }
+
+    fun export(fileUri: Uri) {
+        val pin = pinCode ?: return
+
         viewModelScope.launch(dispatcher) {
             catchError(errorResult) {
-                exportResult.postValue(fileMigration.export(pin))
+                exportResult.postValue(fileMigration.export(pin, fileUri))
             }
         }
     }

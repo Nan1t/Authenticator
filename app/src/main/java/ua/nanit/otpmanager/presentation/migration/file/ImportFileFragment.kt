@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ua.nanit.otpmanager.R
+import ua.nanit.otpmanager.domain.migration.FileMigration
 import ua.nanit.otpmanager.presentation.ext.navigator
 import ua.nanit.otpmanager.presentation.ext.showCloseableSnackbar
 
@@ -29,7 +30,7 @@ class ImportFileFragment : FileMigrationFragment() {
 
     override val permission: String = Manifest.permission.READ_EXTERNAL_STORAGE
 
-    lateinit var fileDialog: ActivityResultLauncher<Array<String>>
+    private lateinit var fileDialog: ActivityResultLauncher<Array<String>>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,11 +52,7 @@ class ImportFileFragment : FileMigrationFragment() {
         }
 
         if (savedInstanceState == null) {
-            if (isPermissionGranted()) {
-                openFileDialog()
-            } else {
-                requestPermission()
-            }
+            openFileDialog()
         }
 
         viewModel.observeErrorResult(viewLifecycleOwner) { msg ->
@@ -83,6 +80,6 @@ class ImportFileFragment : FileMigrationFragment() {
     }
 
     private fun openFileDialog() {
-        fileDialog.launch(arrayOf("application/zip"))
+        fileDialog.launch(arrayOf("application/${FileMigration.FILE_EXT}"))
     }
 }

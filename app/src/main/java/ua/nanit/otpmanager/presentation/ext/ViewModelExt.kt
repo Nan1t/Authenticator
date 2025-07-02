@@ -7,5 +7,6 @@ suspend fun catchError(errorLd: MutableLiveData<String>, runnable: suspend () ->
         runnable()
     } catch (ex: Exception) {
         errorLd.postValue(ex.message ?: "")
+        ex.printStackTrace()
     }
 }

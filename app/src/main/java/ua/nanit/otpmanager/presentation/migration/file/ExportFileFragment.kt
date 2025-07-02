@@ -1,11 +1,15 @@
 package ua.nanit.otpmanager.presentation.migration.file
 
-import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ua.nanit.otpmanager.R
+import ua.nanit.otpmanager.domain.migration.FileMigration
 import ua.nanit.otpmanager.presentation.ext.navigator
 import ua.nanit.otpmanager.presentation.ext.showCloseableSnackbar
 
@@ -13,31 +17,34 @@ import ua.nanit.otpmanager.presentation.ext.showCloseableSnackbar
 class ExportFileFragment : FileMigrationFragment() {
 
     private val viewModel: FileMigrationViewModel by viewModels()
-    private val pinDialog = lazy {
+    private val pinDialog by lazy {
         PinDialog(
             requireContext(),
             R.string.account_export_file_pin,
             onConfirm = { pin ->
-                setProcessing(true)
-                viewModel.export(pin)
+                viewModel.savePin(pin)
+                openFileDialog()
             },
             onCancel = { navigator().navUp() }
         )
     }
-
-    override val permission: String = Manifest.permission.WRITE_EXTERNAL_STORAGE
+    private lateinit var documentLauncher:  ActivityResultLauncher<Intent>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setProcessing(false)
 
-        if (isPermissionGranted()) {
-            pinDialog.value.show()
-        } else {
-            if (savedInstanceState == null)
-                requestPermission()
+        documentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                setProcessing(true)
+                it.data?.data?.let { uri ->
+                    viewModel.export(uri)
+                }
+            }
         }
+
+        pinDialog.show()
 
         viewModel.observeExportResult(viewLifecycleOwner) { filename ->
             setProcessing(false)
@@ -53,10 +60,20 @@ class ExportFileFragment : FileMigrationFragment() {
 
     override fun onPermissionResult(result: Boolean) {
         if (result) {
-            pinDialog.value.show()
+            pinDialog.show()
         } else {
             showCloseableSnackbar(R.string.account_export_permission)
             navigator().navUp()
         }
+    }
+
+    private fun openFileDialog() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/${FileMigration.FILE_EXT}"
+            putExtra(Intent.EXTRA_TITLE, "${FileMigration.FILE_NAME}.${FileMigration.FILE_EXT}")
+        }
+
+        documentLauncher.launch(intent)
     }
 }
