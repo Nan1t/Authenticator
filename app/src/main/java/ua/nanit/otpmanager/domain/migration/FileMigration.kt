@@ -11,7 +11,6 @@ import net.lingala.zip4j.io.outputstream.ZipOutputStream
 import net.lingala.zip4j.model.ZipParameters
 import net.lingala.zip4j.model.enums.EncryptionMethod
 import ua.nanit.otpmanager.domain.account.AccountRepository
-import java.io.InputStream
 import javax.inject.Inject
 
 /**
@@ -49,14 +48,16 @@ class FileMigration @Inject constructor(
         return "$FILE_NAME.$FILE_EXT"
     }
 
-    suspend fun import(input: InputStream, pin: String): Int {
-        return ZipInputStream(input, pin.toCharArray()).use { stream ->
-            stream.nextEntry
-            val data = stream.readBytes()
-            val payload: MigrationPayload = ProtoBuf.decodeFromByteArray(data)
-            val count = importPayload(payload)
+    suspend fun import(fileUri: Uri, pin: String): Int {
+        return context.contentResolver.openInputStream(fileUri)?.use { input ->
+            ZipInputStream(input, pin.toCharArray()).use { stream ->
+                stream.nextEntry
+                val data = stream.readBytes()
+                val payload: MigrationPayload = ProtoBuf.decodeFromByteArray(data)
+                val count = importPayload(payload)
 
-            count
-        }
+                count
+            }
+        } ?: 0
     }
 }

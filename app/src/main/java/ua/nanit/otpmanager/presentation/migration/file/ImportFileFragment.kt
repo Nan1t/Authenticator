@@ -36,12 +36,8 @@ class ImportFileFragment : FileMigrationFragment() {
 
         fileDialog = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             if (uri != null) {
-                val stream = requireContext().contentResolver.openInputStream(uri)
-
-                if (stream != null) {
-                    viewModel.selectFile(stream)
-                    return@registerForActivityResult
-                }
+                viewModel.selectFile(uri)
+                return@registerForActivityResult
             }
 
             showCloseableSnackbar(R.string.account_import_file_error)

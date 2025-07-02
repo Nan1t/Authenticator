@@ -8,8 +8,6 @@ import kotlinx.coroutines.launch
 import ua.nanit.otpmanager.domain.migration.FileMigration
 import ua.nanit.otpmanager.presentation.Event
 import ua.nanit.otpmanager.presentation.ext.catchError
-import java.io.InputStream
-import java.io.OutputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +19,7 @@ class FileMigrationViewModel @Inject constructor(
     private val errorResult = Event<String>()
     private val exportResult = MutableLiveData<String>()
     private val importResult = MutableLiveData<Int>()
-    private val fileResult = MutableLiveData<InputStream>()
+    private val fileResult = MutableLiveData<Uri>()
 
     private var pinCode: String? = null
 
@@ -37,7 +35,7 @@ class FileMigrationViewModel @Inject constructor(
         importResult.observe(owner, observer)
     }
 
-    fun observeFileResult(owner: LifecycleOwner, observer: Observer<InputStream>) {
+    fun observeFileResult(owner: LifecycleOwner, observer: Observer<Uri>) {
         fileResult.observe(owner, observer)
     }
 
@@ -66,7 +64,7 @@ class FileMigrationViewModel @Inject constructor(
         }
     }
 
-    fun selectFile(stream: InputStream) {
-        fileResult.value = stream
+    fun selectFile(fileUri: Uri) {
+        fileResult.value = fileUri
     }
 }
